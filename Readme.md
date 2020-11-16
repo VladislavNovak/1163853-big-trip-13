@@ -1,7 +1,7 @@
 # Проект «Большое путешествие» [![Build status][travis-image]][travis-url]
 
 * Студент: [Влад Новак](https://up.htmlacademy.ru/ecmascript/13/user/1163853).
-* Наставник: `Неизвестно`.
+* Наставник: [Сергей Глазков](https://htmlacademy.ru/profile/id1194253).
 
 ---
 
