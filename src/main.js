@@ -1,6 +1,6 @@
 import {createInfoTemplate} from "./view/info";
 import {EVENTS_COUNT} from "./temp/constants";
-import {render} from "./utils/render";
+import {render, RenderPosition} from "./utils/render";
 
 import {createTabsTemplate} from "./view/tabs";
 import {createFiltersTemplate} from "./view/filters";
@@ -12,25 +12,25 @@ import {createEventEditTemplate} from "./view/event-edit";
 
 const layoutBody = document.body;
 const layoutHeader = layoutBody.querySelector(`.trip-main`);
-const tabsPlace = layoutHeader.querySelector(`.trip-controls`).firstElementChild;
-const filterPlace = layoutHeader.querySelector(`.trip-controls`).lastElementChild;
+const layoutControls = layoutHeader.querySelector(`.trip-controls`);
 const layoutMain = layoutBody.querySelector(`.trip-events`);
 
-render(layoutHeader, createInfoTemplate(), `afterbegin`);
-render(tabsPlace, createTabsTemplate(), `afterend`);
-render(filterPlace, createFiltersTemplate(), `afterend`);
-render(layoutMain, createSortTemplate(), `beforeend`);
-render(layoutMain, createEventsList(), `beforeend`);
+render(layoutHeader, createInfoTemplate());
+render(layoutControls, createFiltersTemplate());
+render(layoutControls, createTabsTemplate());
+
+render(layoutMain, createEventsList());
+render(layoutMain, createSortTemplate());
 
 const eventsList = layoutMain.querySelector(`.trip-events__list`);
 
-render(eventsList, createEventEditTemplate(), `beforeend`);
-
 for (let i = 0; i < EVENTS_COUNT; i++) {
-  render(eventsList, createEventsItemTemplate(), `beforeend`);
+  render(eventsList, createEventsItemTemplate(), RenderPosition.BEFOREEND);
 }
+
+render(eventsList, createEventEditTemplate());
 
 const eventsItems = eventsList.querySelectorAll(`.trip-events__item`);
 eventsItems.forEach((eventsItem) => {
-  render(eventsItem, createEventTemplate(), `beforeend`);
+  render(eventsItem, createEventTemplate(), RenderPosition.BEFOREEND);
 });
