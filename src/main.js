@@ -1,5 +1,5 @@
 import {createInfoTemplate} from "./view/info";
-import {EVENTS_COUNT} from "./temp/utils";
+import {CHANCE_EVENTS_COUNT} from "./temp/constants";
 import {render, RenderPosition} from "./utils/render";
 import {generatePoint} from "./temp/point";
 
@@ -11,7 +11,7 @@ import {createEventsItemTemplate} from "./view/events-item";
 import {createEventTemplate} from "./view/event";
 import {createEventEditTemplate} from "./view/event-edit";
 
-const points = new Array(EVENTS_COUNT).fill().map(generatePoint);
+const points = new Array(CHANCE_EVENTS_COUNT).fill().map(generatePoint);
 console.log(points);
 
 const layoutBody = document.body;
@@ -28,7 +28,7 @@ render(layoutMain, createSortTemplate());
 
 const eventsList = layoutMain.querySelector(`.trip-events__list`);
 
-for (let i = 0; i < EVENTS_COUNT; i++) {
+for (let i = 0; i < CHANCE_EVENTS_COUNT; i++) {
   render(eventsList, createEventsItemTemplate(), RenderPosition.BEFOREEND);
 }
 
