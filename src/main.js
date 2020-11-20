@@ -1,6 +1,7 @@
 import {createInfoTemplate} from "./view/info";
-import {EVENTS_COUNT} from "./temp/constants";
+import {EVENTS_COUNT} from "./temp/utils";
 import {render, RenderPosition} from "./utils/render";
+import {generatePoint} from "./temp/point";
 
 import {createTabsTemplate} from "./view/tabs";
 import {createFiltersTemplate} from "./view/filters";
@@ -9,6 +10,9 @@ import {createEventsList} from "./view/events-list";
 import {createEventsItemTemplate} from "./view/events-item";
 import {createEventTemplate} from "./view/event";
 import {createEventEditTemplate} from "./view/event-edit";
+
+const points = new Array(EVENTS_COUNT).fill().map(generatePoint);
+console.log(points);
 
 const layoutBody = document.body;
 const layoutHeader = layoutBody.querySelector(`.trip-main`);
