@@ -1,8 +1,8 @@
-import {mapOfOffersByRouteTypes} from "./offers-utils";
+import {getRelatedOffers} from "./offers-utils";
 
-export const getOffersByRouteTypes = (routeType) => {
+export const getOffersByRouteType = (routeType) => {
   const type = routeType;
-  const offers = mapOfOffersByRouteTypes.find((item) => item[0] === routeType)[1];
+  const offers = getRelatedOffers(routeType);
   return {
     type,
     offers,
@@ -10,4 +10,4 @@ export const getOffersByRouteTypes = (routeType) => {
 };
 
 // type: string
-// offers: array of of shape {title: string, price: number, isChecked: bool}
+// offers: array of shape {title: string, price: number, isChecked: bool}

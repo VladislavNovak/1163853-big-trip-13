@@ -30,3 +30,5 @@ export const mapOfOffersByRouteTypes = [
   [routeTypes[8], getCollectionOfOffers(5, 11, 12)],
   [routeTypes[9], getCollectionOfOffers(6, 7, 10)]
 ];
+
+export const getRelatedOffers = (routeType) => mapOfOffersByRouteTypes.find((item) => item[0] === routeType)[1];

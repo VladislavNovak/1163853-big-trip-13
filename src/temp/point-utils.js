@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import dayjsRandom from "dayjs-random";
 import {routeTypes, places} from "./constants";
 import {getRandomInteger} from "./utils";
 
@@ -25,8 +26,9 @@ const routePlacesAndDescriptions = [
 ];
 
 export const getRandomIntervalDate = () => {
-  const timeStart = dayjs().add(getRandomInteger(-CHANCE_DAYS_GAP, CHANCE_DAYS_GAP), `day`).toDate();
-  const timeEnd = dayjs(timeStart).add(getRandomInteger(1, CHANCE_DAYS_GAP), `day`).toDate();
+  dayjs.extend(dayjsRandom);
+  const timeStart = dayjs.recent(CHANCE_DAYS_GAP).toDate();
+  const timeEnd = dayjs.between(timeStart, dayjs().add(CHANCE_DAYS_GAP, `day`)).toDate();
   return {timeStart, timeEnd};
 };
 

@@ -7,12 +7,12 @@ import {createTabsTemplate} from "./view/tabs";
 import {createFiltersTemplate} from "./view/filters";
 import {createSortTemplate} from "./view/sort";
 import {createEventsList} from "./view/events-list";
-import {createEventsItemTemplate} from "./view/events-item";
 import {createEventTemplate} from "./view/event";
 import {createEventEditTemplate} from "./view/event-edit";
 
-const points = new Array(CHANCE_EVENTS_COUNT).fill().map(generatePoint);
-console.log(points);
+const dataPoints = new Array(CHANCE_EVENTS_COUNT).fill().map(generatePoint);
+dataPoints.sort((a, b) => a.timeStart - b.timeStart);
+console.log(dataPoints);
 
 const layoutBody = document.body;
 const layoutHeader = layoutBody.querySelector(`.trip-main`);
@@ -28,13 +28,8 @@ render(layoutMain, createSortTemplate());
 
 const eventsList = layoutMain.querySelector(`.trip-events__list`);
 
-for (let i = 0; i < CHANCE_EVENTS_COUNT; i++) {
-  render(eventsList, createEventsItemTemplate(), RenderPosition.BEFOREEND);
+for (let i = 1; i < CHANCE_EVENTS_COUNT; i++) {
+  render(eventsList, createEventTemplate(dataPoints[i]), RenderPosition.BEFOREEND);
 }
 
 render(eventsList, createEventEditTemplate());
-
-const eventsItems = eventsList.querySelectorAll(`.trip-events__item`);
-eventsItems.forEach((eventsItem) => {
-  render(eventsItem, createEventTemplate(), RenderPosition.BEFOREEND);
-});

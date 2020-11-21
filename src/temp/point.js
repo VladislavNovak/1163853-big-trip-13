@@ -1,7 +1,7 @@
 import {nanoid} from "nanoid";
 import {getRandomInteger} from "./utils";
 import {getRandomIntervalDate, getPlacePhotos, getPlacesDescriptions, getRandomRouteType, getRandomPlace} from "./point-utils";
-import {getOffersByRouteTypes} from "./offers";
+import {getOffersByRouteType} from "./offers";
 
 export const generatePoint = () => {
   const id = nanoid();
@@ -12,7 +12,7 @@ export const generatePoint = () => {
   const price = getRandomInteger(100, 1000);
   const isFavorite = Boolean(getRandomInteger());
   const type = getRandomRouteType();
-  const {offers} = getOffersByRouteTypes(type);
+  const {offers} = getOffersByRouteType(type);
   return {
     id,
     place,
