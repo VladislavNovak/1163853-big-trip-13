@@ -10,4 +10,4 @@ export const getOffersByRouteType = (routeType) => {
 };
 
 // type: string
-// offers: array of shape {title: string, price: number, isChecked: bool}
+// offers: array of shape {title: string, expense: number, isChecked: bool}

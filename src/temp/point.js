@@ -36,4 +36,4 @@ export const generatePoint = () => {
 // price: number
 // isFavorite: bool
 // type: string
-// offers: array of shape {title: string, price: number, isChecked: bool}
+// offers: array of shape {title: string, expense: number, isChecked: bool}

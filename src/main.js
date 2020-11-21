@@ -7,7 +7,7 @@ import {createTabsTemplate} from "./view/tabs";
 import {createFiltersTemplate} from "./view/filters";
 import {createSortTemplate} from "./view/sort";
 import {createEventsList} from "./view/events-list";
-import {createEventTemplate} from "./view/event";
+import {createEventTemplate} from "./view/event/event";
 import {createEventEditTemplate} from "./view/event-edit";
 
 const dataPoints = new Array(CHANCE_EVENTS_COUNT).fill().map(generatePoint);
@@ -32,4 +32,4 @@ for (let i = 1; i < CHANCE_EVENTS_COUNT; i++) {
   render(eventsList, createEventTemplate(dataPoints[i]), RenderPosition.BEFOREEND);
 }
 
-render(eventsList, createEventEditTemplate());
+render(eventsList, createEventEditTemplate(dataPoints[0]));
