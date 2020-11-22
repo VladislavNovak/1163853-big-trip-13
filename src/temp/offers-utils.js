@@ -1,20 +1,19 @@
 import {ROUTE_TYPES} from "./constants";
-import {getRandomInteger} from "./utils";
 
 const offersList = [
-  {title: `Add breakfast`, expense: 50, isChecked: Boolean(getRandomInteger())},
-  {title: `Add luggage`, expense: 30, isChecked: Boolean(getRandomInteger())},
-  {title: `Add meal`, expense: 15, isChecked: Boolean(getRandomInteger())},
-  {title: `Book tickets`, expense: 40, isChecked: Boolean(getRandomInteger())},
-  {title: `Choose seats`, expense: 5, isChecked: Boolean(getRandomInteger())},
-  {title: `Lunch in city`, expense: 25, isChecked: Boolean(getRandomInteger())},
-  {title: `Musical accompaniment`, expense: 25, isChecked: Boolean(getRandomInteger())},
-  {title: `Order Uber`, expense: 20, isChecked: Boolean(getRandomInteger())},
-  {title: `Rent a car`, expense: 200, isChecked: Boolean(getRandomInteger())},
-  {title: `Travel by train`, expense: 40, isChecked: Boolean(getRandomInteger())},
-  {title: `Improve class`, expense: 100, isChecked: Boolean(getRandomInteger())},
-  {title: `Archery excursion`, expense: 85, isChecked: Boolean(getRandomInteger())},
-  {title: `Order the guide`, expense: 85, isChecked: Boolean(getRandomInteger())},
+  {title: `Add breakfast`, expense: 50, isChecked: Math.random() > 0.5},
+  {title: `Add luggage`, expense: 30, isChecked: Math.random() > 0.5},
+  {title: `Add meal`, expense: 15, isChecked: Math.random() > 0.5},
+  {title: `Book tickets`, expense: 40, isChecked: Math.random() > 0.5},
+  {title: `Choose seats`, expense: 5, isChecked: Math.random() > 0.5},
+  {title: `Lunch in city`, expense: 25, isChecked: Math.random() > 0.5},
+  {title: `Musical accompaniment`, expense: 25, isChecked: Math.random() > 0.5},
+  {title: `Order Uber`, expense: 20, isChecked: Math.random() > 0.5},
+  {title: `Rent a car`, expense: 200, isChecked: Math.random() > 0.5},
+  {title: `Travel by train`, expense: 40, isChecked: Math.random() > 0.5},
+  {title: `Improve class`, expense: 100, isChecked: Math.random() > 0.5},
+  {title: `Archery excursion`, expense: 85, isChecked: Math.random() > 0.5},
+  {title: `Order the guide`, expense: 85, isChecked: Math.random() > 0.5},
 ];
 
 const getCollectionOfOffers = (...offersCollection) => offersList.filter((_, index) => offersCollection.includes(index));
