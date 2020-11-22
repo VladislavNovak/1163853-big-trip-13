@@ -32,6 +32,12 @@ export const getRandomIntervalDate = () => {
   return {timeStart, timeEnd};
 };
 
+export const getCurrentDateForNewPoint = () => {
+  const timeStart = dayjs();
+  const timeEnd = dayjs();
+  return {timeStart, timeEnd};
+};
+
 export const getPlacePhotos = () => {
   const photoLinks = [];
   for (let i = 0; i < getRandomInteger(1, CHANCE_PHOTO_COUNT); i++) {
@@ -41,6 +47,8 @@ export const getPlacePhotos = () => {
 };
 
 export const getRandomRouteType = () => ROUTE_TYPES[getRandomInteger(0, ROUTE_TYPES.length - 1)];
+
+export const getRouteTypeForNewPoint = () => ROUTE_TYPES[0];
 
 export const getRandomPlace = () => PLACES[getRandomInteger(0, PLACES.length - 1)];
 

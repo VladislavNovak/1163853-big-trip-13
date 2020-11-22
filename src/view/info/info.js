@@ -1,4 +1,4 @@
-import {ViewTypes} from "../../utils/constants";
+import {FormatTypes} from "../../utils/constants";
 import {getEllipseString, getFormattedDate} from "../../utils";
 
 export const createInfoTemplate = (dataPoints) => {
@@ -18,7 +18,7 @@ export const createInfoTemplate = (dataPoints) => {
       <div class="trip-info__main">
         <h1 class="trip-info__title">${getEllipseString(places)}</h1>
 
-        <p class="trip-info__dates">${getFormattedDate(dataPoints[0].timeStart, ViewTypes.MONTHS)}&nbsp;&mdash;&nbsp;${getFormattedDate(dataPoints[dataPoints.length - 1].timeEnd, ViewTypes.MONTHS)}</p>
+        <p class="trip-info__dates">${getFormattedDate(dataPoints[0].timeStart, FormatTypes.MONTHS)}&nbsp;&mdash;&nbsp;${getFormattedDate(dataPoints[dataPoints.length - 1].timeEnd, FormatTypes.MONTHS)}</p>
       </div>
 
       <p class="trip-info__cost">

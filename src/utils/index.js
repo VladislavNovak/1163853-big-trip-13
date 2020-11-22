@@ -4,7 +4,7 @@ import duration from "dayjs/plugin/duration";
 /**
  * This function formats the date according to a certain condition
  * @param {Object} time - the date to be converted
- * @param {string} view - one of the variants of the ViewTypes object
+ * @param {string} view - one of the variants of the FormatTypes object
  * @return {string} returns the collected formatted string
  */
 export const getFormattedDate = (time, view) => {

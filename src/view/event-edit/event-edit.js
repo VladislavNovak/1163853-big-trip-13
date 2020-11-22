@@ -3,7 +3,7 @@ import {createHeaderDestinationTemplate} from "./templates/create-header-destina
 import {createSectionOffersTemplate} from "./templates/create-section-offers-template";
 import {createDescriptionTemplate} from "./templates/create-description-template";
 import {getFormattedDate} from "../../utils";
-import {ViewTypes} from "../../utils/constants";
+import {FormatTypes} from "../../utils/constants";
 
 export const createEventEditTemplate = ({type, place, offers, placeDescription, placePhotos, timeStart, timeEnd}) => {
 
@@ -15,10 +15,10 @@ export const createEventEditTemplate = ({type, place, offers, placeDescription, 
           ${createHeaderDestinationTemplate(type, place)}
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormattedDate(timeStart, ViewTypes.LONG_SLASH)}">
+            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormattedDate(timeStart, FormatTypes.LONG_SLASH)}">
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFormattedDate(timeEnd, ViewTypes.LONG_SLASH)}">
+            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFormattedDate(timeEnd, FormatTypes.LONG_SLASH)}">
           </div>
 
           <div class="event__field-group  event__field-group--price">

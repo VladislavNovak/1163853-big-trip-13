@@ -1,4 +1,4 @@
-export const ViewTypes = {
+export const FormatTypes = {
   MONTHS: `MMM DD`,
   TIME: `HH:mm`,
   LONG_HYPHEN: `YYYY-MM-DD[T]HH:mm`,
@@ -24,12 +24,17 @@ export const TabTypes = {
   STATS: `Stats`
 };
 
+export const AddClassToTab = {
+  ACTIVE: `trip-tabs__btn--active`,
+  DISACTIVE: ``,
+};
+
 export const WarningTipes = {
   EMPTY_DATA_LIST: `Click New Event to create your first point`,
   WAITING_FOR_DOWNLOADING: `Loading...`,
 };
 
-export const TabAddedClassTypes = {
-  ACTIVE: `trip-tabs__btn--active`,
-  DISACTIVE: ``,
+export const ComponentType = {
+  REGULAR_AND_EDITABLE: true,
+  NEW: false,
 };

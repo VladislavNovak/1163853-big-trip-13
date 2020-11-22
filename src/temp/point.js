@@ -1,14 +1,15 @@
 import {nanoid} from "nanoid";
+import {ComponentType} from "../utils/constants";
 import {getRandomInteger} from "./utils";
-import {getRandomIntervalDate, getPlacePhotos, getPlacesDescriptions, getRandomRouteType, getRandomPlace} from "./point-utils";
+import {getRandomIntervalDate, getPlacePhotos, getPlacesDescriptions, getRandomRouteType, getRandomPlace, getCurrentDateForNewPoint} from "./point-utils";
 import {getOffersByRouteType} from "./offers";
 
-export const generatePoint = () => {
+export const generatePoint = (isComponentRegular = ComponentType.REGULAR_AND_EDITABLE) => {
   const id = nanoid();
-  const place = getRandomPlace();
-  const placeDescription = getPlacesDescriptions(place);
-  const placePhotos = getPlacePhotos();
-  const {timeStart, timeEnd} = getRandomIntervalDate();
+  const place = isComponentRegular ? getRandomPlace() : ``;
+  const placeDescription = isComponentRegular ? getPlacesDescriptions(place) : ``;
+  const placePhotos = isComponentRegular ? getPlacePhotos() : ``;
+  const {timeStart, timeEnd} = isComponentRegular ? getRandomIntervalDate() : getCurrentDateForNewPoint();
   const price = getRandomInteger(100, 1000);
   const isFavorite = Boolean(getRandomInteger());
   const type = getRandomRouteType();
