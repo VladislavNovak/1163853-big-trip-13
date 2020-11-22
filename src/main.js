@@ -14,7 +14,6 @@ import {createWarningTemplate} from "./view/warning/warning";
 
 const dataPoints = new Array(CHANCE_EVENTS_COUNT).fill().map(generatePoint);
 dataPoints.sort((a, b) => a.timeStart - b.timeStart);
-console.log(dataPoints);
 
 const layoutBody = document.body;
 const layoutHeader = layoutBody.querySelector(`.trip-main`);
