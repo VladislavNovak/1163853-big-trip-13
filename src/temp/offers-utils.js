@@ -1,4 +1,4 @@
-import {routeTypes} from "./constants";
+import {ROUTE_TYPES} from "./constants";
 import {getRandomInteger} from "./utils";
 
 const offersList = [
@@ -20,16 +20,16 @@ const offersList = [
 const getCollectionOfOffers = (...offersCollection) => offersList.filter((_, index) => offersCollection.includes(index));
 
 export const mapOfOffersByRouteTypes = [
-  [routeTypes[0], getCollectionOfOffers(4, 7)],
-  [routeTypes[1], getCollectionOfOffers(5, 10)],
-  [routeTypes[2], getCollectionOfOffers(3, 10)],
-  [routeTypes[3], getCollectionOfOffers(2, 10, 11)],
-  [routeTypes[4], getCollectionOfOffers(9)],
-  [routeTypes[5], getCollectionOfOffers(8, 9)],
-  [routeTypes[6], getCollectionOfOffers(0, 1, 2, 3)],
-  [routeTypes[7], getCollectionOfOffers(0)],
-  [routeTypes[8], getCollectionOfOffers(5, 11, 12)],
-  [routeTypes[9], getCollectionOfOffers(6, 7, 10)]
+  [ROUTE_TYPES[0], getCollectionOfOffers(4, 7)],
+  [ROUTE_TYPES[1], getCollectionOfOffers(5, 10)],
+  [ROUTE_TYPES[2], getCollectionOfOffers(3, 10)],
+  [ROUTE_TYPES[3], getCollectionOfOffers(2, 10, 11)],
+  [ROUTE_TYPES[4], getCollectionOfOffers(9)],
+  [ROUTE_TYPES[5], getCollectionOfOffers(8, 9)],
+  [ROUTE_TYPES[6], getCollectionOfOffers(0, 1, 2, 3)],
+  [ROUTE_TYPES[7], getCollectionOfOffers(0)],
+  [ROUTE_TYPES[8], getCollectionOfOffers(5, 11, 12)],
+  [ROUTE_TYPES[9], getCollectionOfOffers(6, 7, 10)]
 ];
 
 export const getRelatedOffers = (routeType) => mapOfOffersByRouteTypes.find((item) => item[0] === routeType)[1];

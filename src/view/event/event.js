@@ -1,4 +1,4 @@
-import {ViewType} from "../../utils/constants";
+import {ViewTypes} from "../../utils/constants";
 import {getFormattedDate, getFormattedDuration} from "../../utils";
 import {createOffersTemplate} from "./templates/create-offers-template";
 
@@ -7,16 +7,16 @@ export const createEventTemplate = ({timeStart, timeEnd, type, place, price, isF
   return (
     `<li class="trip-events__item">
       <div class="event">
-        <time class="event__date" datetime="2019-03-18">${getFormattedDate(timeStart, ViewType.MONTHS)}</time>
+        <time class="event__date" datetime="2019-03-18">${getFormattedDate(timeStart, ViewTypes.MONTHS)}</time>
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/drive.png" alt="Event type icon">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
         </div>
         <h3 class="event__title">${type} ${place}</h3>
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime="${getFormattedDate(timeStart, ViewType.LONG)}">${getFormattedDate(timeStart, ViewType.TIME)}</time>
+            <time class="event__start-time" datetime="${getFormattedDate(timeStart, ViewTypes.LONG_HYPHEN)}">${getFormattedDate(timeStart, ViewTypes.TIME)}</time>
             &mdash;
-            <time class="event__end-time" datetime="${getFormattedDate(timeEnd, ViewType.LONG)}">${getFormattedDate(timeEnd, ViewType.TIME)}</time>
+            <time class="event__end-time" datetime="${getFormattedDate(timeEnd, ViewTypes.LONG_HYPHEN)}">${getFormattedDate(timeEnd, ViewTypes.TIME)}</time>
           </p>
           <p class="event__duration">${getFormattedDuration(timeStart, timeEnd)}</p>
         </div>

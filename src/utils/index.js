@@ -1,6 +1,12 @@
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 
+/**
+ * This function formats the date according to a certain condition
+ * @param {Object} time - the date to be converted
+ * @param {string} view - one of the variants of the ViewTypes object
+ * @return {string} returns the collected formatted string
+ */
 export const getFormattedDate = (time, view) => {
   return dayjs(time).format(view);
 };
@@ -23,3 +29,10 @@ export const getFormattedDuration = (start, end) => {
 
   return humanizer;
 };
+
+/**
+ * This function depending on the number of arguments returns different kinds of string
+ * @param {string[]} arr - in the case of this project, it is a listing of destinations
+ * @return {string} returns the collected string
+ */
+export const getEllipseString = (arr) => (arr.length > 3) ? `${arr[0]} &mdash; ... &mdash; ${arr[arr.length - 1]}` : arr.reduce((phrase, word, index) => (index === 0) ? `${phrase}${word}` : `${phrase} &mdash; ${word}`, ``);
