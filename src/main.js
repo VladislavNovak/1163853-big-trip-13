@@ -1,6 +1,5 @@
 import {WarningTipes} from "./utils/constants";
 import {CHANCE_EVENTS_COUNT} from "./temp/constants";
-// import {generatePoint} from "./temp/point";
 import {points} from "./temp/point";
 import {render, RenderPosition} from "./utils/render";
 
@@ -13,7 +12,6 @@ import {createEventTemplate} from "./view/event/event";
 import {createEventEditTemplate} from "./view/event-edit/event-edit";
 import {createWarningTemplate} from "./view/warning/warning";
 
-// const dataPoints = new Array(CHANCE_EVENTS_COUNT).fill().map(generatePoint);
 points.sort((a, b) => a.timeStart - b.timeStart);
 
 const layoutBody = document.body;

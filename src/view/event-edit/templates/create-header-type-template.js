@@ -1,8 +1,9 @@
-import {ROUTE_TYPES} from "../../../temp/constants";
+import {RouteTypes} from "../../../temp/constants";
 
 export const createHeaderTypeTemplate = (type) => {
+
   const getTypeItem = () => {
-    return ROUTE_TYPES.map((routeType) => {
+    return Object.values(RouteTypes).map((routeType) => {
       const typeInLowerCase = routeType.toLowerCase();
       return (
         `<div class="event__type-item">

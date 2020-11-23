@@ -1,8 +1,8 @@
-import {getRelatedOffers} from "./offers-utils";
+import {getOffers} from "./offers-utils";
 
 export const getOffersByRouteType = (routeType) => {
   const type = routeType;
-  const offers = getRelatedOffers(routeType);
+  const offers = getOffers(routeType);
   return {
     type,
     offers,
