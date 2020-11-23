@@ -14,15 +14,11 @@ export const createSortTemplate = (dataLength) => {
     }).join(``);
   };
 
-  if (!dataLength) {
-    return ``;
-  }
-
   return (
-    `<h2 class="visually-hidden">Trip events</h2>
+    dataLength && `<h2 class="visually-hidden">Trip events</h2>
     <!-- Сортировка -->
     <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
       ${getSorts()}
-    </form>`
+    </form>` || ``
   );
 };

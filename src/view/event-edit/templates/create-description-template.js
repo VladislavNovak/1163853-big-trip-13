@@ -9,28 +9,20 @@ export const createDescriptionTemplate = (placeDescription, placePhotos) => {
   };
 
   const getPhotoContainer = () => {
-    if (!placePhotos.length) {
-      return ``;
-    }
-
     return (
-      `<div class="event__photos-container">
+      placePhotos.length && `<div class="event__photos-container">
         <div class="event__photos-tape">
           ${getPhotoList()}
         </div>
-      </div>`
+      </div>` || ``
     );
   };
 
-  if (!placeDescription && !placePhotos.length) {
-    return ``;
-  }
-
   return (
-    `<section class="event__section  event__section--destination">
+    placeDescription && placePhotos.length && `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
       <p class="event__destination-description">${placeDescription}</p>
       ${getPhotoContainer()}
-    </section>`
+    </section>` || ``
   );
 };

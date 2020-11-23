@@ -1,7 +1,7 @@
 export const createOffersTemplate = (offers) => {
 
-  const getListOffers = (markedOffers) => {
-    return markedOffers.map(({expense, title}) => {
+  const getListOffers = (markedOffersList) => {
+    return markedOffersList.map(({expense, title}) => {
       return (
         `<li class="event__offer">
           <span class="event__offer-title">${title}</span>
@@ -17,14 +17,11 @@ export const createOffersTemplate = (offers) => {
   }
 
   const markedOffers = offers.filter((offer) => offer.isChecked);
-  if (!markedOffers.length) {
-    return ``;
-  }
 
   return (
-    `<ul class="event__selected-offers">
+    markedOffers.length && `<ul class="event__selected-offers">
       <h4 class="visually-hidden">Offers:</h4>
       ${getListOffers(markedOffers)}
-    </ul>`
+    </ul>` || ``
   );
 };
