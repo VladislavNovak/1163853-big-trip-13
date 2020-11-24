@@ -1,36 +1,38 @@
-import {createInfoTemplate} from "./view/info";
-import {EVENTS_COUNT} from "./temp/constants";
+import {WarningTypes} from "./utils/constants";
+import {getPoints} from "./temp/data";
 import {render, RenderPosition} from "./utils/render";
 
-import {createTabsTemplate} from "./view/tabs";
-import {createFiltersTemplate} from "./view/filters";
-import {createSortTemplate} from "./view/sort";
-import {createEventsList} from "./view/events-list";
-import {createEventsItemTemplate} from "./view/events-item";
-import {createEventTemplate} from "./view/event";
-import {createEventEditTemplate} from "./view/event-edit";
+import {createInfoTemplate} from "./view/info/info";
+import {createTabsTemplate} from "./view/tabs/tabs";
+import {createFiltersTemplate} from "./view/filters/filters";
+import {createSortTemplate} from "./view/sort/sort";
+import {createEventsList} from "./view/event-list/events-list";
+import {createEventTemplate} from "./view/event/event";
+import {createEventEditTemplate} from "./view/event-edit/event-edit";
+import {createWarningTemplate} from "./view/warning/warning";
+
+const points = getPoints();
+points.sort((a, b) => a.timeStart - b.timeStart);
 
 const layoutBody = document.body;
 const layoutHeader = layoutBody.querySelector(`.trip-main`);
 const layoutControls = layoutHeader.querySelector(`.trip-controls`);
 const layoutMain = layoutBody.querySelector(`.trip-events`);
 
-render(layoutHeader, createInfoTemplate());
+render(layoutHeader, createInfoTemplate(points));
 render(layoutControls, createFiltersTemplate());
 render(layoutControls, createTabsTemplate());
 
-render(layoutMain, createEventsList());
-render(layoutMain, createSortTemplate());
+if (points.length) {
+  render(layoutMain, createEventsList(points.length));
+  render(layoutMain, createSortTemplate(points.length));
+  const eventsList = layoutMain.querySelector(`.trip-events__list`);
 
-const eventsList = layoutMain.querySelector(`.trip-events__list`);
+  points.forEach((point) => {
+    render(eventsList, createEventTemplate(point), RenderPosition.BEFOREEND);
+  });
 
-for (let i = 0; i < EVENTS_COUNT; i++) {
-  render(eventsList, createEventsItemTemplate(), RenderPosition.BEFOREEND);
+  render(eventsList, createEventEditTemplate(points[0]));
+} else {
+  render(layoutMain, createWarningTemplate(WarningTypes.EMPTY_DATA_LIST));
 }
-
-render(eventsList, createEventEditTemplate());
-
-const eventsItems = eventsList.querySelectorAll(`.trip-events__item`);
-eventsItems.forEach((eventsItem) => {
-  render(eventsItem, createEventTemplate(), RenderPosition.BEFOREEND);
-});
