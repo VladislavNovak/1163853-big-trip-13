@@ -1,6 +1,37 @@
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 
+export const getRandomInteger = (a = 0, b = 1) => {
+  const lower = Math.ceil(Math.min(a, b));
+  const upper = Math.floor(Math.max(a, b));
+  return Math.floor(lower + Math.random() * (upper - lower + 1));
+};
+
+export const getID = () => {
+  return `xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx`.replace(/[xy]/g, (c) => {
+    let r = Math.random() * 16 | 0;
+    let v = c === `x` ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+};
+
+/**
+ * This function shuffles a copy of the original array and truncates it at random
+ * @param {string[]} arr - in the case of this project, it is a listing of offers
+ * @return {string[]} returns an array of several random values of the original array
+ */
+export const getSomeArrayValues = (arr) => {
+  const clone = arr.slice(0);
+  for (let i = clone.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [clone[i], clone[j]] = [clone[j], clone[i]];
+  }
+
+  const sliceArr = clone.slice(0, getRandomInteger(0, 5));
+
+  return sliceArr;
+};
+
 /**
  * This function formats the date according to a certain condition
  * @param {Object} time - the date to be converted

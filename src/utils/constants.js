@@ -29,12 +29,11 @@ export const AddClassToTab = {
   DISACTIVE: ``,
 };
 
-export const WarningTipes = {
+export const WarningTypes = {
   EMPTY_DATA_LIST: `Click New Event to create your first point`,
   WAITING_FOR_DOWNLOADING: `Loading...`,
 };
 
 export const ComponentType = {
-  REGULAR_AND_EDITABLE: true,
   NEW: false,
 };

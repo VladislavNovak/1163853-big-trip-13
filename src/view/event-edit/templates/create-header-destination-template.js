@@ -1,11 +1,12 @@
-import {Places} from "../../../temp/constants";
+import {getPlaces} from "../../../temp/utils";
 
 export const createHeaderDestinationTemplate = (type, selectedPlace) => {
 
   const getOption = () => {
-    return Object.values(Places).map((place) => {
+    const places = getPlaces();
+    return places.map((place) => {
       return (
-        `<option value="${place}"></option>`
+        `<option value="${place}">${place}</option>`
       );
     }).join(``);
   };

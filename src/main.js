@@ -1,6 +1,5 @@
-import {WarningTipes} from "./utils/constants";
-import {CHANCE_EVENTS_COUNT} from "./temp/constants";
-import {points} from "./temp/point";
+import {WarningTypes} from "./utils/constants";
+import {getPoints} from "./temp/data";
 import {render, RenderPosition} from "./utils/render";
 
 import {createInfoTemplate} from "./view/info/info";
@@ -12,6 +11,7 @@ import {createEventTemplate} from "./view/event/event";
 import {createEventEditTemplate} from "./view/event-edit/event-edit";
 import {createWarningTemplate} from "./view/warning/warning";
 
+const points = getPoints();
 points.sort((a, b) => a.timeStart - b.timeStart);
 
 const layoutBody = document.body;
@@ -28,11 +28,11 @@ if (points.length) {
   render(layoutMain, createSortTemplate(points.length));
   const eventsList = layoutMain.querySelector(`.trip-events__list`);
 
-  for (let i = 1; i < CHANCE_EVENTS_COUNT; i++) {
-    render(eventsList, createEventTemplate(points[i]), RenderPosition.BEFOREEND);
-  }
+  points.forEach((point) => {
+    render(eventsList, createEventTemplate(point), RenderPosition.BEFOREEND);
+  });
 
   render(eventsList, createEventEditTemplate(points[0]));
 } else {
-  render(layoutMain, createWarningTemplate(WarningTipes.EMPTY_DATA_LIST));
+  render(layoutMain, createWarningTemplate(WarningTypes.EMPTY_DATA_LIST));
 }
