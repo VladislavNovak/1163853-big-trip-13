@@ -3,7 +3,7 @@ import {getID, getSomeArrayValues} from "../utils";
 import {getRamdomType, generateDate, getPlacePhotos, getRandomPlace, getPlaceDescription, getPointPrice, getFavoriteStatus} from "./utils";
 
 const generateOffers = (isNotNew) => {
-  const offers = isNotNew && getSomeArrayValues(OffersList) || ``;
+  const offers = isNotNew && getSomeArrayValues(OffersList) || [];
   return {
     offers,
   };
@@ -49,8 +49,6 @@ const generatePoint = (isNotNew = true) => {
   };
 };
 
-export const getPoints = () => new Array(CHANCE_EVENTS_COUNT).fill().map(generatePoint);
-
 // id: string
 // type: string
 // offers: array of shape {title: string, expense: number, isChecked: bool}
@@ -61,3 +59,5 @@ export const getPoints = () => new Array(CHANCE_EVENTS_COUNT).fill().map(generat
 // timeEnd: object of Date
 // price: number
 // isFavorite: bool
+
+export const getPoints = () => new Array(CHANCE_EVENTS_COUNT).fill().map(generatePoint);

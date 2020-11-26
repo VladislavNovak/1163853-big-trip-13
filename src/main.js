@@ -1,6 +1,6 @@
 import {WarningTypes} from "./utils/constants";
 import {getPoints} from "./temp/data";
-import {render, RenderPosition} from "./utils/render";
+import {renderTemplate, RenderPosition} from "./utils/render";
 
 import {createInfoTemplate} from "./view/info/info";
 import {createTabsTemplate} from "./view/tabs/tabs";
@@ -19,20 +19,20 @@ const layoutHeader = layoutBody.querySelector(`.trip-main`);
 const layoutControls = layoutHeader.querySelector(`.trip-controls`);
 const layoutMain = layoutBody.querySelector(`.trip-events`);
 
-render(layoutHeader, createInfoTemplate(points));
-render(layoutControls, createFiltersTemplate());
-render(layoutControls, createTabsTemplate());
+renderTemplate(layoutHeader, createInfoTemplate(points));
+renderTemplate(layoutControls, createFiltersTemplate());
+renderTemplate(layoutControls, createTabsTemplate());
 
 if (points.length) {
-  render(layoutMain, createEventsList(points.length));
-  render(layoutMain, createSortTemplate(points.length));
+  renderTemplate(layoutMain, createEventsList(points.length));
+  renderTemplate(layoutMain, createSortTemplate(points.length));
   const eventsList = layoutMain.querySelector(`.trip-events__list`);
 
   points.forEach((point) => {
-    render(eventsList, createEventTemplate(point), RenderPosition.BEFOREEND);
+    renderTemplate(eventsList, createEventTemplate(point), RenderPosition.BEFOREEND);
   });
 
-  render(eventsList, createEventEditTemplate(points[0]));
+  renderTemplate(eventsList, createEventEditTemplate(points[0]));
 } else {
-  render(layoutMain, createWarningTemplate(WarningTypes.EMPTY_DATA_LIST));
+  renderTemplate(layoutMain, createWarningTemplate(WarningTypes.EMPTY_DATA_LIST));
 }
