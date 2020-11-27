@@ -1,15 +1,15 @@
 import {WarningTypes} from "./utils/constants";
 import {getPoints} from "./temp/data";
-import {renderTemplate, RenderPosition} from "./utils/render";
+import {RenderPosition, renderElement} from "./utils/render";
 
-import {createInfoTemplate} from "./view/info/info";
-import {createTabsTemplate} from "./view/tabs/tabs";
-import {createFiltersTemplate} from "./view/filters/filters";
-import {createSortTemplate} from "./view/sort/sort";
-import {createEventsList} from "./view/event-list/events-list";
-import {createEventTemplate} from "./view/event/event";
-import {createEventEditTemplate} from "./view/event-edit/event-edit";
-import {createWarningTemplate} from "./view/warning/warning";
+import Info from "./view/info/info";
+import Tabs from "./view/tabs/tabs";
+import Filters from "./view/filters/filters";
+import Sort from "./view/sort/sort";
+import EventsList from "./view/event-list/events-list";
+import Event from "./view/event/event";
+import EventEdit from "./view/event-edit/event-edit";
+import Warning from "./view/warning/warning";
 
 const points = getPoints();
 points.sort((a, b) => a.timeStart - b.timeStart);
@@ -19,20 +19,20 @@ const layoutHeader = layoutBody.querySelector(`.trip-main`);
 const layoutControls = layoutHeader.querySelector(`.trip-controls`);
 const layoutMain = layoutBody.querySelector(`.trip-events`);
 
-renderTemplate(layoutHeader, createInfoTemplate(points));
-renderTemplate(layoutControls, createFiltersTemplate());
-renderTemplate(layoutControls, createTabsTemplate());
+renderElement(layoutHeader, new Info(points).getElement());
+renderElement(layoutControls, new Filters().getElement());
+renderElement(layoutControls, new Tabs().getElement());
 
 if (points.length) {
-  renderTemplate(layoutMain, createEventsList(points.length));
-  renderTemplate(layoutMain, createSortTemplate(points.length));
+  renderElement(layoutMain, new EventsList(points.length).getElement());
+  renderElement(layoutMain, new Sort(points.length).getElement());
   const eventsList = layoutMain.querySelector(`.trip-events__list`);
 
   points.forEach((point) => {
-    renderTemplate(eventsList, createEventTemplate(point), RenderPosition.BEFOREEND);
+    renderElement(eventsList, new Event(point).getElement(), RenderPosition.BEFOREEND);
   });
 
-  renderTemplate(eventsList, createEventEditTemplate(points[0]));
+  renderElement(eventsList, new EventEdit(points[0]).getElement());
 } else {
-  renderTemplate(layoutMain, createWarningTemplate(WarningTypes.EMPTY_DATA_LIST));
+  renderElement(layoutMain, new Warning(WarningTypes.EMPTY_DATA_LIST).getElement());
 }

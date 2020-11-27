@@ -1,13 +1,24 @@
-import {AddClassToTab, TabTypes} from "../../utils/constants";
+import {createElement} from "../../utils/render";
+import {createTabsTemplate} from "./templates/create-tabs-template";
 
-export const createTabsTemplate = () => {
+export default class Tabs {
+  constructor() {
+    this._element = null;
+  }
 
-  return (
-    `<h2 class="visually-hidden">Switch trip view</h2>
-    <!-- Меню -->
-    <nav class="trip-controls__trip-tabs  trip-tabs">
-      <a class="trip-tabs__btn  ${AddClassToTab.ACTIVE}" href="#">${TabTypes.TABLE}</a>
-      <a class="trip-tabs__btn" ${AddClassToTab.DISACTIVE} href="#">${TabTypes.STATS}</a>
-    </nav>`
-  );
-};
+  getTemplate() {
+    return createTabsTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

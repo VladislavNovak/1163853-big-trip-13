@@ -1,26 +1,24 @@
-import {FilterTypes} from "../../utils/constants";
+import {createElement} from "../../utils/render";
+import {createFiltersTemplate} from "./templates/create-filters-template";
 
-export const createFiltersTemplate = () => {
+export default class Filters {
+  constructor() {
+    this._element = null;
+  }
 
-  const getFilters = () => {
-    return Object.values(FilterTypes).map((filter) => {
-      const filterInLowerCase = filter.toLowerCase();
-      return (
-        `<div class="trip-filters__filter">
-          <input
-            id="filter-${filterInLowerCase}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${filterInLowerCase}" checked>
-          <label class="trip-filters__filter-label" for="filter-${filterInLowerCase}">${filter}</label>
-        </div>`
-      );
-    }).join(``);
-  };
+  getTemplate() {
+    return createFiltersTemplate();
+  }
 
-  return (
-    `<h2 class="visually-hidden">Filter events</h2>
-    <!-- Фильтры -->
-    <form class="trip-filters" action="#" method="get">
-      ${getFilters()}
-      <button class="visually-hidden" type="submit">Accept filter</button>
-    </form>`
-  );
-};
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
