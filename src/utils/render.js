@@ -28,8 +28,8 @@ export const renderElement = (container, child, place = RenderPosition.AFTERBEGI
 };
 
 export const createElement = (template) => {
-  const newElement = document.createElement(`div`);
+  const newElement = document.createElement(`fragment`);
   newElement.innerHTML = template;
 
-  return newElement.firstChild;
+  return newElement;
 };

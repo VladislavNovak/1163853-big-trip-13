@@ -17,7 +17,6 @@ export const createFiltersTemplate = () => {
 
   return (
     `<h2 class="visually-hidden">Filter events</h2>
-    <!-- Фильтры -->
     <form class="trip-filters" action="#" method="get">
       ${getFilters()}
       <button class="visually-hidden" type="submit">Accept filter</button>
