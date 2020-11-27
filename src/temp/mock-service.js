@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import dayjsRandom from "dayjs-random";
-import {CHANCE_DAYS_GAP, CHANCE_PHOTO_COUNT, Routes, RouteTypes} from "./constants";
+import {CHANCE_DAYS_GAP, CHANCE_PHOTO_COUNT, Routes, RouteTypes} from "./mock-constants";
 import {getRandomInteger} from "../utils";
 
 export const getPlaces = () => Object.keys(Routes);

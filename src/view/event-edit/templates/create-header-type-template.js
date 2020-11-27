@@ -1,4 +1,4 @@
-import {RouteTypes} from "../../../temp/constants";
+import {RouteTypes} from "../../../temp/mock-constants";
 
 export const createHeaderTypeTemplate = (type) => {
 

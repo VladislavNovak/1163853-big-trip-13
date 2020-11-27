@@ -1,14 +1,14 @@
 import {createElement} from "../../utils/render";
-import {createEventsList} from "./templates/create-events-list";
+import {createBoard} from "./templates/create-board";
 
-export default class EventsList {
+export default class Board {
   constructor(dataLength) {
     this._dataLength = dataLength;
     this._element = null;
   }
 
   getTemplate() {
-    return createEventsList(this._dataLength);
+    return createBoard(this._dataLength);
   }
 
   getElement() {

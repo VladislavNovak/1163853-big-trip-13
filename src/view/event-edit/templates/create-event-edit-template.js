@@ -1,9 +1,10 @@
+import {FormatTypes} from "../../../utils/constants";
+import {getFormattedDate} from "../../../utils";
+
 import {createHeaderTypeTemplate} from "./create-header-type-template";
 import {createHeaderDestinationTemplate} from "./create-header-destination-template";
 import {createSectionOffersTemplate} from "./create-section-offers-template";
 import {createDescriptionTemplate} from "./create-description-template";
-import {getFormattedDate} from "../../../utils";
-import {FormatTypes} from "../../../utils/constants";
 
 export const createEventEditTemplate = (type, place, offers, placeDescription, placePhotos, timeStart, timeEnd) => {
 
