@@ -1,12 +1,12 @@
 import {WarningTypes} from "./utils/constants";
 import {getPoints} from "./temp/mocks";
-import {RenderPosition, renderElement} from "./utils/render";
+import {RenderPosition, render} from "./utils/render";
 
 import InfoView from "./view/info/info";
 import TabsView from "./view/tabs/tabs";
 import FiltersView from "./view/filters/filters";
 import SortView from "./view/sort/sort";
-import BoardView from "./view/event-list/board";
+import BoardView from "./view/board/board";
 import EventView from "./view/event/event";
 import EventEditView from "./view/event-edit/event-edit";
 import WarningView from "./view/warning/warning";
@@ -19,20 +19,24 @@ const layoutHeader = layoutBody.querySelector(`.trip-main`);
 const layoutControls = layoutHeader.querySelector(`.trip-controls`);
 const layoutMain = layoutBody.querySelector(`.trip-events`);
 
-renderElement(layoutHeader, new InfoView(points).getElement());
-renderElement(layoutControls, new FiltersView().getElement());
-renderElement(layoutControls, new TabsView().getElement());
+render(layoutHeader, new InfoView(points).getElement());
+render(layoutControls, new FiltersView().getElement());
+render(layoutControls, new TabsView().getElement());
 
 if (points.length) {
   const boardComponent = new BoardView(points.length);
-  renderElement(layoutMain, boardComponent.getElement());
-  renderElement(layoutMain, new SortView(points.length).getElement());
+  render(layoutMain, boardComponent.getElement());
+  render(layoutMain, new SortView(points.length).getElement());
+
+  const board = layoutMain.querySelector(`.trip-events__list`);
 
   points.forEach((point) => {
-    renderElement(boardComponent.getElement(), new EventView(point).getElement(), RenderPosition.BEFOREEND);
+    render(board, new EventView(point).getElement(), RenderPosition.BEFOREEND);
+    // render(boardComponent.getElement(), new EventView(point).getElement(), RenderPosition.BEFOREEND);
   });
 
-  renderElement(boardComponent.getElement(), new EventEditView(points[0]).getElement());
+  render(board, new EventEditView(points[0]).getElement());
+  // render(boardComponent.getElement(), new EventEditView(points[0]).getElement());
 } else {
-  renderElement(layoutMain, new WarningView(WarningTypes.EMPTY_DATA_LIST).getElement());
+  render(layoutMain, new WarningView(WarningTypes.EMPTY_DATA_LIST).getElement());
 }

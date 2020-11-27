@@ -9,7 +9,7 @@ export const renderTemplate = (container, template, place = RenderPosition.AFTER
   container.insertAdjacentHTML(place, template);
 };
 
-export const renderElement = (container, child, place = RenderPosition.AFTERBEGIN) => {
+export const render = (container, child, place = RenderPosition.AFTERBEGIN) => {
 
   switch (place) {
     case RenderPosition.BEFOREBEGIN:
@@ -27,9 +27,18 @@ export const renderElement = (container, child, place = RenderPosition.AFTERBEGI
   }
 };
 
-export const createElement = (template) => {
-  const newElement = document.createElement(`fragment`);
-  newElement.innerHTML = template;
+export const createElement = (template) => document.createRange().createContextualFragment(template);
 
-  return newElement;
-};
+// export const createElement = (markup) => {
+//   const newElement = document.createElement(`template`);
+//   newElement.innerHTML = markup;
+
+//   return newElement.content;
+// };
+
+// export const createElement = (markup) => {
+//   const newElement = document.createElement(`div`);
+//   newElement.innerHTML = markup;
+
+//   return newElement.firstChild;
+// };
