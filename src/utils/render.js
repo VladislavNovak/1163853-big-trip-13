@@ -27,18 +27,9 @@ export const render = (container, child, place = RenderPosition.AFTERBEGIN) => {
   }
 };
 
-export const createElement = (template) => document.createRange().createContextualFragment(template);
+export const createElement = (markup) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = markup;
 
-// export const createElement = (markup) => {
-//   const newElement = document.createElement(`template`);
-//   newElement.innerHTML = markup;
-
-//   return newElement.content;
-// };
-
-// export const createElement = (markup) => {
-//   const newElement = document.createElement(`div`);
-//   newElement.innerHTML = markup;
-
-//   return newElement.firstChild;
-// };
+  return newElement.firstChild;
+};
