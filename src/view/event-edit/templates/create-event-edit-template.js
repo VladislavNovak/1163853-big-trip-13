@@ -6,8 +6,7 @@ import {createHeaderDestinationTemplate} from "./create-header-destination-templ
 import {createSectionOffersTemplate} from "./create-section-offers-template";
 import {createDescriptionTemplate} from "./create-description-template";
 
-export const createEventEditTemplate = (type, place, offers, placeDescription, placePhotos, timeStart, timeEnd) => {
-
+export const createEventEditTemplate = (type, place, offers, placeDescription, placePhotos, timeStart, timeEnd, isEditMode) => {
   return (
     `<li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
@@ -31,7 +30,8 @@ export const createEventEditTemplate = (type, place, offers, placeDescription, p
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-          <button class="event__reset-btn" type="reset">Cancel</button>
+          <button class="event__reset-btn" type="reset">${isEditMode ? `Delete` : `Cancel`}</button>
+          <button class="event__rollup-btn" type="button">
         </header>
         <section class="event__details">
           ${createSectionOffersTemplate(offers)}
