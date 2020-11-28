@@ -1,6 +1,6 @@
-export const createBoard = (dataLength) => {
+export const createBoard = (points) => {
 
   return (
-    dataLength && `<ul class="trip-events__list"></ul>` || ``
+    points.length && `<ul class="trip-events__list"></ul>` || ``
   );
 };

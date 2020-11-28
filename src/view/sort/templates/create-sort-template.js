@@ -1,6 +1,6 @@
 import {SortTypes} from "../../../utils/constants";
 
-export const createSortTemplate = (dataLength) => {
+export const createSortTemplate = (points) => {
 
   const getSorts = () => {
     return Object.values(SortTypes).map((sort) => {
@@ -15,8 +15,6 @@ export const createSortTemplate = (dataLength) => {
   };
 
   return (
-    dataLength && `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-      ${getSorts()}
-    </form>` || ``
+    points.length && `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">${getSorts()}</form>` || ``
   );
 };

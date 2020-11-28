@@ -6,13 +6,15 @@ import {createHeaderDestinationTemplate} from "./create-header-destination-templ
 import {createSectionOffersTemplate} from "./create-section-offers-template";
 import {createDescriptionTemplate} from "./create-description-template";
 
-export const createEventEditTemplate = (type, place, offers, placeDescription, placePhotos, timeStart, timeEnd, isEditMode) => {
+export const createEventEditTemplate = (point, isEditMode) => {
+  const {timeStart, timeEnd} = point;
+
   return (
     `<li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
         <header class="event__header">
-          ${createHeaderTypeTemplate(type)}
-          ${createHeaderDestinationTemplate(type, place)}
+          ${createHeaderTypeTemplate(point)}
+          ${createHeaderDestinationTemplate(point)}
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
             <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormattedDate(timeStart, FormatTypes.LONG_SLASH)}">
@@ -34,8 +36,8 @@ export const createEventEditTemplate = (type, place, offers, placeDescription, p
           <button class="event__rollup-btn" type="button">
         </header>
         <section class="event__details">
-          ${createSectionOffersTemplate(offers)}
-          ${createDescriptionTemplate(placeDescription, placePhotos)}
+          ${createSectionOffersTemplate(point)}
+          ${createDescriptionTemplate(point)}
         </section>
       </form>
     </li>`

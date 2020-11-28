@@ -1,4 +1,4 @@
-export const createOffersTemplate = (offers) => {
+export const createOffersTemplate = ({offers}) => {
 
   const getListOffers = (markedOffersList) => {
     return markedOffersList.map(({expense, title}) => {
@@ -16,7 +16,7 @@ export const createOffersTemplate = (offers) => {
     return ``;
   }
 
-  const markedOffers = offers.filter((offer) => offer.isChecked);
+  const markedOffers = offers.filter(({isChecked}) => isChecked);
 
   return (
     markedOffers.length && `<ul class="event__selected-offers">

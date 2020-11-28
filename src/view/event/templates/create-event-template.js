@@ -2,7 +2,8 @@ import {FormatTypes} from "../../../utils/constants";
 import {getFormattedDate, getFormattedDuration} from "../../../utils";
 import {createOffersTemplate} from "./create-offers-template";
 
-export const createEventTemplate = (timeStart, timeEnd, type, place, price, isFavorite, offers) => {
+export const createEventTemplate = (point) => {
+  const {timeStart, timeEnd, type, place, price, isFavorite} = point;
 
   return (
     `<li class="trip-events__item">
@@ -23,7 +24,7 @@ export const createEventTemplate = (timeStart, timeEnd, type, place, price, isFa
         <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${price}</span>
         </p>
-        ${createOffersTemplate(offers)}
+        ${createOffersTemplate(point)}
         <button class="event__favorite-btn ${isFavorite ? `event__favorite-btn--active` : ``}" type="button">
           <span class="visually-hidden">Add to favorite</span>
           <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">

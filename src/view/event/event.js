@@ -2,21 +2,15 @@ import {createElement} from "../../utils/render";
 import {createEventTemplate} from "./templates/create-event-template";
 
 export default class Event {
-  constructor({timeStart, timeEnd, type, place, price, isFavorite, offers}) {
+  constructor(point) {
 
-    [this._timeStart,
-      this._timeEnd,
-      this._type,
-      this._place,
-      this._price,
-      this._isFavorite,
-      this._offers] = [timeStart, timeEnd, type, place, price, isFavorite, offers];
+    this._point = point;
 
     this._element = null;
   }
 
   getTemplate() {
-    return createEventTemplate(this._timeStart, this._timeEnd, this._type, this._place, this._price, this._isFavorite, this._offers);
+    return createEventTemplate(this._point);
   }
 
   getElement() {
