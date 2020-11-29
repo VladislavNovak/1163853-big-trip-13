@@ -1,24 +1,25 @@
-import {SortTypes} from "../../utils/constants";
+import {createElement} from "../../utils/render";
+import {createSortTemplate} from "./templates/create-sort-template";
 
-export const createSortTemplate = (dataLength) => {
+export default class Sort {
+  constructor(points) {
+    this._points = points;
+    this._element = null;
+  }
 
-  const getSorts = () => {
-    return Object.values(SortTypes).map((sort) => {
-      const type = sort.split(`-`).pop();
-      return (
-        `<div class="trip-sort__item  trip-sort__item--${type}">
-          <input id="${sort}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${sort}" checked>
-          <label class="trip-sort__btn" for="${sort}">${type[0].toUpperCase()}${type.slice(1)}</label>
-        </div>`
-      );
-    }).join(``);
-  };
+  getTemplate() {
+    return createSortTemplate(this._points);
+  }
 
-  return (
-    dataLength && `<h2 class="visually-hidden">Trip events</h2>
-    <!-- Сортировка -->
-    <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-      ${getSorts()}
-    </form>` || ``
-  );
-};
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,4 +1,4 @@
-export const createDescriptionTemplate = (placeDescription, placePhotos) => {
+export const createDescriptionTemplate = ({placeDescription, placePhotos}) => {
 
   const getPhotoList = () => {
     return placePhotos.map((photo) => {

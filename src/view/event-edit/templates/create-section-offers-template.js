@@ -1,4 +1,4 @@
-export const createSectionOffersTemplate = (offers) => {
+export const createSectionOffersTemplate = ({offers}) => {
 
   const getListOffers = () => {
 

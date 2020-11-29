@@ -1,21 +1,25 @@
-import {FormatTypes} from "../../utils/constants";
-import {getEllipseString, getFormattedDate} from "../../utils";
+import {createElement} from "../../utils/render";
+import {createInfoTemplate} from "./templates/create-info-template";
 
-export const createInfoTemplate = (dataPoints) => {
+export default class Info {
+  constructor(points) {
+    this._points = points;
+    this._element = null;
+  }
 
-  const getTotal = () => dataPoints.map(({price}) => price).reduce((start, value) => start + value, 0);
+  getTemplate() {
+    return createInfoTemplate(this._points);
+  }
 
-  return (
-    dataPoints.length && `<section class="trip-main__trip-info  trip-info">
-      <div class="trip-info__main">
-        <h1 class="trip-info__title">${getEllipseString(dataPoints.map(({place}) => place))}</h1>
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
 
-        <p class="trip-info__dates">${getFormattedDate(dataPoints[0].timeStart, FormatTypes.MONTHS)}&nbsp;&mdash;&nbsp;${getFormattedDate(dataPoints[dataPoints.length - 1].timeEnd, FormatTypes.MONTHS)}</p>
-      </div>
+    return this._element;
+  }
 
-      <p class="trip-info__cost">
-        Total: &euro;&nbsp;<span class="trip-info__cost-value">${getTotal()}</span>
-      </p>
-    </section>` || ``
-  );
-};
+  removeElement() {
+    this._element = null;
+  }
+}

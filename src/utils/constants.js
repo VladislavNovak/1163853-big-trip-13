@@ -1,3 +1,5 @@
+export const IS_NEW_MODE = false;
+
 export const FormatTypes = {
   MONTHS: `MMM DD`,
   TIME: `HH:mm`,
@@ -32,8 +34,4 @@ export const AddClassToTab = {
 export const WarningTypes = {
   EMPTY_DATA_LIST: `Click New Event to create your first point`,
   WAITING_FOR_DOWNLOADING: `Loading...`,
-};
-
-export const ComponentType = {
-  NEW: false,
 };

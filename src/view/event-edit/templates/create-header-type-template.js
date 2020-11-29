@@ -1,6 +1,6 @@
-import {RouteTypes} from "../../../temp/constants";
+import {RouteTypes} from "../../../temp/mock-constants";
 
-export const createHeaderTypeTemplate = (type) => {
+export const createHeaderTypeTemplate = ({type}) => {
 
   const getTypeItem = () => {
     return Object.values(RouteTypes).map((routeType) => {
