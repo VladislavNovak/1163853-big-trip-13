@@ -17,15 +17,15 @@ const headerElement = bodyElement.querySelector(`.trip-main`);
 const controlElement = headerElement.querySelector(`.trip-controls`);
 const mainElement = bodyElement.querySelector(`.trip-events`);
 
-render(headerElement, new InfoView(points).getElement());
-render(controlElement, new FiltersView().getElement());
+render(headerElement, new InfoView(points).getElement(), RenderPosition.AFTERBEGIN);
 render(controlElement, new TabsView().getElement());
+render(controlElement, new FiltersView().getElement());
 
 render(mainElement, new SortView(points).getElement());
 
 if (points.length) {
   const boardComponent = new BoardView(points);
-  render(mainElement, boardComponent.getElement(), RenderPosition.BEFOREEND);
+  render(mainElement, boardComponent.getElement());
   boardComponent.init();
 } else {
   render(mainElement, new WarningView(WarningTypes.EMPTY_DATA_LIST).getElement());

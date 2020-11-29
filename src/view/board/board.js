@@ -1,5 +1,5 @@
 import {IS_NEW_MODE} from "../../utils/constants";
-import {createElement, render, RenderPosition} from "../../utils/render";
+import {createElement, render} from "../../utils/render";
 import {createBoard} from "./templates/create-board";
 import {getBlankPoint} from "../../temp/mocks";
 
@@ -71,14 +71,14 @@ export default class Board {
         evt.preventDefault();
       });
 
-    render(boardElement, eventElement, RenderPosition.BEFOREEND);
+    render(boardElement, eventElement);
   }
 
   init() {
+    render(this.getElement(), new EventEditView(getBlankPoint(), IS_NEW_MODE).getElement());
+
     this._points.forEach((point) => {
       this._renderEvent(this.getElement(), point);
     });
-
-    render(this.getElement(), new EventEditView(getBlankPoint(), IS_NEW_MODE).getElement());
   }
 }
