@@ -21,12 +21,11 @@ render(headerElement, new InfoView(points).getElement(), RenderPosition.AFTERBEG
 render(controlElement, new TabsView().getElement());
 render(controlElement, new FiltersView().getElement());
 
-render(mainElement, new SortView(points).getElement());
-
-if (points.length) {
+if (points.length === 0) {
+  render(mainElement, new WarningView(WarningTypes.EMPTY_DATA_LIST).getElement());
+} else {
+  render(mainElement, new SortView().getElement());
   const boardComponent = new BoardView(points);
   render(mainElement, boardComponent.getElement());
   boardComponent.init();
-} else {
-  render(mainElement, new WarningView(WarningTypes.EMPTY_DATA_LIST).getElement());
 }

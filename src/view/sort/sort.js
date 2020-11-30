@@ -2,13 +2,12 @@ import {createElement} from "../../utils/render";
 import {createSortTemplate} from "./templates/create-sort-template";
 
 export default class Sort {
-  constructor(points) {
-    this._points = points;
+  constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createSortTemplate(this._points);
+    return createSortTemplate();
   }
 
   getElement() {
