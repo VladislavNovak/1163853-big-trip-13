@@ -1,25 +1,8 @@
-import {createElement} from '../../utils/render';
+import Abstract from '../abstract';
 import {createTimetable} from './templates/create-timetable';
 
-export default class Timetable {
-  constructor() {
-    this._element = null;
-  }
-
+export default class Timetable extends Abstract {
   getTemplate() {
     return createTimetable();
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }
-

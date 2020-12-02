@@ -1,24 +1,8 @@
-import {createElement} from '../../utils/render';
+import Abstract from '../abstract';
 import {createTripTemplate} from './templates/create-trip-template';
 
-export default class Trip {
-  constructor() {
-    this._element = null;
-  }
-
+export default class Trip extends Abstract {
   getTemplate() {
     return createTripTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

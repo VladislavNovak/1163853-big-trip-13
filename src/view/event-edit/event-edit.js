@@ -1,27 +1,15 @@
-import {createElement} from '../../utils/render';
+import Abstract from '../abstract';
 import {createEventEditTemplate} from './templates/create-event-edit-template';
 
-export default class EventEdit {
+export default class EventEdit extends Abstract {
   constructor(point, isEditMode = true) {
+    super();
     this._point = point;
 
     this._isEditMode = isEditMode;
-    this._element = null;
   }
 
   getTemplate() {
     return createEventEditTemplate(this._point, this._isEditMode);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
