@@ -1,5 +1,5 @@
-import {FormatTypes} from "../../../utils/constants";
-import {getEllipseString, getFormattedDate} from "../../../utils";
+import {FormatTypes} from '../../../utils/constants';
+import {getEllipseString, getFormattedDate} from '../../../utils';
 
 export const createInfoTemplate = (points) => {
 

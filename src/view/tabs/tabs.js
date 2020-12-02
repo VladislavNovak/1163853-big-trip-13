@@ -1,5 +1,5 @@
-import {createElement} from "../../utils/render";
-import {createTabsTemplate} from "./templates/create-tabs-template";
+import {createElement} from '../../utils/render';
+import {createTabsTemplate} from './templates/create-tabs-template';
 
 export default class Tabs {
   constructor() {

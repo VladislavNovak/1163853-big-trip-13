@@ -1,5 +1,5 @@
-import {createElement} from "../../utils/render";
-import {createEventTemplate} from "./templates/create-event-template";
+import {createElement} from '../../utils/render';
+import {createEventTemplate} from './templates/create-event-template';
 
 export default class Event {
   constructor(point) {

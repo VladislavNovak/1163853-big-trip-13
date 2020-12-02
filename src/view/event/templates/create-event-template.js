@@ -1,6 +1,6 @@
-import {AddClassName, FormatTypes} from "../../../utils/constants";
-import {getFormattedDate, getFormattedDuration} from "../../../utils";
-import {createOffersTemplate} from "./create-offers-template";
+import {AddClassName, FormatTypes} from '../../../utils/constants';
+import {getFormattedDate, getFormattedDuration} from '../../../utils';
+import {createOffersTemplate} from './create-offers-template';
 
 export const createEventTemplate = (point) => {
   const {timeStart, timeEnd, type, place, price, isFavorite} = point;

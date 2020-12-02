@@ -1,6 +1,6 @@
-import {IS_NEW_MODE, WarningTypes} from "./utils/constants";
-import {getBlankPoint, getPoints} from "./temp/mocks";
-import {RenderPosition, render} from "./utils/render";
+import {IS_NEW_MODE, WarningTypes} from './utils/constants';
+import {getBlankPoint, getPoints} from './temp/mocks';
+import {RenderPosition, render} from './utils/render';
 
 import {
   EventView,

@@ -1,4 +1,4 @@
-import {AddClassName, TabTypes} from "../../../utils/constants";
+import {AddClassName, TabTypes} from '../../../utils/constants';
 
 export const createTabsTemplate = () => {
 

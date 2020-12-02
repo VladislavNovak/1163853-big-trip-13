@@ -1,5 +1,5 @@
-import {createElement} from "../../utils/render";
-import {createFiltersTemplate} from "./templates/create-filters-template";
+import {createElement} from '../../utils/render';
+import {createFiltersTemplate} from './templates/create-filters-template';
 
 export default class Filters {
   constructor() {

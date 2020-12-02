@@ -1,5 +1,5 @@
-import {createElement} from "../../utils/render";
-import {createTripTemplate} from "./templates/create-trip-template";
+import {createElement} from '../../utils/render';
+import {createTripTemplate} from './templates/create-trip-template';
 
 export default class Trip {
   constructor() {

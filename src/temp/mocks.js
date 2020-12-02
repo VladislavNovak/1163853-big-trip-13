@@ -1,7 +1,7 @@
-import {IS_NEW_MODE} from "../utils/constants";
-import {CHANCE_EVENTS_COUNT, OffersList} from "./mock-constants";
-import {getID, getSomeArrayValues} from "../utils";
-import {getRamdomType, generateDate, getPlacePhotos, getRandomPlace, getPlaceDescription, getPointPrice, getFavoriteStatus} from "./mock-service";
+import {IS_NEW_MODE} from '../utils/constants';
+import {CHANCE_EVENTS_COUNT, OffersList} from './mock-constants';
+import {getID, getSomeArrayValues} from '../utils';
+import {getRamdomType, generateDate, getPlacePhotos, getRandomPlace, getPlaceDescription, getPointPrice, getFavoriteStatus} from './mock-service';
 
 const generateOffers = (isEditMode) => {
   const offers = isEditMode && getSomeArrayValues(OffersList) || [];
@@ -10,7 +10,6 @@ const generateOffers = (isEditMode) => {
   };
 };
 
-// type: string
 // offers: array of shape {title: string, expense: number, isChecked: bool}
 
 const generateRoute = (isEditMode) => {

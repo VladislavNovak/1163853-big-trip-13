@@ -1,7 +1,8 @@
+import {getRandomInteger} from '../utils';
+
 export const CHANCE_EVENTS_COUNT = 20;
 export const CHANCE_DAYS_GAP = 7;
 export const CHANCE_PHOTO_COUNT = 7;
-import {getRandomInteger} from "../utils";
 
 export const RouteTypes = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
 

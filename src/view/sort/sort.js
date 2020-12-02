@@ -1,5 +1,5 @@
-import {createElement} from "../../utils/render";
-import {createSortTemplate} from "./templates/create-sort-template";
+import {createElement} from '../../utils/render';
+import {createSortTemplate} from './templates/create-sort-template';
 
 export default class Sort {
   constructor() {

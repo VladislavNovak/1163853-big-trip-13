@@ -1,5 +1,5 @@
-import {createElement} from "../../utils/render";
-import {createEventEditTemplate} from "./templates/create-event-edit-template";
+import {createElement} from '../../utils/render';
+import {createEventEditTemplate} from './templates/create-event-edit-template';
 
 export default class EventEdit {
   constructor(point, isEditMode = true) {

@@ -1,5 +1,5 @@
-import {createElement} from "../../utils/render";
-import {createWarningTemplate} from "./templates/create-warning-template";
+import {createElement} from '../../utils/render';
+import {createWarningTemplate} from './templates/create-warning-template';
 
 export default class Warning {
   constructor(warning) {

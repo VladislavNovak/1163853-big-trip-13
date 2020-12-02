@@ -1,4 +1,4 @@
-import {FilterTypes} from "../../../utils/constants";
+import {FilterTypes} from '../../../utils/constants';
 
 export const createFiltersTemplate = () => {
 

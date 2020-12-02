@@ -1,5 +1,5 @@
-import {createElement} from "../../utils/render";
-import {createInfoTemplate} from "./templates/create-info-template";
+import {createElement} from '../../utils/render';
+import {createInfoTemplate} from './templates/create-info-template';
 
 export default class Info {
   constructor(points) {

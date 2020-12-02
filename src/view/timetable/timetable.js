@@ -1,5 +1,5 @@
-import {createElement} from "../../utils/render";
-import {createTimetable} from "./templates/create-timetable";
+import {createElement} from '../../utils/render';
+import {createTimetable} from './templates/create-timetable';
 
 export default class Timetable {
   constructor() {
