@@ -15,8 +15,8 @@ import {
 } from './view/';
 
 const renderEvent = (boardElement, point) => {
-  const eventElement = new EventView(point).getElement();
-  const eventEditElement = new EventEditView(point).getElement();
+  const eventComponent = new EventView(point);
+  const eventEditComponent = new EventEditView(point);
 
   const onEscKeyDown = (evt) => {
     if (evt.key === `Escape` || evt.key === `Esc`) {
@@ -27,37 +27,38 @@ const renderEvent = (boardElement, point) => {
   };
 
   const setEditMode = () => {
-    boardElement.replaceChild(eventEditElement, eventElement);
+    boardElement.replaceChild(eventEditComponent.getElement(), eventComponent.getElement());
   };
 
   const setViewMode = () => {
-    boardElement.replaceChild(eventElement, eventEditElement);
+    boardElement.replaceChild(eventComponent.getElement(), eventEditComponent.getElement());
   };
 
-  eventElement.querySelector(`.event__rollup-btn`)
-    .addEventListener(`click`, () => {
-      setEditMode();
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
+  const formSubmitDummy = () => {
+    eventEditComponent.getElement().querySelector(`.event__save-btn`).textContent =
+      (eventEditComponent.getElement().querySelector(`.event__save-btn`).textContent === `Submitted`) ? `Save` : `Submitted`;
+  };
 
-  eventEditElement.querySelector(`.event__rollup-btn`)
-    .addEventListener(`click`, () => {
-      setViewMode();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
+  eventComponent.rollupButtonClick(() => {
+    setEditMode();
+    document.addEventListener(`keydown`, onEscKeyDown);
+  });
 
-  eventEditElement.querySelector(`.event__reset-btn`)
-    .addEventListener(`click`, () => {
-      setViewMode();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
+  eventEditComponent.rollupButtonClick(() => {
+    setViewMode();
+    document.removeEventListener(`keydown`, onEscKeyDown);
+  });
 
-  eventEditElement.querySelector(`form`)
-    .addEventListener(`submit`, (evt) => {
-      evt.preventDefault();
-    });
+  eventEditComponent.resetButtonClick(() => {
+    setViewMode();
+    document.removeEventListener(`keydown`, onEscKeyDown);
+  });
 
-  render(boardElement, eventElement);
+  eventEditComponent.formSubmit(() => {
+    formSubmitDummy();
+  });
+
+  render(boardElement, eventComponent.getElement());
 };
 
 const points = getPoints();
