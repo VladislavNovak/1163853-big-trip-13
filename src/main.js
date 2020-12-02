@@ -2,15 +2,17 @@ import {IS_NEW_MODE, WarningTypes} from "./utils/constants";
 import {getBlankPoint, getPoints} from "./temp/mocks";
 import {RenderPosition, render} from "./utils/render";
 
-import InfoView from "./view/info/info";
-import TabsView from "./view/tabs/tabs";
-import FiltersView from "./view/filters/filters";
-import SortView from "./view/sort/sort";
-import TimetableView from "./view/timetable/timetable";
-import EventView from "./view/event/event";
-import EventEditView from "./view/event-edit/event-edit";
-import WarningView from "./view/warning/warning";
-import TripView from "./view/trip/trip";
+import {
+  EventView,
+  EventEditView,
+  FiltersView,
+  InfoView,
+  SortView,
+  TabsView,
+  TimetableView,
+  TripView,
+  WarningView,
+} from './view/';
 
 const renderEvent = (boardElement, point) => {
   const eventElement = new EventView(point).getElement();
