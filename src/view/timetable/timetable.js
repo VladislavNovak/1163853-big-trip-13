@@ -1,14 +1,13 @@
 import {createElement} from "../../utils/render";
-import {createBoard} from "./templates/create-board";
+import {createTimetable} from "./templates/create-timetable";
 
-export default class Board {
-  constructor(points) {
-    this._points = points;
+export default class Timetable {
+  constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createBoard(this._points);
+    return createTimetable();
   }
 
   getElement() {
