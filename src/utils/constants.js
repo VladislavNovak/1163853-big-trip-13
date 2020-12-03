@@ -26,8 +26,9 @@ export const TabTypes = {
   STATS: `Stats`
 };
 
-export const AddClassToTab = {
-  ACTIVE: `trip-tabs__btn--active`,
+export const AddClassName = {
+  ACTIVE_TAB: `trip-tabs__btn--active`,
+  ACTIVE_FAVORITE: `event__favorite-btn--active`,
   DISACTIVE: ``,
 };
 

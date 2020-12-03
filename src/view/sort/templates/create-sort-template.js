@@ -1,4 +1,4 @@
-import {SortTypes} from "../../../utils/constants";
+import {SortTypes} from '../../../utils/constants';
 
 export const createSortTemplate = () => {
 
