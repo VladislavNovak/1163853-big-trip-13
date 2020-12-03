@@ -1,6 +1,6 @@
 import {IS_NEW_MODE, WarningTypes} from './utils/constants';
 import {getBlankPoint, getPoints} from './temp/mocks';
-import {RenderPosition, render} from './utils/render';
+import {RenderPosition, render, replace} from './utils/render';
 
 import {
   EventView,
@@ -14,7 +14,7 @@ import {
   WarningView,
 } from './view/';
 
-const renderEvent = (boardElement, point) => {
+const renderEvent = (timetableElement, point) => {
   const eventComponent = new EventView(point);
   const eventEditComponent = new EventEditView(point);
 
@@ -26,17 +26,12 @@ const renderEvent = (boardElement, point) => {
     }
   };
 
-  const setEditMode = () => {
-    boardElement.replaceChild(eventEditComponent.getElement(), eventComponent.getElement());
-  };
+  const setEditMode = () => replace(eventEditComponent, eventComponent);
 
-  const setViewMode = () => {
-    boardElement.replaceChild(eventComponent.getElement(), eventEditComponent.getElement());
-  };
+  const setViewMode = () => replace(eventComponent, eventEditComponent);
 
-  const formSubmitDummy = () => {
-    eventEditComponent.getElement().querySelector(`.event__save-btn`).textContent =
-      (eventEditComponent.getElement().querySelector(`.event__save-btn`).textContent === `Submitted`) ? `Save` : `Submitted`;
+  const formSubmitDummy = ({type, submitter}) => {
+    throw new Error(`Need to implement a handler ${type} in "${submitter.className}"`);
   };
 
   eventComponent.rollupButtonClick(() => {
@@ -54,11 +49,11 @@ const renderEvent = (boardElement, point) => {
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
 
-  eventEditComponent.formSubmit(() => {
-    formSubmitDummy();
+  eventEditComponent.formSubmit((evt) => {
+    formSubmitDummy(evt);
   });
 
-  render(boardElement, eventComponent.getElement());
+  render(timetableElement, eventComponent);
 };
 
 const points = getPoints();
@@ -69,27 +64,27 @@ const headerElement = bodyElement.querySelector(`.trip-main`);
 const controlElement = headerElement.querySelector(`.trip-controls`);
 const mainElement = bodyElement.querySelector(`.page-body__page-main  .page-body__container`);
 
-render(headerElement, new InfoView(points).getElement(), RenderPosition.AFTERBEGIN);
-render(controlElement, new TabsView().getElement());
-render(controlElement, new FiltersView().getElement());
+render(headerElement, new InfoView(points), RenderPosition.AFTERBEGIN);
+render(controlElement, new TabsView());
+render(controlElement, new FiltersView());
 
 const renderTrip = (tripContainer, tripPoints) => {
   const tripComponent = new TripView();
 
-  render(tripContainer, tripComponent.getElement());
+  render(tripContainer, tripComponent);
 
   if (tripPoints.length === 0) {
-    render(tripComponent.getElement(), new WarningView(WarningTypes.EMPTY_DATA_LIST).getElement());
+    render(tripComponent, new WarningView(WarningTypes.EMPTY_DATA_LIST));
     return;
   }
 
-  render(tripComponent.getElement(), new SortView().getElement());
+  render(tripComponent, new SortView());
   const timetableComponent = new TimetableView();
-  render(tripComponent.getElement(), timetableComponent.getElement());
-  render(timetableComponent.getElement(), new EventEditView(getBlankPoint(), IS_NEW_MODE).getElement());
+  render(tripComponent, timetableComponent);
+  render(timetableComponent, new EventEditView(getBlankPoint(), IS_NEW_MODE));
 
 
-  tripPoints.forEach((point) => renderEvent(timetableComponent.getElement(), point));
+  tripPoints.forEach((point) => renderEvent(timetableComponent, point));
 };
 
 renderTrip(mainElement, points);
