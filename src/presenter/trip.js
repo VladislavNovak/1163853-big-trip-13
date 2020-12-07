@@ -73,7 +73,7 @@ export default class Trip {
       formSubmitDummy(evt);
     });
 
-    render(this._timetableElement, eventComponent);
+    render(this._timetableComponent, eventComponent);
   }
 
   _renderEvents() {
