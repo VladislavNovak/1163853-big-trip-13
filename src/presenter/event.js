@@ -1,4 +1,4 @@
-import {render, replace} from "../utils/render";
+import {remove, render, replace} from "../utils/render";
 
 import {
   EventEditView,
@@ -22,6 +22,9 @@ export default class Event {
   init(point) {
     this._point = point;
 
+    const prevEventComponent = this._eventComponent;
+    const prevEventEditComponent = this._eventEditComponent;
+
     this._eventComponent = new EventView(point);
     this._eventEditComponent = new EventEditView(point);
 
@@ -30,7 +33,26 @@ export default class Event {
     this._eventEditComponent.resetButtonClick(this._handlEventEditResetClick);
     this._eventEditComponent.formSubmit(this._handlEventEditFormSubmit);
 
-    render(this._timetableContainer, this._eventComponent);
+    if (prevEventComponent === null || prevEventEditComponent === null) {
+      render(this._timetableContainer, this._eventComponent);
+      return;
+    }
+
+    if (this._timetableContainer.getElement().contains(prevEventComponent.getElement())) {
+      replace(this._eventComponent, prevEventComponent);
+    }
+
+    if (this._timetableContainer.getElement().contains(prevEventEditComponent.getElement())) {
+      replace(this._eventEditComponent, prevEventEditComponent);
+    }
+
+    remove(prevEventComponent);
+    remove(prevEventEditComponent);
+  }
+
+  destroy() {
+    remove(this._eventComponent);
+    remove(this._eventEditComponent);
   }
 
   _setEditMode() {
