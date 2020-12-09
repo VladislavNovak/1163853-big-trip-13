@@ -1,4 +1,5 @@
 import {IS_NEW_MODE, WarningTypes} from "../utils/constants";
+import {updateItem} from "../utils/";
 import {render} from "../utils/render";
 import {getBlankPoint} from "../temp/mocks";
 
@@ -22,6 +23,8 @@ export default class Trip {
     this._timetableComponent = new TimetableView();
     this._warningComponent = new WarningView(WarningTypes.EMPTY_DATA_LIST);
     this._blankComponent = new EventEditView(getBlankPoint(), IS_NEW_MODE);
+
+    this._handleEventChange = this._handleEventChange.bind(this);
   }
 
   init(points) {
@@ -30,6 +33,11 @@ export default class Trip {
     render(this._tripContainer, this._tripComponent);
 
     this._renderTrip();
+  }
+
+  _handleEventChange(updatedPoint) {
+    this._points = updateItem(this._points, updatedPoint);
+    this._eventPresenter[updatedPoint.id].init(updatedPoint);
   }
 
   _renderSort() {
@@ -76,3 +84,17 @@ export default class Trip {
     this._renderTimetable();
   }
 }
+
+// _handleEventChange: реализует связь от представления к данным.
+// Т.е. каждая вью будет иметь данный метод и будет его вызывать в ответ на какое-либо действие
+// - получает один элемент обновлённых данных;
+// - обновляет список моковых данных;
+// - передаёт в эвент-презентер обновлённый элемент данных для инициализации
+
+// _renderEvent:
+// - создаёт новый эвент-презентер;
+// - инициализируется;
+// - добавляет его в список эвент-презентеров
+
+// _clearTimetable:
+// - удаляет список всех эвент-презентеров
