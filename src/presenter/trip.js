@@ -15,6 +15,7 @@ import {
 export default class Trip {
   constructor(tripContainer) {
     this._tripContainer = tripContainer;
+    this._eventPresenter = {};
 
     this._tripComponent = new TripView();
     this._sortComponent = new SortView();
@@ -38,6 +39,7 @@ export default class Trip {
   _renderEvent(point) {
     const eventPresenter = new EventPresenter(this._timetableComponent);
     eventPresenter.init(point);
+    this._eventPresenter[point.id] = eventPresenter;
   }
 
   _renderEvents() {
@@ -50,6 +52,11 @@ export default class Trip {
 
   _renderNewEvent() {
     render(this._timetableComponent, this._blankComponent);
+  }
+
+  _clearTimetable() {
+    Object.values(this._eventPresenter).forEach((presenter) => presenter.destroy());
+    this._eventPresenter = {};
   }
 
   _renderTimetable() {
