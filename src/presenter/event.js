@@ -6,8 +6,9 @@ import {
 } from "../view";
 
 export default class Event {
-  constructor(timetableContainer) {
+  constructor(timetableContainer, changeData) {
     this._timetableContainer = timetableContainer;
+    this._changeData = changeData;
 
     this._eventComponent = null;
     this._eventEditComponent = null;
@@ -17,6 +18,7 @@ export default class Event {
     this._handlEventEditResetClick = this._handlEventEditResetClick.bind(this);
     this._handlEventEditFormSubmit = this._handlEventEditFormSubmit.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
   }
 
   init(point) {
@@ -29,6 +31,7 @@ export default class Event {
     this._eventEditComponent = new EventEditView(point);
 
     this._eventComponent.rollupButtonClick(this._handlEventRollupClick);
+    this._eventComponent.favoriteButtonClick(this._handleFavoriteClick);
     this._eventEditComponent.rollupButtonClick(this._handlEventEditRollupClick);
     this._eventEditComponent.resetButtonClick(this._handlEventEditResetClick);
     this._eventEditComponent.formSubmit(this._handlEventEditFormSubmit);
@@ -81,14 +84,32 @@ export default class Event {
     this._setViewMode();
   }
 
-  _handlEventEditFormSubmit(evt) {
-    this._formSubmitDummy(evt);
-  }
-
   _escKeyDownHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this._setViewMode();
     }
   }
+
+  _handleFavoriteClick() {
+    this._changeData(
+        Object.assign(
+            {},
+            this._point,
+            {
+              isFavorite: !this._point.isFavorite
+            }
+        )
+    );
+  }
+
+  _handlEventEditFormSubmit(point, evt) {
+    this._changeData(point);
+    this._formSubmitDummy(evt);
+  }
 }
+
+// _changeData: коллбэк, который получает из tripPresenter._handleEventChange каждый эвент-презентер
+// - получает один элемент обновлённых данных;
+// - обновляет список моковых данных;
+// - передаёт в эвент-презентер обновлённый элемент данных для инициализации

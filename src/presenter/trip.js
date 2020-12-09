@@ -45,7 +45,7 @@ export default class Trip {
   }
 
   _renderEvent(point) {
-    const eventPresenter = new EventPresenter(this._timetableComponent);
+    const eventPresenter = new EventPresenter(this._timetableComponent, this._handleEventChange);
     eventPresenter.init(point);
     this._eventPresenter[point.id] = eventPresenter;
   }
