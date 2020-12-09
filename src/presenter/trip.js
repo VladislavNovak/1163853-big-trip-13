@@ -25,6 +25,7 @@ export default class Trip {
     this._blankComponent = new EventEditView(getBlankPoint(), IS_NEW_MODE);
 
     this._handleEventChange = this._handleEventChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
   }
 
   init(points) {
@@ -33,6 +34,10 @@ export default class Trip {
     render(this._tripContainer, this._tripComponent);
 
     this._renderTrip();
+  }
+
+  _handleModeChange() {
+    Object.values(this._eventPresenter).forEach((presenter) => presenter.resetView());
   }
 
   _handleEventChange(updatedPoint) {
@@ -45,7 +50,7 @@ export default class Trip {
   }
 
   _renderEvent(point) {
-    const eventPresenter = new EventPresenter(this._timetableComponent, this._handleEventChange);
+    const eventPresenter = new EventPresenter(this._timetableComponent, this._handleEventChange, this._handleModeChange);
     eventPresenter.init(point);
     this._eventPresenter[point.id] = eventPresenter;
   }
@@ -85,7 +90,11 @@ export default class Trip {
   }
 }
 
-// _handleEventChange: реализует связь от представления к данным.
+// _handleModeChange: будем передавать в каждый эвент-презентер.
+// - перебирает список со всеми презентерами и сбрасывает их вид до начального посредством их же метода .resetView
+
+// _handleEventChange: будем передавать в каждый эвент-презентер.
+// Реализует связь от представления к данным.
 // Т.е. каждая вью будет иметь данный метод и будет его вызывать в ответ на какое-либо действие
 // - получает один элемент обновлённых данных;
 // - обновляет список моковых данных;

@@ -1,3 +1,4 @@
+import {Mode} from "../utils/constants";
 import {remove, render, replace} from "../utils/render";
 
 import {
@@ -6,12 +7,14 @@ import {
 } from "../view";
 
 export default class Event {
-  constructor(timetableContainer, changeData) {
+  constructor(timetableContainer, changeData, changeMode) {
     this._timetableContainer = timetableContainer;
     this._changeData = changeData;
+    this._changeMode = changeMode;
 
     this._eventComponent = null;
     this._eventEditComponent = null;
+    this._mode = Mode.DEFAULT;
 
     this._handlEventRollupClick = this._handlEventRollupClick.bind(this);
     this._handlEventEditRollupClick = this._handlEventEditRollupClick.bind(this);
@@ -41,16 +44,22 @@ export default class Event {
       return;
     }
 
-    if (this._timetableContainer.getElement().contains(prevEventComponent.getElement())) {
+    if (this._mode === Mode.DEFAULT) {
       replace(this._eventComponent, prevEventComponent);
     }
 
-    if (this._timetableContainer.getElement().contains(prevEventEditComponent.getElement())) {
+    if (this._mode === Mode.EDITING) {
       replace(this._eventEditComponent, prevEventEditComponent);
     }
 
     remove(prevEventComponent);
     remove(prevEventEditComponent);
+  }
+
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._setViewMode();
+    }
   }
 
   destroy() {
@@ -61,15 +70,18 @@ export default class Event {
   _setEditMode() {
     replace(this._eventEditComponent, this._eventComponent);
     document.addEventListener(`keydown`, this._escKeyDownHandler);
+    this._changeMode();
+    this._mode = Mode.EDITING;
   }
 
   _setViewMode() {
     replace(this._eventComponent, this._eventEditComponent);
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
+    this._mode = Mode.DEFAULT;
   }
 
   _formSubmitDummy({type, submitter}) {
-    throw new Error(`Need to implement a handler ${type} in "${submitter.className}"`);
+    throw new Error(`TODO implement a handler_${type} in ${submitter.className}`);
   }
 
   _handlEventRollupClick() {
@@ -106,10 +118,14 @@ export default class Event {
   _handlEventEditFormSubmit(point, evt) {
     this._changeData(point);
     this._formSubmitDummy(evt);
+    this._setViewMode();
   }
 }
 
-// _changeData: коллбэк, который получает из tripPresenter._handleEventChange каждый эвент-презентер
+// changeMode: коллбэк, который получает из tripPresenter._handleModeChange каждый эвент-презентер
+// - перебирает список со всеми презентерами и сбрасывает их вид до начального посредством их же метода .resetView
+
+// changeData: коллбэк, который получает из tripPresenter._handleEventChange каждый эвент-презентер
 // - получает один элемент обновлённых данных;
 // - обновляет список моковых данных;
 // - передаёт в эвент-презентер обновлённый элемент данных для инициализации

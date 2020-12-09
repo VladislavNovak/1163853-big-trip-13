@@ -36,3 +36,8 @@ export const WarningTypes = {
   EMPTY_DATA_LIST: `Click New Event to create your first point`,
   WAITING_FOR_DOWNLOADING: `Loading...`,
 };
+
+export const Mode = {
+  DEFAULT: `DEFAULT`,
+  EDITING: `EDITING`,
+};
