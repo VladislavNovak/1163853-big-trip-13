@@ -17,7 +17,16 @@ const controlElement = headerElement.querySelector(`.trip-controls`);
 const mainElement = bodyElement.querySelector(`.page-body__page-main  .page-body__container`);
 
 render(headerElement, new InfoView(points), RenderPosition.AFTERBEGIN);
-render(controlElement, new TabsView());
+const tabsComponent = new TabsView();
+render(controlElement, tabsComponent);
+
+const handleTabClick = (activeTab) => {
+  throw new Error(`TODO implement switching by active tab: ${activeTab}`);
+};
+
+tabsComponent.tabClick(handleTabClick);
+
+
 render(controlElement, new FiltersView());
 
 const tripPresenter = new TripPresenter(mainElement);

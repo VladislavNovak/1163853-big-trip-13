@@ -1,11 +1,12 @@
-import {AddClassName, TabTypes} from '../../../utils/constants';
+import {AddClass, TabTypes} from '../../../utils/constants';
 
-export const createTabsTemplate = () => {
+export const createTabsTemplate = (activeTab) => {
 
   return (
     `<nav class="trip-controls__trip-tabs  trip-tabs">
-      <a class="trip-tabs__btn  ${AddClassName.ACTIVE_TAB}" href="#">${TabTypes.TABLE}</a>
-      <a class="trip-tabs__btn" ${AddClassName.DISACTIVE} href="#">${TabTypes.STATS}</a>
+      ${Object.values(TabTypes)
+        .map((value) => (`<a href="#" class="trip-tabs__btn  ${activeTab === value ? AddClass.ACTIVE_TAB : AddClass.DISACTIVE}" data-tab-type="${value}">${value}</a>`))
+        .join(``)}
     </nav>`
   );
 };
