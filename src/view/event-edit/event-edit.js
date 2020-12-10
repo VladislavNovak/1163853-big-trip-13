@@ -29,7 +29,7 @@ export default class EventEdit extends Abstract {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.onFormSubmit(evt);
+    this._callback.onFormSubmit(this._point, evt);
   }
 
   rollupButtonClick(callback) {

@@ -1,60 +1,12 @@
-import {IS_NEW_MODE, WarningTypes} from './utils/constants';
-import {getBlankPoint, getPoints} from './temp/mocks';
-import {RenderPosition, render, replace} from './utils/render';
+import {getPoints} from './temp/mocks';
+import {RenderPosition, render} from './utils/render';
 
+import TripPresenter from './presenter/trip';
 import {
-  EventView,
-  EventEditView,
   FiltersView,
   InfoView,
-  SortView,
   TabsView,
-  TimetableView,
-  TripView,
-  WarningView,
 } from './view/';
-
-const renderEvent = (timetableElement, point) => {
-  const eventComponent = new EventView(point);
-  const eventEditComponent = new EventEditView(point);
-
-  const onEscKeyDown = (evt) => {
-    if (evt.key === `Escape` || evt.key === `Esc`) {
-      evt.preventDefault();
-      setViewMode();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    }
-  };
-
-  const setEditMode = () => replace(eventEditComponent, eventComponent);
-
-  const setViewMode = () => replace(eventComponent, eventEditComponent);
-
-  const formSubmitDummy = ({type, submitter}) => {
-    throw new Error(`Need to implement a handler ${type} in "${submitter.className}"`);
-  };
-
-  eventComponent.rollupButtonClick(() => {
-    setEditMode();
-    document.addEventListener(`keydown`, onEscKeyDown);
-  });
-
-  eventEditComponent.rollupButtonClick(() => {
-    setViewMode();
-    document.removeEventListener(`keydown`, onEscKeyDown);
-  });
-
-  eventEditComponent.resetButtonClick(() => {
-    setViewMode();
-    document.removeEventListener(`keydown`, onEscKeyDown);
-  });
-
-  eventEditComponent.formSubmit((evt) => {
-    formSubmitDummy(evt);
-  });
-
-  render(timetableElement, eventComponent);
-};
 
 const points = getPoints();
 points.sort((a, b) => a.timeStart - b.timeStart);
@@ -65,26 +17,17 @@ const controlElement = headerElement.querySelector(`.trip-controls`);
 const mainElement = bodyElement.querySelector(`.page-body__page-main  .page-body__container`);
 
 render(headerElement, new InfoView(points), RenderPosition.AFTERBEGIN);
-render(controlElement, new TabsView());
-render(controlElement, new FiltersView());
+const tabsComponent = new TabsView();
+render(controlElement, tabsComponent);
 
-const renderTrip = (tripContainer, tripPoints) => {
-  const tripComponent = new TripView();
-
-  render(tripContainer, tripComponent);
-
-  if (tripPoints.length === 0) {
-    render(tripComponent, new WarningView(WarningTypes.EMPTY_DATA_LIST));
-    return;
-  }
-
-  render(tripComponent, new SortView());
-  const timetableComponent = new TimetableView();
-  render(tripComponent, timetableComponent);
-  render(timetableComponent, new EventEditView(getBlankPoint(), IS_NEW_MODE));
-
-
-  tripPoints.forEach((point) => renderEvent(timetableComponent, point));
+const handleTabClick = (activeTab) => {
+  throw new Error(`TODO implement switching by active tab: ${activeTab}`);
 };
 
-renderTrip(mainElement, points);
+tabsComponent.tabClick(handleTabClick);
+
+
+render(controlElement, new FiltersView());
+
+const tripPresenter = new TripPresenter(mainElement);
+tripPresenter.init(points);

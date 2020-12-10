@@ -26,7 +26,7 @@ export const TabTypes = {
   STATS: `Stats`
 };
 
-export const AddClassName = {
+export const AddClass = {
   ACTIVE_TAB: `trip-tabs__btn--active`,
   ACTIVE_FAVORITE: `event__favorite-btn--active`,
   DISACTIVE: ``,
@@ -35,4 +35,9 @@ export const AddClassName = {
 export const WarningTypes = {
   EMPTY_DATA_LIST: `Click New Event to create your first point`,
   WAITING_FOR_DOWNLOADING: `Loading...`,
+};
+
+export const Mode = {
+  DEFAULT: `DEFAULT`,
+  EDITING: `EDITING`,
 };
