@@ -56,7 +56,7 @@ export default class Trip {
 
     return {
       [SortTypes.SORT_DAY]: () => (this._points = this._clonedPoints.slice()),
-      [SortTypes.SORT_TIME]: () => this._points.sort((a, b) => dayjs(b.timeEnd).diff(b.timeBegin) - dayjs(a.timeEnd).diff(a.timeBegin)),
+      [SortTypes.SORT_TIME]: () => this._points.sort((a, b) => dayjs(b.timeEnd).diff(b.timeStart) - dayjs(a.timeEnd).diff(a.timeStart)),
       [SortTypes.SORT_PRICE]: () => this._points.sort((a, b) => b.price - a.price),
     }[activeSort]();
   }
