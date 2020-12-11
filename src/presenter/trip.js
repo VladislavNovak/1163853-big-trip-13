@@ -1,4 +1,5 @@
-import {IS_NEW_MODE, WarningTypes} from "../utils/constants";
+import dayjs from 'dayjs';
+import {IS_NEW_MODE, SortTypes, WarningTypes} from "../utils/constants";
 import {updateItem} from "../utils/";
 import {render} from "../utils/render";
 import {getBlankPoint} from "../temp/mocks";
@@ -8,7 +9,7 @@ import EventPresenter from "./event";
 import {
   EventEditView,
   SortView,
-  TimetableView,
+  RouteView,
   TripView,
   WarningView,
 } from "../view";
@@ -17,19 +18,22 @@ export default class Trip {
   constructor(tripContainer) {
     this._tripContainer = tripContainer;
     this._eventPresenter = {};
+    this._currentSortType = SortTypes.SORT_DAY;
 
     this._tripComponent = new TripView();
     this._sortComponent = new SortView();
-    this._timetableComponent = new TimetableView();
+    this._routeComponent = new RouteView();
     this._warningComponent = new WarningView(WarningTypes.EMPTY_DATA_LIST);
     this._blankComponent = new EventEditView(getBlankPoint(), IS_NEW_MODE);
 
     this._handleEventChange = this._handleEventChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
   init(points) {
     this._points = points.slice();
+    this._clonedPoints = this._points.slice();
 
     render(this._tripContainer, this._tripComponent);
 
@@ -45,12 +49,29 @@ export default class Trip {
     this._eventPresenter[updatedPoint.id].init(updatedPoint);
   }
 
+  _sortPoints(activeSort) {
+    this._currentSortType = activeSort;
+
+    return {
+      [SortTypes.SORT_DAY]: () => (this._points = this._clonedPoints.slice()),
+      [SortTypes.SORT_TIME]: () => this._points.sort((a, b) => dayjs(b.timeEnd).diff(b.timeBegin) - dayjs(a.timeEnd).diff(a.timeBegin)),
+      [SortTypes.SORT_PRICE]: () => this._points.sort((a, b) => b.price - a.price),
+    }[activeSort]();
+  }
+
+  _handleSortTypeChange(activeSort) {
+    this._sortPoints(activeSort);
+    this._clearRoute();
+    this._renderRoute();
+  }
+
   _renderSort() {
     render(this._tripComponent, this._sortComponent);
+    this._sortComponent.sortClick(this._handleSortTypeChange);
   }
 
   _renderEvent(point) {
-    const eventPresenter = new EventPresenter(this._timetableComponent, this._handleEventChange, this._handleModeChange);
+    const eventPresenter = new EventPresenter(this._routeComponent, this._handleEventChange, this._handleModeChange);
     eventPresenter.init(point);
     this._eventPresenter[point.id] = eventPresenter;
   }
@@ -64,16 +85,16 @@ export default class Trip {
   }
 
   _renderNewEvent() {
-    render(this._timetableComponent, this._blankComponent);
+    render(this._routeComponent, this._blankComponent);
   }
 
-  _clearTimetable() {
+  _clearRoute() {
     Object.values(this._eventPresenter).forEach((presenter) => presenter.destroy());
     this._eventPresenter = {};
   }
 
-  _renderTimetable() {
-    render(this._tripComponent, this._timetableComponent);
+  _renderRoute() {
+    render(this._tripComponent, this._routeComponent);
     this._renderNewEvent();
 
     this._renderEvents();
@@ -86,7 +107,7 @@ export default class Trip {
     }
 
     this._renderSort();
-    this._renderTimetable();
+    this._renderRoute();
   }
 }
 
@@ -105,5 +126,10 @@ export default class Trip {
 // - инициализируется;
 // - добавляет его в список эвент-презентеров
 
-// _clearTimetable:
+// _clearRoute:
 // - удаляет список всех эвент-презентеров
+
+// _handleSortTypeChange:
+// - сортирует данные;
+// - очищает поле с эвентами;
+// - отрисовывает поле с эвентами;

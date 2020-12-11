@@ -30,7 +30,7 @@ export default class Tabs extends Abstract {
     const prevActiveClass = this.getElement().querySelector(`.${AddClass.ACTIVE_TAB}`);
     prevActiveClass.classList.remove(AddClass.ACTIVE_TAB);
     target.classList.add(AddClass.ACTIVE_TAB);
-    this._callback.onTabClick(target.dataset.tabType);
+    this._callback.onTabClick(this._activeTab);
   }
 
   tabClick(callback) {

@@ -7,8 +7,8 @@ import {
 } from "../view";
 
 export default class Event {
-  constructor(timetableContainer, changeData, changeMode) {
-    this._timetableContainer = timetableContainer;
+  constructor(routeContainer, changeData, changeMode) {
+    this._routeContainer = routeContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
 
@@ -40,7 +40,7 @@ export default class Event {
     this._eventEditComponent.formSubmit(this._handlEventEditFormSubmit);
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
-      render(this._timetableContainer, this._eventComponent);
+      render(this._routeContainer, this._eventComponent);
       return;
     }
 
