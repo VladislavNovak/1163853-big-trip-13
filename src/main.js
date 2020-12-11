@@ -9,7 +9,6 @@ import {
 } from './view/';
 
 const points = getPoints();
-points.sort((a, b) => a.timeStart - b.timeStart);
 
 const bodyElement = document.body;
 const headerElement = bodyElement.querySelector(`.trip-main`);

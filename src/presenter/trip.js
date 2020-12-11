@@ -32,6 +32,8 @@ export default class Trip {
   }
 
   init(points) {
+    points.sort((a, b) => a.timeStart - b.timeStart);
+
     this._points = points.slice();
     this._clonedPoints = this._points.slice();
 
