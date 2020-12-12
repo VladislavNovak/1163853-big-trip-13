@@ -88,4 +88,4 @@ export const updateItem = (items, update) => {
   ];
 };
 
-
+export const assign = (a, ...b) => Object.assign({}, a, ...b);

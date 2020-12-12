@@ -1,4 +1,5 @@
 import {Mode} from "../utils/constants";
+import {assign} from "../utils";
 import {remove, render, replace} from "../utils/render";
 
 import {
@@ -104,15 +105,7 @@ export default class Event {
   }
 
   _handleFavoriteClick() {
-    this._changeData(
-        Object.assign(
-            {},
-            this._point,
-            {
-              isFavorite: !this._point.isFavorite
-            }
-        )
-    );
+    this._changeData(assign(this._point, {isFavorite: !this._point.isFavorite}));
   }
 
   _handlEventEditFormSubmit(point, evt) {
