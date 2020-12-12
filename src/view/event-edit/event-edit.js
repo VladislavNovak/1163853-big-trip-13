@@ -6,7 +6,6 @@ import {createEventEditTemplate} from './templates/create-event-edit-template';
 export default class EventEdit extends Abstract {
   constructor(point, isEditMode = true) {
     super();
-    this._point = point;
     this._point = EventEdit.supplementData(point, isEditMode);
 
     this._isEditMode = isEditMode;
@@ -18,6 +17,23 @@ export default class EventEdit extends Abstract {
 
   getTemplate() {
     return createEventEditTemplate(this._point);
+  }
+
+  updateData(update) {
+    if (!update) {
+      return;
+    }
+
+    this._point
+  }
+
+  updateElement() {
+    let prevElement = this.getElement();
+    const parent = prevElement.parentElement;
+    this.removeElement();
+
+    const newElement = this.getElement();
+    parent.replaceChild(newElement, prevElement);
   }
 
   _rollupButtonClickHandler(evt) {
@@ -64,6 +80,12 @@ export default class EventEdit extends Abstract {
     return data;
   }
 }
+
+// updateElement: при генерации нового элемента будет снова зачитано свойство _point.
+// И если мы сперва обновим его, а потом шаблон, то в итоге получим элемент с новыми данными.
+// - удаляет старый DOM элемент;
+// - вызваtт генерацию нового;
+// - заменяет один на другой;
 
 // supplementData:
 // - расширяет объект, добавляя к нему поле со значением, которое понадобится для взаимодействия с вью
