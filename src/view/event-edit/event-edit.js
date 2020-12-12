@@ -8,11 +8,17 @@ export default class EventEdit extends Abstract {
     super();
     this._point = EventEdit.supplementData(point, isEditMode);
 
-    this._isEditMode = isEditMode;
-
     this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
     this._resetButtonClickHandler = this._resetButtonClickHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._offerChangeHandler = this._offerChangeHandler.bind(this);
+
+    const availableOffers = this.getElement().querySelector(`.event__available-offers`);
+    if (!availableOffers) {
+      return;
+    }
+
+    availableOffers.addEventListener(`change`, this._offerChangeHandler);
   }
 
   getTemplate() {
@@ -24,7 +30,9 @@ export default class EventEdit extends Abstract {
       return;
     }
 
-    this._point
+    this._point = assign(this._point, update);
+
+    this.updateElement();
   }
 
   updateElement() {
@@ -34,6 +42,24 @@ export default class EventEdit extends Abstract {
 
     const newElement = this.getElement();
     parent.replaceChild(newElement, prevElement);
+  }
+
+  _offerChangeHandler({target}) {
+    const {id, checked: isChecked} = target;
+
+    if (!target.matches(`INPUT`)) {
+      return;
+    }
+
+    const offers = this._point.offers.map((offer) => {
+      if (offer.title === id.replace(/-/g, ` `)) {
+        return assign(offer, {isChecked});
+      }
+
+      return offer;
+    });
+
+    this.updateData({offers});
   }
 
   _rollupButtonClickHandler(evt) {
@@ -80,6 +106,10 @@ export default class EventEdit extends Abstract {
     return data;
   }
 }
+
+// updateData:
+// - обновляет данные в свойстве _point,
+// - вызывает обновление шаблона
 
 // updateElement: при генерации нового элемента будет снова зачитано свойство _point.
 // И если мы сперва обновим его, а потом шаблон, то в итоге получим элемент с новыми данными.

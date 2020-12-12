@@ -1,13 +1,14 @@
 import dayjs from 'dayjs';
-import {IS_NEW_MODE, SortTypes, WarningTypes} from "../utils/constants";
+import {SortTypes, WarningTypes} from "../utils/constants";
+// 021 импортировать константу IS_NEW_MODE
 import {updateItem} from "../utils/";
 import {render} from "../utils/render";
-import {getBlankPoint} from "../temp/mocks";
+// 022: импортировать функцию getBlankPoint
 
 import EventPresenter from "./event";
 
 import {
-  EventEditView,
+  // 023: импортировать компонент
   SortView,
   RouteView,
   TripView,
@@ -24,7 +25,7 @@ export default class Trip {
     this._sortComponent = new SortView();
     this._routeComponent = new RouteView();
     this._warningComponent = new WarningView(WarningTypes.EMPTY_DATA_LIST);
-    this._blankComponent = new EventEditView(getBlankPoint(), IS_NEW_MODE);
+    // 024: подключить компонент new
 
     this._handleEventChange = this._handleEventChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
@@ -87,7 +88,7 @@ export default class Trip {
   }
 
   _renderNewEvent() {
-    render(this._routeComponent, this._blankComponent);
+    // 025: отрисовать компонент new
   }
 
   _clearRoute() {
@@ -136,3 +137,9 @@ export default class Trip {
 // - сортирует данные;
 // - очищает поле с эвентами;
 // - отрисовывает поле с эвентами;
+
+// 021 - import {IS_NEW_MODE} from "../utils/constants";
+// 022 - import {getBlankPoint} from "../temp/mocks";
+// 023 - EventEditView,
+// 024 - this._blankComponent = new EventEditView(getBlankPoint(), IS_NEW_MODE);
+// 025 - render(this._routeComponent, this._blankComponent)
