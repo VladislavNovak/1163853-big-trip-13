@@ -1,3 +1,5 @@
+import {assign} from '../../utils';
+
 import Abstract from '../abstract';
 import {createEventEditTemplate} from './templates/create-event-edit-template';
 
@@ -5,6 +7,7 @@ export default class EventEdit extends Abstract {
   constructor(point, isEditMode = true) {
     super();
     this._point = point;
+    this._point = EventEdit.supplementData(point, isEditMode);
 
     this._isEditMode = isEditMode;
 
@@ -14,7 +17,7 @@ export default class EventEdit extends Abstract {
   }
 
   getTemplate() {
-    return createEventEditTemplate(this._point, this._isEditMode);
+    return createEventEditTemplate(this._point);
   }
 
   _rollupButtonClickHandler(evt) {
@@ -29,7 +32,7 @@ export default class EventEdit extends Abstract {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.onFormSubmit(this._point, evt);
+    this._callback.onFormSubmit(EventEdit.improverishData(this._point), evt);
   }
 
   rollupButtonClick(callback) {
@@ -49,4 +52,21 @@ export default class EventEdit extends Abstract {
     this.getElement().querySelector(`form`)
       .addEventListener(`submit`, this._formSubmitHandler);
   }
+
+  static supplementData(data, payload) {
+    return assign(data, {isEditMode: payload});
+  }
+
+  static improverishData(data) {
+    data = assign(data);
+
+    delete data.isEditMode;
+    return data;
+  }
 }
+
+// supplementData:
+// - расширяет объект, добавляя к нему поле со значением, которое понадобится для взаимодействия с вью
+
+// improverishData:
+// - сокращает объект, удаляя ненужное для внешнего взаимодействия поле
