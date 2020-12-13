@@ -11,7 +11,9 @@ export default class EventEdit extends Abstract {
     this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
     this._resetButtonClickHandler = this._resetButtonClickHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
-    this._offerChangeHandler = this._offerChangeHandler.bind(this);
+    this._offerCheckboxChangeHandler = this._offerCheckboxChangeHandler.bind(this);
+    this._priceTextInputHandler = this._priceTextInputHandler.bind(this);
+    this._destinationTextInputHandler = this._destinationTextInputHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -20,12 +22,16 @@ export default class EventEdit extends Abstract {
     return createEventEditTemplate(this._point);
   }
 
-  updateData(update) {
+  updateData(update, justDataUpdating) {
     if (!update) {
       return;
     }
 
     this._point = assign(this._point, update);
+
+    if (justDataUpdating) {
+      return;
+    }
 
     this.updateElement();
   }
@@ -49,6 +55,9 @@ export default class EventEdit extends Abstract {
 
   _setInnerHandlers() {
     this._addListenerToAvailableOffers();
+
+    this.getElement().querySelector(`.event__input--price`).addEventListener(`input`, this._priceTextInputHandler);
+    this.getElement().querySelector(`.event__input--destination`).addEventListener(`input`, this._destinationTextInputHandler);
   }
 
   _addListenerToAvailableOffers() {
@@ -57,10 +66,10 @@ export default class EventEdit extends Abstract {
       return;
     }
 
-    availableOffers.addEventListener(`change`, this._offerChangeHandler);
+    availableOffers.addEventListener(`change`, this._offerCheckboxChangeHandler);
   }
 
-  _offerChangeHandler({target}) {
+  _offerCheckboxChangeHandler({target}) {
     const {id, checked: isChecked} = target;
 
     if (!target.matches(`INPUT`)) {
@@ -76,6 +85,16 @@ export default class EventEdit extends Abstract {
     });
 
     this.updateData({offers});
+  }
+
+  _priceTextInputHandler(evt) {
+    evt.preventDefault();
+    this.updateData({price: evt.target.value}, true);
+  }
+
+  _destinationTextInputHandler(evt) {
+    evt.preventDefault();
+    this.updateData({place: evt.target.value}, true);
   }
 
   _rollupButtonClickHandler(evt) {
@@ -124,6 +143,8 @@ export default class EventEdit extends Abstract {
 }
 
 // updateData:
+// аргумент justDataUpdating указывает на то, что в компоненте нужно только обновить данные без перерисовки
+// нужно, например, при вводе в инпуты
 // - обновляет данные в свойстве _point,
 // - вызывает обновление шаблона
 
