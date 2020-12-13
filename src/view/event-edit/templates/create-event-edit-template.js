@@ -7,7 +7,7 @@ import {createSectionOffersTemplate} from './create-section-offers-template';
 import {createDescriptionTemplate} from './create-description-template';
 
 export const createEventEditTemplate = (point) => {
-  const {timeStart, timeEnd, isEditMode} = point;
+  const {timeStart, timeEnd, isEditMode, price} = point;
 
   return (
     `<li class="trip-events__item">
@@ -28,7 +28,7 @@ export const createEventEditTemplate = (point) => {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
+            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>

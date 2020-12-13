@@ -13,12 +13,7 @@ export default class EventEdit extends Abstract {
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._offerChangeHandler = this._offerChangeHandler.bind(this);
 
-    const availableOffers = this.getElement().querySelector(`.event__available-offers`);
-    if (!availableOffers) {
-      return;
-    }
-
-    availableOffers.addEventListener(`change`, this._offerChangeHandler);
+    this._setInnerHandlers();
   }
 
   getTemplate() {
@@ -42,6 +37,27 @@ export default class EventEdit extends Abstract {
 
     const newElement = this.getElement();
     parent.replaceChild(newElement, prevElement);
+    this.restoreHandlers();
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.rollupButtonClick(this._callback.onRollupButtonClick);
+    this.resetButtonClick(this._callback.onResetButtonClick);
+    this.formSubmit(this._callback.onFormSubmit);
+  }
+
+  _setInnerHandlers() {
+    this._addListenerToAvailableOffers();
+  }
+
+  _addListenerToAvailableOffers() {
+    const availableOffers = this.getElement().querySelector(`.event__available-offers`);
+    if (!availableOffers) {
+      return;
+    }
+
+    availableOffers.addEventListener(`change`, this._offerChangeHandler);
   }
 
   _offerChangeHandler({target}) {
@@ -122,3 +138,11 @@ export default class EventEdit extends Abstract {
 
 // improverishData:
 // - сокращает объект, удаляя ненужное для внешнего взаимодействия поле
+
+// _setInnerHandlers: будет вызываться при инициализации класса и после перерисовки компонента - в restoreHandlers
+// - навешиваются внутренние обработчики, вроде переключения выбора даты или повторения
+
+// restoreHandlers: вызывается каждый раз, когда происходит перерисовка в updateElement
+// Это необходимо, т.к. при перерисовке обработчики удаляются и нужно снова их восстановить
+// - вызывает _setInnerHandlers, в котором навешиваются внутренние обработчики
+// - привязывает все обработчики к соответствующим сохранённым _callback
