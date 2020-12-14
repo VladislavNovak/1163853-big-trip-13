@@ -1,4 +1,5 @@
-import {assign} from '../../utils';
+import {Destinations} from '../../temp/mock-constants';
+import {assign, getPlaces} from '../../utils';
 
 import Abstract from '../abstract';
 import {createEventEditTemplate} from './templates/create-event-edit-template';
@@ -92,9 +93,14 @@ export default class EventEdit extends Abstract {
     this.updateData({price: evt.target.value}, true);
   }
 
-  _destinationTextInputHandler(evt) {
-    evt.preventDefault();
-    this.updateData({place: evt.target.value}, true);
+  _destinationTextInputHandler({target}) {
+    if (!getPlaces().includes(target.value)) {
+      return;
+    }
+
+    const {place, placeDescription, placePhotos} = Destinations[Destinations.findIndex((destination) => destination.place === target.value)];
+
+    this.updateData({place, placeDescription, placePhotos});
   }
 
   _rollupButtonClickHandler(evt) {
