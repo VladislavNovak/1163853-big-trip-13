@@ -1,10 +1,9 @@
-import {IS_NEW_MODE} from '../utils/constants';
-import {CHANCE_EVENTS_COUNT, OffersList} from './mock-constants';
-import {getID, getSomeArrayValues} from '../utils';
-import {getRamdomType, generateDate, getPlacePhotos, getRandomPlace, getPlaceDescription, getPointPrice, getFavoriteStatus} from './mock-service';
+import {CHANCE_EVENTS_COUNT, emptyDestination, Destinations, GenerateMode, OffersList} from './mock-constants';
+import {getID, getRandomInteger, getSomeArrayValues} from '../utils';
+import {getRamdomType, generateDate, getPointPrice, getFavoriteStatus} from './mock-service';
 
-const generateOffers = (isEditMode) => {
-  const offers = isEditMode && getSomeArrayValues(OffersList) || [];
+const generateOffers = (mode) => {
+  const offers = (mode === GenerateMode.AS_EDIT_MODE) ? getSomeArrayValues(OffersList) : [];
   return {
     offers,
   };
@@ -12,10 +11,12 @@ const generateOffers = (isEditMode) => {
 
 // offers: array of shape {title: string, expense: number, isChecked: bool}
 
-const generateRoute = (isEditMode) => {
-  const place = getRandomPlace(isEditMode);
-  const placeDescription = getPlaceDescription(place, isEditMode);
-  const placePhotos = getPlacePhotos(isEditMode);
+const generateDestination = (mode) => {
+  const {place, placeDescription, placePhotos} = {
+    [GenerateMode.AS_EDIT_MODE]: Destinations[getRandomInteger(0, Destinations.length - 1)],
+    [GenerateMode.AS_NEW_COMPONENT]: emptyDestination,
+  }[mode];
+
   return {
     place,
     placeDescription,
@@ -27,14 +28,14 @@ const generateRoute = (isEditMode) => {
 // placeDescription: string
 // placePhotos: array of string
 
-const generatePoint = (isEditMode = true) => {
+const generatePoint = (mode) => {
   const id = getID();
-  const type = getRamdomType(isEditMode);
-  const {offers} = generateOffers(isEditMode);
-  const {place, placeDescription, placePhotos} = generateRoute(isEditMode);
-  const {timeStart, timeEnd} = generateDate(isEditMode);
-  const price = getPointPrice(isEditMode);
-  const isFavorite = getFavoriteStatus(isEditMode);
+  const type = getRamdomType(mode);
+  const {offers} = generateOffers(mode);
+  const {place, placeDescription, placePhotos} = generateDestination(mode);
+  const {timeStart, timeEnd} = generateDate(mode);
+  const price = getPointPrice(mode);
+  const isFavorite = getFavoriteStatus(mode);
   return {
     id,
     type,
@@ -60,5 +61,5 @@ const generatePoint = (isEditMode = true) => {
 // price: number
 // isFavorite: bool
 
-export const getPoints = () => new Array(CHANCE_EVENTS_COUNT).fill().map(generatePoint);
-export const getBlankPoint = () => generatePoint(IS_NEW_MODE);
+export const getPoints = () => new Array(CHANCE_EVENTS_COUNT).fill().map(() => generatePoint(GenerateMode.AS_EDIT_MODE));
+export const getBlankPoint = () => generatePoint(GenerateMode.AS_NEW_COMPONENT);

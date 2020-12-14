@@ -66,7 +66,9 @@ export const getFormattedDuration = (start, end) => {
  * @param {string[]} arr - in the case of this project, it is a listing of destinations
  * @return {string} returns the collected string
  */
-export const getEllipseString = (arr) => (arr.length > 3) ? `${arr[0]} &mdash; ... &mdash; ${arr[arr.length - 1]}` : arr.reduce((phrase, word, index) => (index === 0) ? `${phrase}${word}` : `${phrase} &mdash; ${word}`, ``);
+export const getEllipseString = (arr) => (arr.length > 3)
+  ? `${arr[0]} &mdash; ... &mdash; ${arr[arr.length - 1]}`
+  : arr.reduce((phrase, word, index) => (index === 0) ? `${phrase}${word}` : `${phrase} &mdash; ${word}`, ``);
 
 /**
  * This function replaces one found element in the array
