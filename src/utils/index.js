@@ -21,7 +21,7 @@ export const getID = () => {
  * @param {string[]} arr - in the case of this project, it is a listing of offers
  * @return {string[]} returns an array of several random values of the original array
  */
-export const getSomeArrayValues = (arr) => {
+export const getSomeOffers = (arr) => {
   const clone = arr.slice(0);
   for (let i = clone.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));

@@ -1,5 +1,5 @@
-import {Destinations} from '../../temp/mock-constants';
-import {assign, getPlaces} from '../../utils';
+import {Destinations, OffersList} from '../../temp/mock-constants';
+import {assign, getPlaces, getSomeOffers} from '../../utils';
 
 import Abstract from '../abstract';
 import {createEventEditTemplate} from './templates/create-event-edit-template';
@@ -15,6 +15,7 @@ export default class EventEdit extends Abstract {
     this._offerCheckboxChangeHandler = this._offerCheckboxChangeHandler.bind(this);
     this._priceTextInputHandler = this._priceTextInputHandler.bind(this);
     this._destinationTextInputHandler = this._destinationTextInputHandler.bind(this);
+    this._typeRadioInputHandler = this._typeRadioInputHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -59,6 +60,7 @@ export default class EventEdit extends Abstract {
 
     this.getElement().querySelector(`.event__input--price`).addEventListener(`input`, this._priceTextInputHandler);
     this.getElement().querySelector(`.event__input--destination`).addEventListener(`input`, this._destinationTextInputHandler);
+    this.getElement().querySelector(`.event__type-list`).addEventListener(`change`, this._typeRadioInputHandler);
   }
 
   _addListenerToAvailableOffers() {
@@ -88,9 +90,13 @@ export default class EventEdit extends Abstract {
     this.updateData({offers});
   }
 
-  _priceTextInputHandler(evt) {
-    evt.preventDefault();
-    this.updateData({price: evt.target.value}, true);
+  _priceTextInputHandler({target}) {
+    const price = target.value;
+    if (/\D/.test(price)) {
+      return;
+    }
+
+    this.updateData({price}, true);
   }
 
   _destinationTextInputHandler({target}) {
@@ -101,6 +107,12 @@ export default class EventEdit extends Abstract {
     const {place, placeDescription, placePhotos} = Destinations[Destinations.findIndex((destination) => destination.place === target.value)];
 
     this.updateData({place, placeDescription, placePhotos});
+  }
+
+  _typeRadioInputHandler({target}) {
+    const type = target.value;
+    const offers = getSomeOffers(OffersList);
+    this.updateData({type, offers});
   }
 
   _rollupButtonClickHandler(evt) {

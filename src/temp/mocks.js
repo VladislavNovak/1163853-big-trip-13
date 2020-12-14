@@ -1,9 +1,9 @@
 import {CHANCE_EVENTS_COUNT, emptyDestination, Destinations, GenerateMode, OffersList} from './mock-constants';
-import {getID, getRandomInteger, getSomeArrayValues} from '../utils';
+import {getID, getRandomInteger, getSomeOffers} from '../utils';
 import {getRamdomType, generateDate, getPointPrice, getFavoriteStatus} from './mock-service';
 
 const generateOffers = (mode) => {
-  const offers = (mode === GenerateMode.AS_EDIT_MODE) ? getSomeArrayValues(OffersList) : [];
+  const offers = (mode === GenerateMode.AS_EDIT_MODE) ? getSomeOffers(OffersList) : [];
   return {
     offers,
   };
