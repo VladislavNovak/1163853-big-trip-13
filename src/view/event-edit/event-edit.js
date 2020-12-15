@@ -1,10 +1,10 @@
 import {Destinations, OffersList} from '../../temp/mock-constants';
 import {assign, getPlaces, getSomeOffers} from '../../utils';
 
-import Abstract from '../abstract';
+import Smart from '../smart';
 import {createEventEditTemplate} from './templates/create-event-edit-template';
 
-export default class EventEdit extends Abstract {
+export default class EventEdit extends Smart {
   constructor(point, isEditMode = true) {
     super();
     this._point = EventEdit.supplementData(point, isEditMode);
@@ -24,30 +24,6 @@ export default class EventEdit extends Abstract {
     return createEventEditTemplate(this._point);
   }
 
-  updateData(update, justDataUpdating) {
-    if (!update) {
-      return;
-    }
-
-    this._point = assign(this._point, update);
-
-    if (justDataUpdating) {
-      return;
-    }
-
-    this.updateElement();
-  }
-
-  updateElement() {
-    let prevElement = this.getElement();
-    const parent = prevElement.parentElement;
-    this.removeElement();
-
-    const newElement = this.getElement();
-    parent.replaceChild(newElement, prevElement);
-    this.restoreHandlers();
-  }
-
   restoreHandlers() {
     this._setInnerHandlers();
     this.rollupButtonClick(this._callback.onRollupButtonClick);
@@ -58,7 +34,7 @@ export default class EventEdit extends Abstract {
   _setInnerHandlers() {
     this._addListenerToAvailableOffers();
 
-    this.getElement().querySelector(`.event__input--price`).addEventListener(`input`, this._priceTextInputHandler);
+    this.getElement().querySelector(`.event__input--price`).addEventListener(`keydown`, this._priceTextInputHandler);
     this.getElement().querySelector(`.event__input--destination`).addEventListener(`input`, this._destinationTextInputHandler);
     this.getElement().querySelector(`.event__type-list`).addEventListener(`change`, this._typeRadioInputHandler);
   }
@@ -90,9 +66,11 @@ export default class EventEdit extends Abstract {
     this.updateData({offers});
   }
 
-  _priceTextInputHandler({target}) {
-    const price = target.value;
-    if (/\D/.test(price)) {
+  _priceTextInputHandler(evt) {
+    const price = evt.target.value;
+
+    if ((evt.keyCode > 31 && (evt.keyCode < 48 || evt.keyCode > 57))) {
+      evt.preventDefault();
       return;
     }
 
