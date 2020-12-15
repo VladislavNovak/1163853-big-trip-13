@@ -1,5 +1,7 @@
 import {Destinations, OffersList} from '../../temp/mock-constants';
 import {assign, getPlaces, getSomeOffers} from '../../utils';
+// import flatpickr from "flatpickr";
+// import "../../../node_modules/flatpickr/dist/flatpickr.min";
 
 import Smart from '../smart';
 import {createEventEditTemplate} from './templates/create-event-edit-template';
