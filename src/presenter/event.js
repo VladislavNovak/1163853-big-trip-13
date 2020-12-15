@@ -1,4 +1,5 @@
 import {Mode} from "../utils/constants";
+import {assign} from "../utils";
 import {remove, render, replace} from "../utils/render";
 
 import {
@@ -80,10 +81,6 @@ export default class Event {
     this._mode = Mode.DEFAULT;
   }
 
-  _formSubmitDummy({type, submitter}) {
-    throw new Error(`TODO implement a handler_${type} in ${submitter.className}`);
-  }
-
   _handlEventRollupClick() {
     this._setEditMode();
   }
@@ -99,25 +96,17 @@ export default class Event {
   _escKeyDownHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
+      this._eventEditComponent.reset(this._point);
       this._setViewMode();
     }
   }
 
   _handleFavoriteClick() {
-    this._changeData(
-        Object.assign(
-            {},
-            this._point,
-            {
-              isFavorite: !this._point.isFavorite
-            }
-        )
-    );
+    this._changeData(assign(this._point, {isFavorite: !this._point.isFavorite}));
   }
 
-  _handlEventEditFormSubmit(point, evt) {
+  _handlEventEditFormSubmit(point) {
     this._changeData(point);
-    this._formSubmitDummy(evt);
     this._setViewMode();
   }
 }

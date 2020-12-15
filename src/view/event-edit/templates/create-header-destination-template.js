@@ -1,4 +1,4 @@
-import {getPlaces} from '../../../temp/mock-service';
+import {getPlaces} from "../../../utils";
 
 export const createHeaderDestinationTemplate = ({type, place: selectedPlace}) => {
 
