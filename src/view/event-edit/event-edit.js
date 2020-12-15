@@ -20,6 +20,10 @@ export default class EventEdit extends Smart {
     this._setInnerHandlers();
   }
 
+  reset(point) {
+    this.updateData(EventEdit.improverishData(point));
+  }
+
   getTemplate() {
     return createEventEditTemplate(this._point);
   }
@@ -34,7 +38,7 @@ export default class EventEdit extends Smart {
   _setInnerHandlers() {
     this._addListenerToAvailableOffers();
 
-    this.getElement().querySelector(`.event__input--price`).addEventListener(`keydown`, this._priceTextInputHandler);
+    this.getElement().querySelector(`.event__input--price`).addEventListener(`keyup`, this._priceTextInputHandler);
     this.getElement().querySelector(`.event__input--destination`).addEventListener(`input`, this._destinationTextInputHandler);
     this.getElement().querySelector(`.event__type-list`).addEventListener(`change`, this._typeRadioInputHandler);
   }
@@ -163,3 +167,6 @@ export default class EventEdit extends Smart {
 // Это необходимо, т.к. при перерисовке обработчики удаляются и нужно снова их восстановить
 // - вызывает _setInnerHandlers, в котором навешиваются внутренние обработчики
 // - привязывает все обработчики к соответствующим сохранённым _callback
+
+// reset: вызывается в presenter/Event в случае выхода без сохранения, через ESC
+// - аргументом передаются прежние данные, ведь в презентере находятся "бэкапные" данные
