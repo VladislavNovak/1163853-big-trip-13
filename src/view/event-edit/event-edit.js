@@ -1,7 +1,11 @@
-import {Destinations, OffersList} from '../../temp/mock-constants';
-import {assign, getPlaces, getSomeOffers} from '../../utils';
-// import flatpickr from "flatpickr";
-// import "../../../node_modules/flatpickr/dist/flatpickr.min";
+import {Destinations, OffersList} from "../../temp/mock-constants";
+import {assign, getPlaces, getSomeOffers} from "../../utils";
+
+import flatpickr from "flatpickr";
+import ConfirmDatePlugin from "flatpickr/dist/plugins/confirmDate/confirmDate.js";
+import "flatpickr/dist/themes/dark.css";
+import "flatpickr/dist/plugins/confirmDate/confirmDate.css";
+import "../../../node_modules/flatpickr/dist/flatpickr.min";
 
 import Smart from '../smart';
 import {createEventEditTemplate} from './templates/create-event-edit-template';
@@ -10,6 +14,8 @@ export default class EventEdit extends Smart {
   constructor(point, isEditMode = true) {
     super();
     this._point = EventEdit.supplementData(point, isEditMode);
+    this._pickrStart = null;
+    this._pickrEnd = null;
 
     this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
     this._resetButtonClickHandler = this._resetButtonClickHandler.bind(this);
@@ -19,7 +25,11 @@ export default class EventEdit extends Smart {
     this._destinationTextInputHandler = this._destinationTextInputHandler.bind(this);
     this._typeRadioInputHandler = this._typeRadioInputHandler.bind(this);
 
+    this._onPickrStartHandler = this._onPickrStartHandler.bind(this);
+    this._onPickrEndHandler = this._onPickrEndHandler.bind(this);
+
     this._setInnerHandlers();
+    this._setPickrs();
   }
 
   reset(point) {
@@ -35,12 +45,13 @@ export default class EventEdit extends Smart {
     this.rollupButtonClick(this._callback.onRollupButtonClick);
     this.resetButtonClick(this._callback.onResetButtonClick);
     this.formSubmit(this._callback.onFormSubmit);
+    this._setPickrs();
   }
 
   _setInnerHandlers() {
     this._addListenerToAvailableOffers();
 
-    this.getElement().querySelector(`.event__input--price`).addEventListener(`keyup`, this._priceTextInputHandler);
+    this.getElement().querySelector(`.event__input--price`).addEventListener(`change`, this._priceTextInputHandler);
     this.getElement().querySelector(`.event__input--destination`).addEventListener(`input`, this._destinationTextInputHandler);
     this.getElement().querySelector(`.event__type-list`).addEventListener(`change`, this._typeRadioInputHandler);
   }
@@ -75,7 +86,7 @@ export default class EventEdit extends Smart {
   _priceTextInputHandler(evt) {
     const price = evt.target.value;
 
-    if ((evt.keyCode > 31 && (evt.keyCode < 48 || evt.keyCode > 57))) {
+    if (isNaN(parseFloat(price))) {
       evt.preventDefault();
       return;
     }
@@ -141,6 +152,64 @@ export default class EventEdit extends Smart {
 
     delete data.isEditMode;
     return data;
+  }
+
+  _onPickrStartHandler([newStartTime]) {
+    if (newStartTime === undefined) {
+      return;
+    }
+
+    if (newStartTime > this._point.timeEnd) {
+      this._pickrEnd.set(`defaultDate`, newStartTime);
+      this.updateData({timeEnd: newStartTime});
+    }
+
+    this.updateData({timeStart: newStartTime});
+  }
+
+  _onPickrEndHandler([newEndTime]) {
+    if (newEndTime === undefined) {
+      return;
+    }
+
+    this.updateData({timeEnd: newEndTime});
+  }
+
+  _setPickrs() {
+    if (this._pickrStart) {
+      this._pickrStart.destroy();
+      this._pickrStart = null;
+    }
+
+    if (this._pickrEnd) {
+      this._pickrEnd.destroy();
+      this._pickrEnd = null;
+    }
+
+    const pickrDefaultConfig = {
+      'dateFormat': `d/m/y H:i`,
+      'time_24hr': true,
+      'enableTime': true,
+      'plugins': [new ConfirmDatePlugin({
+        confirmText: `DONE `,
+        theme: `dark`,
+        confirmIcon: `<div class='fa fa-check'>&emsp; &#10004;</div>`
+      })],
+    };
+
+    const pickrStartConfig = assign(pickrDefaultConfig, {
+      'defaultDate': this._point.timeStart,
+      'onClose': this._onPickrStartHandler,
+    });
+
+    const pickrEndConfig = assign(pickrDefaultConfig, {
+      'defaultDate': this._point.timeStart,
+      'minDate': this._point.timeStart,
+      'onClose': this._onPickrEndHandler,
+    });
+
+    this._pickrStart = flatpickr(this.getElement().querySelector(`#event-start-time-1`), pickrStartConfig);
+    this._pickrEnd = flatpickr(this.getElement().querySelector(`#event-end-time-1`), pickrEndConfig);
   }
 }
 
