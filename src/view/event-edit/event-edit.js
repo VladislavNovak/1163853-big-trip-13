@@ -197,19 +197,15 @@ export default class EventEdit extends Smart {
       })],
     };
 
-    const pickrStartConfig = assign(pickrDefaultConfig, {
-      'defaultDate': this._point.timeStart,
-      'onClose': this._onPickrStartHandler,
-    });
-
-    const pickrEndConfig = assign(pickrDefaultConfig, {
-      'defaultDate': this._point.timeStart,
-      'minDate': this._point.timeStart,
-      'onClose': this._onPickrEndHandler,
-    });
+    const pickrStartConfig = assign(pickrDefaultConfig, {'defaultDate': this._point.timeStart, 'onClose': this._onPickrStartHandler});
+    const pickrEndConfig = assign(pickrDefaultConfig, {'defaultDate': this._point.timeEnd, 'onClose': this._onPickrEndHandler});
 
     this._pickrStart = flatpickr(this.getElement().querySelector(`#event-start-time-1`), pickrStartConfig);
     this._pickrEnd = flatpickr(this.getElement().querySelector(`#event-end-time-1`), pickrEndConfig);
+
+    // const xxx = {a: 234, b: 2345, };
+    // const yyy = {...xxx, c: 345, d: 456};
+    // console.log(yyy);
   }
 }
 
