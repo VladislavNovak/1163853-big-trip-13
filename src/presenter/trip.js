@@ -16,7 +16,8 @@ import {
 } from "../view";
 
 export default class Trip {
-  constructor(tripContainer) {
+  constructor(tripContainer, eventsModel) {
+    this._eventsModel = eventsModel;
     this._tripContainer = tripContainer;
     this._eventPresenter = {};
     this._currentSortType = SortTypes.SORT_DAY;
@@ -41,6 +42,10 @@ export default class Trip {
     render(this._tripContainer, this._tripComponent);
 
     this._renderTrip();
+  }
+
+  _getEvents() {
+    return this._eventsModel.getEvents();
   }
 
   _handleModeChange() {

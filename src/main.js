@@ -1,6 +1,7 @@
 import {getPoints} from './temp/mocks';
 import {RenderPosition, render} from './utils/render';
 
+import EventsModel from './model/events';
 import TripPresenter from './presenter/trip';
 import {
   FiltersView,
@@ -9,6 +10,9 @@ import {
 } from './view/';
 
 const points = getPoints();
+
+const eventsModel = new EventsModel();
+eventsModel(points);
 
 const bodyElement = document.body;
 const headerElement = bodyElement.querySelector(`.trip-main`);
@@ -25,8 +29,7 @@ const handleTabClick = (activeTab) => {
 
 tabsComponent.tabClick(handleTabClick);
 
-
 render(controlElement, new FiltersView());
 
-const tripPresenter = new TripPresenter(mainElement);
+const tripPresenter = new TripPresenter(mainElement, eventsModel);
 tripPresenter.init(points);
