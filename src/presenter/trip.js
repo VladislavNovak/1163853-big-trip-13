@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 import {SortTypes, WarningTypes} from "../utils/constants";
 // 021 импортировать константу IS_NEW_MODE
-import {updateItem} from "../utils/";
 import {render} from "../utils/render";
 // 022: импортировать функцию getBlankPoint
 
@@ -33,19 +32,18 @@ export default class Trip {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
-  init(points) {
-    points.sort((a, b) => a.timeStart - b.timeStart);
-
-    this._points = points.slice();
-    this._clonedPoints = this._points.slice();
-
+  init() {
     render(this._tripContainer, this._tripComponent);
 
     this._renderTrip();
   }
 
   _getEvents() {
-    return this._eventsModel.getEvents();
+    return {
+      [SortTypes.SORT_DAY]: () => (this._eventsModel.getEvents().sort((a, b) => a.timeStart - b.timeStart)),
+      [SortTypes.SORT_TIME]: () => this._eventsModel.getEvents().sort((a, b) => dayjs(b.timeEnd).diff(b.timeStart) - dayjs(a.timeEnd).diff(a.timeStart)),
+      [SortTypes.SORT_PRICE]: () => this._eventsModel.getEvents().sort((a, b) => b.price - a.price),
+    }[this._currentSortType]();
   }
 
   _handleModeChange() {
@@ -53,22 +51,12 @@ export default class Trip {
   }
 
   _handleEventChange(updatedPoint) {
-    this._points = updateItem(this._points, updatedPoint);
+    // Здесь будем вызывать обновление модели
     this._eventPresenter[updatedPoint.id].init(updatedPoint);
   }
 
-  _sortPoints(activeSort) {
-    this._currentSortType = activeSort;
-
-    return {
-      [SortTypes.SORT_DAY]: () => (this._points = this._clonedPoints.slice()),
-      [SortTypes.SORT_TIME]: () => this._points.sort((a, b) => dayjs(b.timeEnd).diff(b.timeStart) - dayjs(a.timeEnd).diff(a.timeStart)),
-      [SortTypes.SORT_PRICE]: () => this._points.sort((a, b) => b.price - a.price),
-    }[activeSort]();
-  }
-
   _handleSortTypeChange(activeSort) {
-    this._sortPoints(activeSort);
+    this._currentSortType = activeSort;
     this._clearRoute();
     this._renderRoute();
   }
@@ -85,7 +73,7 @@ export default class Trip {
   }
 
   _renderEvents() {
-    this._points.forEach((point) => this._renderEvent(point));
+    this._getEvents().forEach((point) => this._renderEvent(point));
   }
 
   _renderNoEvents() {
@@ -109,7 +97,7 @@ export default class Trip {
   }
 
   _renderTrip() {
-    if (this._points.length === 0) {
+    if (this._getEvents().length === 0) {
       this._renderNoEvents();
       return;
     }
@@ -142,6 +130,9 @@ export default class Trip {
 // - сортирует данные;
 // - очищает поле с эвентами;
 // - отрисовывает поле с эвентами;
+
+// _getEvents: обертка над методом модели для получения задач
+// - в будущем позволит удобнее получать из модели данные в презенторе
 
 // 021 - import {IS_NEW_MODE} from "../utils/constants";
 // 022 - import {getBlankPoint} from "../temp/mocks";

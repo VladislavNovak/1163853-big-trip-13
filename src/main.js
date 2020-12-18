@@ -32,4 +32,4 @@ tabsComponent.tabClick(handleTabClick);
 render(controlElement, new FiltersView());
 
 const tripPresenter = new TripPresenter(mainElement, eventsModel);
-tripPresenter.init(points);
+tripPresenter.init();
