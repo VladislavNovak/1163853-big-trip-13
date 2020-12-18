@@ -12,7 +12,7 @@ import {
 const points = getPoints();
 
 const eventsModel = new EventsModel();
-eventsModel(points);
+eventsModel.setEvents(points);
 
 const bodyElement = document.body;
 const headerElement = bodyElement.querySelector(`.trip-main`);

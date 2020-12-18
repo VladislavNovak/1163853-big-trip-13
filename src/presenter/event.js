@@ -1,4 +1,4 @@
-import {Mode} from "../utils/constants";
+import {Mode, UserAction, UpdateType} from "../utils/constants";
 import {assign} from "../utils";
 import {remove, render, replace} from "../utils/render";
 
@@ -102,11 +102,11 @@ export default class Event {
   }
 
   _handleFavoriteClick() {
-    this._changeData(assign(this._point, {isFavorite: !this._point.isFavorite}));
+    this._changeData(UserAction.UPDATE_EVENT, UpdateType.MINOR, assign(this._point, {isFavorite: !this._point.isFavorite}));
   }
 
   _handlEventEditFormSubmit(point) {
-    this._changeData(point);
+    this._changeData(UserAction.UPDATE_EVENT, UpdateType.MINOR, point);
     this._setViewMode();
   }
 }
@@ -114,7 +114,7 @@ export default class Event {
 // changeMode: коллбэк, который получает из tripPresenter._handleModeChange каждый эвент-презентер
 // - перебирает список со всеми презентерами и сбрасывает их вид до начального посредством их же метода .resetView
 
-// changeData: коллбэк, который получает из tripPresenter._handleEventChange каждый эвент-презентер
+// changeData: коллбэк, который получает из tripPresenter._handleViewAction каждый эвент-презентер
 // - получает один элемент обновлённых данных;
 // - обновляет список моковых данных;
 // - передаёт в эвент-презентер обновлённый элемент данных для инициализации

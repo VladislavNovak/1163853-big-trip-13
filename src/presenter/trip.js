@@ -27,9 +27,12 @@ export default class Trip {
     this._warningComponent = new WarningView(WarningTypes.EMPTY_DATA_LIST);
     // 024: подключить компонент new
 
-    this._handleEventChange = this._handleEventChange.bind(this);
+    this._handleViewAction = this._handleViewAction.bind(this);
+    this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+
+    this._eventsModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -50,9 +53,12 @@ export default class Trip {
     Object.values(this._eventPresenter).forEach((presenter) => presenter.resetView());
   }
 
-  _handleEventChange(updatedPoint) {
-    // Здесь будем вызывать обновление модели
-    this._eventPresenter[updatedPoint.id].init(updatedPoint);
+  _handleViewAction(actionType, updateType, updatedPoint) {
+    console.log(actionType, updateType, updatedPoint);
+  }
+
+  _handleModelEvent(updateType, data) {
+    console.log(updateType, data);
   }
 
   _handleSortTypeChange(activeSort) {
@@ -67,7 +73,7 @@ export default class Trip {
   }
 
   _renderEvent(point) {
-    const eventPresenter = new EventPresenter(this._routeComponent, this._handleEventChange, this._handleModeChange);
+    const eventPresenter = new EventPresenter(this._routeComponent, this._handleViewAction, this._handleModeChange);
     eventPresenter.init(point);
     this._eventPresenter[point.id] = eventPresenter;
   }
@@ -110,13 +116,17 @@ export default class Trip {
 // _handleModeChange: будем передавать в каждый эвент-презентер.
 // - перебирает список со всеми презентерами и сбрасывает их вид до начального посредством их же метода .resetView
 
-// _handleEventChange: будем передавать в каждый эвент-презентер под наименованием changeData и уже там будет передаваться в необходимый обработчик
+// _handleViewAction: Здесь будем вызывать обновление модели
+// передаётся в каждый нужный презентер под наименованием changeData и уже там будет передаваться в необходимый обработчик
 // При срабатывании обработчика, данные, например флаг isFavorite, изменятся и будут переданы changeData
-// Данные изменятся и обновят конкретный презентер через this._eventPresenter[updatedPoint.id].init(updatedPoint)
-// Т.е. каждая вью будет иметь данный метод и будет его вызывать в ответ на какое-либо действие и реализуется связь от представления к данным.
-// - получает один элемент обновлённых данных;
-// - обновляет список моковых данных;
-// - передаёт в эвент-презентер обновлённый элемент данных для инициализации
+// - actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
+// - updateType - тип изменений, нужно чтобы понять, что после нужно обновить
+// - updateItem - обновленные данные
+
+// _handleModelEvent: обработчик-наблюдатель, который реагирует на изменение модели.
+// В зависимости от типа изменений решаем, что делать:
+// - обновляет часть списка эвентов. Например, когда поменялось описание.
+// - обновляет весь список эвентов. Например, когда удалили/добавили эвент или при переключении фильтра.
 
 // _renderEvent:
 // - создаёт новый эвент-презентер;
