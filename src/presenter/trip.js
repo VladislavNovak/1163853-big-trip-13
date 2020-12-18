@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {SortTypes, WarningTypes} from "../utils/constants";
+import {SortTypes, UpdateType, UserAction, WarningTypes} from "../utils/constants";
 // 021 импортировать константу IS_NEW_MODE
 import {render} from "../utils/render";
 // 022: импортировать функцию getBlankPoint
@@ -53,12 +53,20 @@ export default class Trip {
     Object.values(this._eventPresenter).forEach((presenter) => presenter.resetView());
   }
 
-  _handleViewAction(actionType, updateType, updatedPoint) {
-    console.log(actionType, updateType, updatedPoint);
+  _handleViewAction(actionType, updateType, update) {
+    return {
+      [UserAction.UPDATE_EVENT]: () => (this._eventsModel.updateEvent(updateType, update)),
+      [UserAction.ADD_EVENT]: () => (this._eventsModel.addEvent(updateType, update)),
+      [UserAction.DELETE_EVENT]: () => (this._eventsModel.deleteEvent(updateType, update)),
+    }[actionType]();
   }
 
   _handleModelEvent(updateType, data) {
-    console.log(updateType, data);
+    return {
+      [UpdateType.PATCH]: () => (this._eventPresenter[data.id].init(data)),
+      [UpdateType.MINOR]: () => (console.log(`TODO: need to implement`)),
+      [UpdateType.MAJOR]: () => (console.log(`TODO: need to implement`)),
+    }[updateType]();
   }
 
   _handleSortTypeChange(activeSort) {
