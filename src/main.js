@@ -2,6 +2,7 @@ import {getPoints} from './temp/mocks';
 import {RenderPosition, render} from './utils/render';
 
 import EventsModel from './model/events';
+import FilterModel from './model/filter';
 import TripPresenter from './presenter/trip';
 import {
   FiltersView,
@@ -13,6 +14,8 @@ const points = getPoints();
 
 const eventsModel = new EventsModel();
 eventsModel.setEvents(points);
+
+const filterModel = new FilterModel();
 
 const bodyElement = document.body;
 const headerElement = bodyElement.querySelector(`.trip-main`);
