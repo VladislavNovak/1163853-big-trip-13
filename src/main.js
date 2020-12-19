@@ -1,3 +1,4 @@
+import {FilterTypes} from './utils/constants';
 import {getPoints} from './temp/mocks';
 import {RenderPosition, render} from './utils/render';
 
@@ -32,7 +33,7 @@ const handleTabClick = (activeTab) => {
 
 tabsComponent.tabClick(handleTabClick);
 
-render(controlElement, new FiltersView());
+render(controlElement, new FiltersView(FilterTypes.EVERYTHING));
 
 const tripPresenter = new TripPresenter(mainElement, eventsModel);
 tripPresenter.init();
