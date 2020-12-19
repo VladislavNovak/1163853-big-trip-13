@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import {SortTypes, UpdateType, UserAction, WarningTypes} from "../utils/constants";
 // 021 импортировать константу IS_NEW_MODE
-import {render} from "../utils/render";
+import {remove, render, RenderPosition} from "../utils/render";
 // 022: импортировать функцию getBlankPoint
 
 import EventPresenter from "./event";
@@ -22,7 +22,7 @@ export default class Trip {
     this._currentSortType = SortTypes.SORT_DAY;
 
     this._tripComponent = new TripView();
-    this._sortComponent = new SortView();
+    this._sortComponent = null;
     this._routeComponent = new RouteView();
     this._warningComponent = new WarningView(WarningTypes.EMPTY_DATA_LIST);
     // 024: подключить компонент new
@@ -37,6 +37,7 @@ export default class Trip {
 
   init() {
     render(this._tripContainer, this._tripComponent);
+    render(this._tripComponent, this._routeComponent);
 
     this._renderTrip();
   }
@@ -64,20 +65,36 @@ export default class Trip {
   _handleModelEvent(updateType, data) {
     return {
       [UpdateType.PATCH]: () => (this._eventPresenter[data.id].init(data)),
-      [UpdateType.MINOR]: () => (console.log(`TODO: need to implement`)),
-      [UpdateType.MAJOR]: () => (console.log(`TODO: need to implement`)),
+      [UpdateType.MINOR]: () => {
+        this._clearTrip();
+        this._renderTrip();
+      },
+      [UpdateType.MAJOR]: () => {
+        this._clearTrip({resetSortType: true});
+        this._renderTrip();
+      },
     }[updateType]();
   }
 
   _handleSortTypeChange(activeSort) {
+    if (this._currentSortType === activeSort) {
+      return;
+    }
+
     this._currentSortType = activeSort;
-    this._clearRoute();
-    this._renderRoute();
+    this._clearTrip();
+    this._renderTrip();
   }
 
   _renderSort() {
-    render(this._tripComponent, this._sortComponent);
+    if (this._sortComponent !== null) {
+      this._sortComponent = null;
+    }
+
+    this._sortComponent = new SortView(this._currentSortType);
     this._sortComponent.sortClick(this._handleSortTypeChange);
+
+    render(this._tripComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderEvent(point) {
@@ -95,19 +112,19 @@ export default class Trip {
   }
 
   _renderNewEvent() {
-    // 025: отрисовать компонент new
+    // 025: отрисовать компонент new. Определить точку входа!
   }
 
-  _clearRoute() {
+  _clearTrip(resetSortType = false) {
     Object.values(this._eventPresenter).forEach((presenter) => presenter.destroy());
     this._eventPresenter = {};
-  }
 
-  _renderRoute() {
-    render(this._tripComponent, this._routeComponent);
-    this._renderNewEvent();
+    remove(this._sortComponent);
+    remove(this._warningComponent);
 
-    this._renderEvents();
+    if (resetSortType) {
+      this._currentSortType = SortTypes.SORT_DAY;
+    }
   }
 
   _renderTrip() {
@@ -117,7 +134,7 @@ export default class Trip {
     }
 
     this._renderSort();
-    this._renderRoute();
+    this._renderEvents();
   }
 }
 
