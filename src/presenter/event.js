@@ -19,8 +19,8 @@ export default class Event {
 
     this._handlEventRollupClick = this._handlEventRollupClick.bind(this);
     this._handlEventEditRollupClick = this._handlEventEditRollupClick.bind(this);
-    this._handlEventEditResetClick = this._handlEventEditResetClick.bind(this);
     this._handlEventEditFormSubmit = this._handlEventEditFormSubmit.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
   }
@@ -37,8 +37,8 @@ export default class Event {
     this._eventComponent.rollupButtonClick(this._handlEventRollupClick);
     this._eventComponent.favoriteButtonClick(this._handleFavoriteClick);
     this._eventEditComponent.rollupButtonClick(this._handlEventEditRollupClick);
-    this._eventEditComponent.resetButtonClick(this._handlEventEditResetClick);
     this._eventEditComponent.formSubmit(this._handlEventEditFormSubmit);
+    this._eventEditComponent.resetButtonClick(this._handleDeleteClick);
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
       render(this._routeContainer, this._eventComponent);
@@ -89,10 +89,6 @@ export default class Event {
     this._setViewMode();
   }
 
-  _handlEventEditResetClick() {
-    this._setViewMode();
-  }
-
   _escKeyDownHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
@@ -108,6 +104,10 @@ export default class Event {
   _handlEventEditFormSubmit(point) {
     this._changeData(UserAction.UPDATE_EVENT, UpdateType.MINOR, point);
     this._setViewMode();
+  }
+
+  _handleDeleteClick(point) {
+    this._changeData(UserAction.DELETE_EVENT, UpdateType.MINOR, point);
   }
 }
 

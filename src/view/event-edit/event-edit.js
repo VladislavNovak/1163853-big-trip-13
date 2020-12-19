@@ -10,6 +10,15 @@ import "../../../node_modules/flatpickr/dist/flatpickr.min";
 import Smart from '../smart';
 import {createEventEditTemplate} from './templates/create-event-edit-template';
 
+const pickrsDestroy = (...pickrs) => {
+  pickrs.forEach((pickr) => {
+    if (pickr) {
+      pickr.destroy();
+      pickr = null;
+    }
+  });
+};
+
 export default class EventEdit extends Smart {
   constructor(point, isEditMode = true) {
     super();
@@ -30,6 +39,12 @@ export default class EventEdit extends Smart {
 
     this._setInnerHandlers();
     this._setPickrs();
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    pickrsDestroy(this._pickrStart, this._pickrEnd);
   }
 
   reset(point) {
@@ -115,10 +130,6 @@ export default class EventEdit extends Smart {
     this._callback.onRollupButtonClick();
   }
 
-  _resetButtonClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.onResetButtonClick();
-  }
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
@@ -128,19 +139,24 @@ export default class EventEdit extends Smart {
   rollupButtonClick(callback) {
     this._callback.onRollupButtonClick = callback;
     this.getElement().querySelector(`.event__rollup-btn`)
-      .addEventListener(`click`, this._rollupButtonClickHandler);
+    .addEventListener(`click`, this._rollupButtonClickHandler);
+  }
+
+  formSubmit(callback) {
+    this._callback.onFormSubmit = callback;
+    this.getElement().querySelector(`form`)
+    .addEventListener(`submit`, this._formSubmitHandler);
+  }
+
+  _resetButtonClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.onResetButtonClick(EventEdit.improverishData(this._point));
   }
 
   resetButtonClick(callback) {
     this._callback.onResetButtonClick = callback;
     this.getElement().querySelector(`.event__reset-btn`)
       .addEventListener(`click`, this._resetButtonClickHandler);
-  }
-
-  formSubmit(callback) {
-    this._callback.onFormSubmit = callback;
-    this.getElement().querySelector(`form`)
-      .addEventListener(`submit`, this._formSubmitHandler);
   }
 
   static supplementData(data, payload) {
@@ -176,15 +192,7 @@ export default class EventEdit extends Smart {
   }
 
   _setPickrs() {
-    if (this._pickrStart) {
-      this._pickrStart.destroy();
-      this._pickrStart = null;
-    }
-
-    if (this._pickrEnd) {
-      this._pickrEnd.destroy();
-      this._pickrEnd = null;
-    }
+    pickrsDestroy(this._pickrStart, this._pickrEnd);
 
     const pickrDefaultConfig = {
       'dateFormat': `d/m/y H:i`,
