@@ -241,3 +241,21 @@ export default class EventEdit extends Smart {
 
 // reset: вызывается в presenter/Event в случае выхода без сохранения, через ESC
 // - аргументом передаются прежние данные, ведь в презентере находятся "бэкапные" данные
+
+// Цепочка обработки при датабиндинге состоит из двух больших частей
+// I - ОТ ПРЕДСТАВЛЕНИЯ К МОДЕЛИ:
+// 1 - добавляем подписку на кнопку. Например, resetButtonClick на .event__reset-btn
+// 2 - сохраняем в переменную this._resetButtonClickHandler и биндим её к этому классу как .bind
+// 3 - теперь в презентере Event посредством this._eventEditComponent.resetButtonClick(this._handleDeleteClick)
+// передаём коллбэком обработчик this._handleDeleteClick.
+// 4 - this._handleDeleteClick, в свою очередь, вызывает функцию изменения данных _changeData,
+// где указываем нужные параметры для actionType, updateType, update
+// 5 - в действительности, _changeData - это коллбэк из презентера Trip, который знает о эвентах всё -
+// _handleViewAction и именно в неё попадают аргументами actionType, updateType, update. Именно тут определяется,
+// какой тип функций модели вызывается, например model.updateEvent
+// 6 - в модель попадает updateType, который нужен только для второй части цепочки, и update, т.е. конкретные данные
+// 7 - модель обрабатывает данные указанным способом - updateEvent, addEvent или deleteEvent и
+// спускает данные в notify для оповещения всех подписавшихся наблюдателей
+// II - ОТ МОДЕЛИ К ПРЕЗЕНТЕРУ
+// 1 - наблюдатель только один - Trip._handleModelEvent - который решает, на основе ранее
+// указанного updateType - PATCH, MINOR, MAJOR , как перерисовывать компоненты.
