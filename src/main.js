@@ -1,12 +1,11 @@
-import {FilterTypes} from './utils/constants';
 import {getPoints} from './temp/mocks';
 import {RenderPosition, render} from './utils/render';
 
 import EventsModel from './model/events';
 import FilterModel from './model/filter';
 import TripPresenter from './presenter/trip';
+import FilterPresenter from './presenter/filter';
 import {
-  FiltersView,
   InfoView,
   TabsView,
 } from './view/';
@@ -33,7 +32,8 @@ const handleTabClick = (activeTab) => {
 
 tabsComponent.tabClick(handleTabClick);
 
-render(controlElement, new FiltersView(FilterTypes.EVERYTHING));
-
 const tripPresenter = new TripPresenter(mainElement, eventsModel);
+const filterPresenter = new FilterPresenter(controlElement, filterModel, eventsModel);
+
+filterPresenter.init();
 tripPresenter.init();
