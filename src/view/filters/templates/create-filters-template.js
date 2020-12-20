@@ -1,8 +1,8 @@
 import {FilterTypes} from '../../../utils/constants';
 
-export const createFiltersTemplate = () => {
+export const createFiltersTemplate = (activeFilter) => {
 
-  const getFilters = (activeFilter) => {
+  const getFilters = () => {
     return Object.values(FilterTypes).map((filter) => {
       const filterInLowerCase = filter.toLowerCase();
       return (

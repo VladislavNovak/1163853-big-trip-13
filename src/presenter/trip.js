@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import {SortTypes, UpdateType, UserAction, WarningTypes} from "../utils/constants";
 // 021 импортировать константу IS_NEW_MODE
+import {filter} from '../utils/filter';
 import {remove, render, RenderPosition} from "../utils/render";
 // 022: импортировать функцию getBlankPoint
 
@@ -15,8 +16,9 @@ import {
 } from "../view";
 
 export default class Trip {
-  constructor(tripContainer, eventsModel) {
+  constructor(tripContainer, eventsModel, filterModel) {
     this._eventsModel = eventsModel;
+    this._filterModel = filterModel;
     this._tripContainer = tripContainer;
     this._eventPresenter = {};
     this._currentSortType = SortTypes.SORT_DAY;
@@ -33,6 +35,7 @@ export default class Trip {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
     this._eventsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -43,10 +46,14 @@ export default class Trip {
   }
 
   _getEvents() {
+    const filterType = this._filterModel.getFilter();
+    const points = this._eventsModel.getEvents();
+    const filteredPoints = filter[filterType](points);
+
     return {
-      [SortTypes.SORT_DAY]: () => (this._eventsModel.getEvents().sort((a, b) => a.timeStart - b.timeStart)),
-      [SortTypes.SORT_TIME]: () => this._eventsModel.getEvents().sort((a, b) => dayjs(b.timeEnd).diff(b.timeStart) - dayjs(a.timeEnd).diff(a.timeStart)),
-      [SortTypes.SORT_PRICE]: () => this._eventsModel.getEvents().sort((a, b) => b.price - a.price),
+      [SortTypes.SORT_DAY]: () => filteredPoints.sort((a, b) => a.timeStart - b.timeStart),
+      [SortTypes.SORT_TIME]: () => filteredPoints.sort((a, b) => dayjs(b.timeEnd).diff(b.timeStart) - dayjs(a.timeEnd).diff(a.timeStart)),
+      [SortTypes.SORT_PRICE]: () => filteredPoints.getEvents().sort((a, b) => b.price - a.price),
     }[this._currentSortType]();
   }
 

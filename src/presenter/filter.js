@@ -1,7 +1,7 @@
 import {UpdateType} from '../utils/constants';
 import {remove, render, replace} from '../utils/render';
 
-import {FiltersView} from './view/';
+import FiltersView from '../view/filters/filters';
 
 export default class Filter {
   constructor(filterContainer, filterModel, eventsModel) {

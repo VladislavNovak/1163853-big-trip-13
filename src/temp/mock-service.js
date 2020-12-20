@@ -11,7 +11,9 @@ export const getFavoriteStatus = (mode) => (mode === GenerateMode.AS_EDIT_MODE) 
 
 export const generateDate = (mode) => {
   dayjs.extend(dayjsRandom);
-  const timeStart = (mode === GenerateMode.AS_EDIT_MODE) ? dayjs.recent(CHANCE_DAYS_GAP).toDate() : dayjs().toDate();
+  const recent = dayjs.recent(CHANCE_DAYS_GAP).toDate();
+  const soon = dayjs.soon(CHANCE_DAYS_GAP).toDate();
+  const timeStart = (mode === GenerateMode.AS_EDIT_MODE) ? dayjs.between(recent, soon).toDate() : dayjs().toDate();
   const timeEnd = (mode === GenerateMode.AS_EDIT_MODE) ? dayjs.between(timeStart, dayjs().add(CHANCE_DAYS_GAP, `day`)).toDate() : dayjs().toDate();
   return {timeStart, timeEnd};
 };
