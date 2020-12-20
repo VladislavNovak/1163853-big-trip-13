@@ -1,11 +1,11 @@
-import {Destinations, OffersList} from "../../temp/mock-constants";
-import {assign, getPlaces, getSomeOffers} from "../../utils";
+import {Destinations, OffersList} from '../../temp/mock-constants';
+import {assign, getPlaces, getSomeOffers} from '../../utils';
 
-import flatpickr from "flatpickr";
-import ConfirmDatePlugin from "flatpickr/dist/plugins/confirmDate/confirmDate.js";
-import "flatpickr/dist/themes/dark.css";
-import "flatpickr/dist/plugins/confirmDate/confirmDate.css";
-import "../../../node_modules/flatpickr/dist/flatpickr.min";
+import flatpickr from 'flatpickr';
+import ConfirmDatePlugin from 'flatpickr/dist/plugins/confirmDate/confirmDate.js';
+import 'flatpickr/dist/themes/dark.css';
+import 'flatpickr/dist/plugins/confirmDate/confirmDate.css';
+import '../../../node_modules/flatpickr/dist/flatpickr.min';
 
 import Smart from '../smart';
 import {createEventEditTemplate} from './templates/create-event-edit-template';
@@ -240,7 +240,7 @@ export default class EventEdit extends Smart {
 // - привязывает все обработчики к соответствующим сохранённым _callback
 
 // reset: вызывается в presenter/Event в случае выхода без сохранения, через ESC
-// - аргументом передаются прежние данные, ведь в презентере находятся "бэкапные" данные
+// - аргументом передаются прежние данные, ведь в презентере находятся 'бэкапные' данные
 
 // Цепочка обработки при датабиндинге состоит из двух больших частей
 // I - ОТ ПРЕДСТАВЛЕНИЯ К МОДЕЛИ:

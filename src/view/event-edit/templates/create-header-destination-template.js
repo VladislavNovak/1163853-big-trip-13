@@ -1,4 +1,4 @@
-import {getPlaces} from "../../../utils";
+import {getPlaces} from '../../../utils';
 import he from 'he';
 
 export const createHeaderDestinationTemplate = ({type, place: selectedPlace}) => {

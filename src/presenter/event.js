@@ -1,11 +1,11 @@
-import {Mode, UserAction, UpdateType} from "../utils/constants";
-import {assign} from "../utils";
-import {remove, render, replace} from "../utils/render";
+import {Mode, UserAction, UpdateType} from '../utils/constants';
+import {assign} from '../utils';
+import {remove, render, replace} from '../utils/render';
 
 import {
   EventEditView,
   EventView,
-} from "../view";
+} from '../view';
 
 export default class Event {
   constructor(routeContainer, changeData, changeMode) {
