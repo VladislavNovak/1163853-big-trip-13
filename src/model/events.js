@@ -31,7 +31,7 @@ export default class Events extends Observer {
   }
 
   addEvent(updateType, update) {
-    this._poitns = [
+    this._points = [
       update,
       ...this._points
     ];

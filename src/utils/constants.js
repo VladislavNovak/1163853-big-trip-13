@@ -1,4 +1,4 @@
-export const IS_NEW_MODE = false;
+export const SET_BLANK_MODE = false;
 
 export const FormatTypes = {
   MONTHS: `MMM DD`,

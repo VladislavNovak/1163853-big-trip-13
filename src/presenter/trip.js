@@ -1,19 +1,17 @@
 import dayjs from 'dayjs';
-import {SortTypes, UpdateType, UserAction, WarningTypes} from "../utils/constants";
-// 021 импортировать константу IS_NEW_MODE
+import {FilterTypes, SortTypes, UpdateType, UserAction, WarningTypes} from '../utils/constants';
 import {filter} from '../utils/filter';
-import {remove, render, RenderPosition} from "../utils/render";
-// 022: импортировать функцию getBlankPoint
+import {remove, render, RenderPosition} from '../utils/render';
 
-import EventPresenter from "./event";
+import EventPresenter from './event';
+import BlankPresenter from './blank';
 
 import {
-  // 023: импортировать компонент
   SortView,
   RouteView,
   TripView,
   WarningView,
-} from "../view";
+} from '../view';
 
 export default class Trip {
   constructor(tripContainer, eventsModel, filterModel) {
@@ -27,7 +25,6 @@ export default class Trip {
     this._sortComponent = null;
     this._routeComponent = new RouteView();
     this._warningComponent = new WarningView(WarningTypes.EMPTY_DATA_LIST);
-    // 024: подключить компонент new
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -36,6 +33,8 @@ export default class Trip {
 
     this._eventsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+
+    this._blankPresenter = new BlankPresenter(this._routeComponent, this._handleViewAction);
   }
 
   init() {
@@ -43,6 +42,12 @@ export default class Trip {
     render(this._tripComponent, this._routeComponent);
 
     this._renderTrip();
+  }
+
+  createEvent() {
+    this._currentSortType = SortTypes.SORT_DAY;
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterTypes.EVERYTHING);
+    this._blankPresenter.init();
   }
 
   _getEvents() {
@@ -58,6 +63,7 @@ export default class Trip {
   }
 
   _handleModeChange() {
+    this._blankPresenter.destroy();
     Object.values(this._eventPresenter).forEach((presenter) => presenter.resetView());
   }
 
@@ -118,10 +124,6 @@ export default class Trip {
     render(this._tripComponent, this._warningComponent);
   }
 
-  _renderNewEvent() {
-    // 025: отрисовать компонент new. Определить точку входа!
-  }
-
   _clearTrip(resetSortType = false) {
     Object.values(this._eventPresenter).forEach((presenter) => presenter.destroy());
     this._eventPresenter = {};
@@ -175,9 +177,3 @@ export default class Trip {
 
 // _getEvents: обертка над методом модели для получения задач
 // - в будущем позволит удобнее получать из модели данные в презенторе
-
-// 021 - import {IS_NEW_MODE} from "../utils/constants";
-// 022 - import {getBlankPoint} from "../temp/mocks";
-// 023 - EventEditView,
-// 024 - this._blankComponent = new EventEditView(getBlankPoint(), IS_NEW_MODE);
-// 025 - render(this._routeComponent, this._blankComponent)
