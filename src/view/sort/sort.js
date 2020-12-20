@@ -1,13 +1,11 @@
-import {SortTypes} from '../../utils/constants';
 import Abstract from '../abstract';
 import {createSortTemplate} from './templates/create-sort-template';
 
 export default class Sort extends Abstract {
-  constructor() {
+  constructor(activeSort) {
     super();
 
-    this._activeSort = SortTypes.SORT_DAY;
-    this._prevActiveSort = SortTypes.SORT_DAY;
+    this._activeSort = activeSort;
 
     this._sortClickHandler = this._sortClickHandler.bind(this);
   }
@@ -22,12 +20,6 @@ export default class Sort extends Abstract {
     }
 
     this._activeSort = target.value;
-
-    if (this._activeSort === this._prevActiveSort) {
-      return;
-    }
-
-    this._prevActiveSort = this._activeSort;
     this._callback.onSortClick(this._activeSort);
   }
 

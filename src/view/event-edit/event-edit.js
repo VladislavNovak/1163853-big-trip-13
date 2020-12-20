@@ -1,14 +1,23 @@
-import {Destinations, OffersList} from "../../temp/mock-constants";
-import {assign, getPlaces, getSomeOffers} from "../../utils";
+import {Destinations, OffersList} from '../../temp/mock-constants';
+import {assign, getPlaces, getSomeOffers} from '../../utils';
 
-import flatpickr from "flatpickr";
-import ConfirmDatePlugin from "flatpickr/dist/plugins/confirmDate/confirmDate.js";
-import "flatpickr/dist/themes/dark.css";
-import "flatpickr/dist/plugins/confirmDate/confirmDate.css";
-import "../../../node_modules/flatpickr/dist/flatpickr.min";
+import flatpickr from 'flatpickr';
+import ConfirmDatePlugin from 'flatpickr/dist/plugins/confirmDate/confirmDate.js';
+import 'flatpickr/dist/themes/dark.css';
+import 'flatpickr/dist/plugins/confirmDate/confirmDate.css';
+import '../../../node_modules/flatpickr/dist/flatpickr.min';
 
 import Smart from '../smart';
 import {createEventEditTemplate} from './templates/create-event-edit-template';
+
+const pickrsDestroy = (...pickrs) => {
+  pickrs.forEach((pickr) => {
+    if (pickr) {
+      pickr.destroy();
+      pickr = null;
+    }
+  });
+};
 
 export default class EventEdit extends Smart {
   constructor(point, isEditMode = true) {
@@ -30,6 +39,12 @@ export default class EventEdit extends Smart {
 
     this._setInnerHandlers();
     this._setPickrs();
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    pickrsDestroy(this._pickrStart, this._pickrEnd);
   }
 
   reset(point) {
@@ -115,10 +130,6 @@ export default class EventEdit extends Smart {
     this._callback.onRollupButtonClick();
   }
 
-  _resetButtonClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.onResetButtonClick();
-  }
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
@@ -128,19 +139,24 @@ export default class EventEdit extends Smart {
   rollupButtonClick(callback) {
     this._callback.onRollupButtonClick = callback;
     this.getElement().querySelector(`.event__rollup-btn`)
-      .addEventListener(`click`, this._rollupButtonClickHandler);
+    .addEventListener(`click`, this._rollupButtonClickHandler);
+  }
+
+  formSubmit(callback) {
+    this._callback.onFormSubmit = callback;
+    this.getElement().querySelector(`form`)
+    .addEventListener(`submit`, this._formSubmitHandler);
+  }
+
+  _resetButtonClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.onResetButtonClick(EventEdit.improverishData(this._point));
   }
 
   resetButtonClick(callback) {
     this._callback.onResetButtonClick = callback;
     this.getElement().querySelector(`.event__reset-btn`)
       .addEventListener(`click`, this._resetButtonClickHandler);
-  }
-
-  formSubmit(callback) {
-    this._callback.onFormSubmit = callback;
-    this.getElement().querySelector(`form`)
-      .addEventListener(`submit`, this._formSubmitHandler);
   }
 
   static supplementData(data, payload) {
@@ -176,15 +192,7 @@ export default class EventEdit extends Smart {
   }
 
   _setPickrs() {
-    if (this._pickrStart) {
-      this._pickrStart.destroy();
-      this._pickrStart = null;
-    }
-
-    if (this._pickrEnd) {
-      this._pickrEnd.destroy();
-      this._pickrEnd = null;
-    }
+    pickrsDestroy(this._pickrStart, this._pickrEnd);
 
     const pickrDefaultConfig = {
       'dateFormat': `d/m/y H:i`,
@@ -202,10 +210,6 @@ export default class EventEdit extends Smart {
 
     this._pickrStart = flatpickr(this.getElement().querySelector(`#event-start-time-1`), pickrStartConfig);
     this._pickrEnd = flatpickr(this.getElement().querySelector(`#event-end-time-1`), pickrEndConfig);
-
-    // const xxx = {a: 234, b: 2345, };
-    // const yyy = {...xxx, c: 345, d: 456};
-    // console.log(yyy);
   }
 }
 
@@ -236,4 +240,22 @@ export default class EventEdit extends Smart {
 // - привязывает все обработчики к соответствующим сохранённым _callback
 
 // reset: вызывается в presenter/Event в случае выхода без сохранения, через ESC
-// - аргументом передаются прежние данные, ведь в презентере находятся "бэкапные" данные
+// - аргументом передаются прежние данные, ведь в презентере находятся 'бэкапные' данные
+
+// Цепочка обработки при датабиндинге состоит из двух больших частей
+// I - ОТ ПРЕДСТАВЛЕНИЯ К МОДЕЛИ:
+// 1 - добавляем подписку на кнопку. Например, resetButtonClick на .event__reset-btn
+// 2 - сохраняем в переменную this._resetButtonClickHandler и биндим её к этому классу как .bind
+// 3 - теперь в презентере Event посредством this._eventEditComponent.resetButtonClick(this._handleDeleteClick)
+// передаём коллбэком обработчик this._handleDeleteClick.
+// 4 - this._handleDeleteClick, в свою очередь, вызывает функцию изменения данных _changeData,
+// где указываем нужные параметры для actionType, updateType, update
+// 5 - в действительности, _changeData - это коллбэк из презентера Trip, который знает о эвентах всё -
+// _handleViewAction и именно в неё попадают аргументами actionType, updateType, update. Именно тут определяется,
+// какой тип функций модели вызывается, например model.updateEvent
+// 6 - в модель попадает updateType, который нужен только для второй части цепочки, и update, т.е. конкретные данные
+// 7 - модель обрабатывает данные указанным способом - updateEvent, addEvent или deleteEvent и
+// спускает данные в notify для оповещения всех подписавшихся наблюдателей
+// II - ОТ МОДЕЛИ К ПРЕЗЕНТЕРУ
+// 1 - наблюдатель только один - Trip._handleModelEvent - который решает, на основе ранее
+// указанного updateType - PATCH, MINOR, MAJOR , как перерисовывать компоненты.

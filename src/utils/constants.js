@@ -1,4 +1,4 @@
-export const IS_NEW_MODE = false;
+export const SET_BLANK_MODE = false;
 
 export const FormatTypes = {
   MONTHS: `MMM DD`,
@@ -40,4 +40,16 @@ export const WarningTypes = {
 export const Mode = {
   DEFAULT: `DEFAULT`,
   EDITING: `EDITING`,
+};
+
+export const UserAction = {
+  UPDATE_EVENT: `UPDATE_EVENT`,
+  ADD_EVENT: `ADD_EVENT`,
+  DELETE_EVENT: `DELETE_EVENT`,
+};
+
+export const UpdateType = {
+  PATCH: `PATCH`,
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`,
 };

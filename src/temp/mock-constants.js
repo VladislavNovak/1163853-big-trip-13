@@ -8,8 +8,6 @@ export const CHANCE_PHOTOS_COUNT = 7;
 export const GenerateMode = {
   AS_NEW_COMPONENT: `AS_NEW_COMPONENT`,
   AS_EDIT_MODE: `AS_EDIT_MODE`,
-  WITH_RANDOM_ROUTE: `WITH_RANDOM_ROUTE`,
-  WITH_ALL_AVAILABLE_ROUTES: `WITH_ALL_AVAILABLE_ROUTES`,
 };
 
 export const RouteTypes = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
@@ -117,5 +115,3 @@ export const OffersList = [
 
 // AS_NEW_COMPONENT - необходим при генерации нового эвента
 // AS_EDIT_MODE - необходим при ренерации списка всех эвентов
-// WITH_RANDOM_ROUTE - для генерации случайного пути назначения
-// WITH_ALL_AVAILABLE_ROUTES - для генерации всех путей назначения

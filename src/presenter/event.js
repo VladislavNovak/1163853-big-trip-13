@@ -1,11 +1,11 @@
-import {Mode} from "../utils/constants";
-import {assign} from "../utils";
-import {remove, render, replace} from "../utils/render";
+import {Mode, UserAction, UpdateType} from '../utils/constants';
+import {assign} from '../utils';
+import {remove, render, replace} from '../utils/render';
 
 import {
   EventEditView,
   EventView,
-} from "../view";
+} from '../view';
 
 export default class Event {
   constructor(routeContainer, changeData, changeMode) {
@@ -19,8 +19,8 @@ export default class Event {
 
     this._handlEventRollupClick = this._handlEventRollupClick.bind(this);
     this._handlEventEditRollupClick = this._handlEventEditRollupClick.bind(this);
-    this._handlEventEditResetClick = this._handlEventEditResetClick.bind(this);
     this._handlEventEditFormSubmit = this._handlEventEditFormSubmit.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
   }
@@ -37,8 +37,8 @@ export default class Event {
     this._eventComponent.rollupButtonClick(this._handlEventRollupClick);
     this._eventComponent.favoriteButtonClick(this._handleFavoriteClick);
     this._eventEditComponent.rollupButtonClick(this._handlEventEditRollupClick);
-    this._eventEditComponent.resetButtonClick(this._handlEventEditResetClick);
     this._eventEditComponent.formSubmit(this._handlEventEditFormSubmit);
+    this._eventEditComponent.resetButtonClick(this._handleDeleteClick);
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
       render(this._routeContainer, this._eventComponent);
@@ -89,10 +89,6 @@ export default class Event {
     this._setViewMode();
   }
 
-  _handlEventEditResetClick() {
-    this._setViewMode();
-  }
-
   _escKeyDownHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
@@ -102,19 +98,23 @@ export default class Event {
   }
 
   _handleFavoriteClick() {
-    this._changeData(assign(this._point, {isFavorite: !this._point.isFavorite}));
+    this._changeData(UserAction.UPDATE_EVENT, UpdateType.MINOR, assign(this._point, {isFavorite: !this._point.isFavorite}));
   }
 
   _handlEventEditFormSubmit(point) {
-    this._changeData(point);
+    this._changeData(UserAction.UPDATE_EVENT, UpdateType.MINOR, point);
     this._setViewMode();
+  }
+
+  _handleDeleteClick(point) {
+    this._changeData(UserAction.DELETE_EVENT, UpdateType.MINOR, point);
   }
 }
 
 // changeMode: коллбэк, который получает из tripPresenter._handleModeChange каждый эвент-презентер
 // - перебирает список со всеми презентерами и сбрасывает их вид до начального посредством их же метода .resetView
 
-// changeData: коллбэк, который получает из tripPresenter._handleEventChange каждый эвент-презентер
+// changeData: коллбэк, который получает из tripPresenter._handleViewAction каждый эвент-презентер
 // - получает один элемент обновлённых данных;
 // - обновляет список моковых данных;
 // - передаёт в эвент-презентер обновлённый элемент данных для инициализации

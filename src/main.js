@@ -1,14 +1,21 @@
 import {getPoints} from './temp/mocks';
 import {RenderPosition, render} from './utils/render';
 
+import EventsModel from './model/events';
+import FilterModel from './model/filter';
 import TripPresenter from './presenter/trip';
+import FilterPresenter from './presenter/filter';
 import {
-  FiltersView,
   InfoView,
   TabsView,
 } from './view/';
 
 const points = getPoints();
+
+const eventsModel = new EventsModel();
+eventsModel.setEvents(points);
+
+const filterModel = new FilterModel();
 
 const bodyElement = document.body;
 const headerElement = bodyElement.querySelector(`.trip-main`);
@@ -25,8 +32,13 @@ const handleTabClick = (activeTab) => {
 
 tabsComponent.tabClick(handleTabClick);
 
+const tripPresenter = new TripPresenter(mainElement, eventsModel, filterModel);
+const filterPresenter = new FilterPresenter(controlElement, filterModel, eventsModel);
 
-render(controlElement, new FiltersView());
+filterPresenter.init();
+tripPresenter.init();
 
-const tripPresenter = new TripPresenter(mainElement);
-tripPresenter.init(points);
+document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
+  evt.preventDefault();
+  tripPresenter.createEvent();
+});

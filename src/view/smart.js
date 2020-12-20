@@ -1,5 +1,5 @@
-import {assign} from "../utils";
-import Abstract from "./abstract";
+import {assign} from '../utils';
+import Abstract from './abstract';
 
 export default class Smart extends Abstract {
   constructor() {

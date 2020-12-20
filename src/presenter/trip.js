@@ -1,129 +1,166 @@
 import dayjs from 'dayjs';
-import {SortTypes, WarningTypes} from "../utils/constants";
-// 021 импортировать константу IS_NEW_MODE
-import {updateItem} from "../utils/";
-import {render} from "../utils/render";
-// 022: импортировать функцию getBlankPoint
+import {FilterTypes, SortTypes, UpdateType, UserAction, WarningTypes} from '../utils/constants';
+import {filter} from '../utils/filter';
+import {remove, render, RenderPosition} from '../utils/render';
 
-import EventPresenter from "./event";
+import EventPresenter from './event';
+import BlankPresenter from './blank';
 
 import {
-  // 023: импортировать компонент
   SortView,
   RouteView,
   TripView,
   WarningView,
-} from "../view";
+} from '../view';
 
 export default class Trip {
-  constructor(tripContainer) {
+  constructor(tripContainer, eventsModel, filterModel) {
+    this._eventsModel = eventsModel;
+    this._filterModel = filterModel;
     this._tripContainer = tripContainer;
     this._eventPresenter = {};
     this._currentSortType = SortTypes.SORT_DAY;
 
     this._tripComponent = new TripView();
-    this._sortComponent = new SortView();
+    this._sortComponent = null;
     this._routeComponent = new RouteView();
     this._warningComponent = new WarningView(WarningTypes.EMPTY_DATA_LIST);
-    // 024: подключить компонент new
 
-    this._handleEventChange = this._handleEventChange.bind(this);
+    this._handleViewAction = this._handleViewAction.bind(this);
+    this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+
+    this._eventsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+
+    this._blankPresenter = new BlankPresenter(this._routeComponent, this._handleViewAction);
   }
 
-  init(points) {
-    points.sort((a, b) => a.timeStart - b.timeStart);
-
-    this._points = points.slice();
-    this._clonedPoints = this._points.slice();
-
+  init() {
     render(this._tripContainer, this._tripComponent);
+    render(this._tripComponent, this._routeComponent);
 
     this._renderTrip();
   }
 
+  createEvent() {
+    this._currentSortType = SortTypes.SORT_DAY;
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterTypes.EVERYTHING);
+    this._blankPresenter.init();
+  }
+
+  _getEvents() {
+    const filterType = this._filterModel.getFilter();
+    const points = this._eventsModel.getEvents();
+    const filteredPoints = filter[filterType](points);
+
+    return {
+      [SortTypes.SORT_DAY]: () => filteredPoints.sort((a, b) => a.timeStart - b.timeStart),
+      [SortTypes.SORT_TIME]: () => filteredPoints.sort((a, b) => dayjs(b.timeEnd).diff(b.timeStart) - dayjs(a.timeEnd).diff(a.timeStart)),
+      [SortTypes.SORT_PRICE]: () => filteredPoints.getEvents().sort((a, b) => b.price - a.price),
+    }[this._currentSortType]();
+  }
+
   _handleModeChange() {
+    this._blankPresenter.destroy();
     Object.values(this._eventPresenter).forEach((presenter) => presenter.resetView());
   }
 
-  _handleEventChange(updatedPoint) {
-    this._points = updateItem(this._points, updatedPoint);
-    this._eventPresenter[updatedPoint.id].init(updatedPoint);
+  _handleViewAction(actionType, updateType, update) {
+    return {
+      [UserAction.UPDATE_EVENT]: () => (this._eventsModel.updateEvent(updateType, update)),
+      [UserAction.ADD_EVENT]: () => (this._eventsModel.addEvent(updateType, update)),
+      [UserAction.DELETE_EVENT]: () => (this._eventsModel.deleteEvent(updateType, update)),
+    }[actionType]();
   }
 
-  _sortPoints(activeSort) {
-    this._currentSortType = activeSort;
-
+  _handleModelEvent(updateType, data) {
     return {
-      [SortTypes.SORT_DAY]: () => (this._points = this._clonedPoints.slice()),
-      [SortTypes.SORT_TIME]: () => this._points.sort((a, b) => dayjs(b.timeEnd).diff(b.timeStart) - dayjs(a.timeEnd).diff(a.timeStart)),
-      [SortTypes.SORT_PRICE]: () => this._points.sort((a, b) => b.price - a.price),
-    }[activeSort]();
+      [UpdateType.PATCH]: () => (this._eventPresenter[data.id].init(data)),
+      [UpdateType.MINOR]: () => {
+        this._clearTrip();
+        this._renderTrip();
+      },
+      [UpdateType.MAJOR]: () => {
+        this._clearTrip({resetSortType: true});
+        this._renderTrip();
+      },
+    }[updateType]();
   }
 
   _handleSortTypeChange(activeSort) {
-    this._sortPoints(activeSort);
-    this._clearRoute();
-    this._renderRoute();
+    if (this._currentSortType === activeSort) {
+      return;
+    }
+
+    this._currentSortType = activeSort;
+    this._clearTrip();
+    this._renderTrip();
   }
 
   _renderSort() {
-    render(this._tripComponent, this._sortComponent);
+    if (this._sortComponent !== null) {
+      this._sortComponent = null;
+    }
+
+    this._sortComponent = new SortView(this._currentSortType);
     this._sortComponent.sortClick(this._handleSortTypeChange);
+
+    render(this._tripComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderEvent(point) {
-    const eventPresenter = new EventPresenter(this._routeComponent, this._handleEventChange, this._handleModeChange);
+    const eventPresenter = new EventPresenter(this._routeComponent, this._handleViewAction, this._handleModeChange);
     eventPresenter.init(point);
     this._eventPresenter[point.id] = eventPresenter;
   }
 
   _renderEvents() {
-    this._points.forEach((point) => this._renderEvent(point));
+    this._getEvents().forEach((point) => this._renderEvent(point));
   }
 
   _renderNoEvents() {
     render(this._tripComponent, this._warningComponent);
   }
 
-  _renderNewEvent() {
-    // 025: отрисовать компонент new
-  }
-
-  _clearRoute() {
+  _clearTrip(resetSortType = false) {
     Object.values(this._eventPresenter).forEach((presenter) => presenter.destroy());
     this._eventPresenter = {};
-  }
 
-  _renderRoute() {
-    render(this._tripComponent, this._routeComponent);
-    this._renderNewEvent();
+    remove(this._sortComponent);
+    remove(this._warningComponent);
 
-    this._renderEvents();
+    if (resetSortType) {
+      this._currentSortType = SortTypes.SORT_DAY;
+    }
   }
 
   _renderTrip() {
-    if (this._points.length === 0) {
+    if (this._getEvents().length === 0) {
       this._renderNoEvents();
       return;
     }
 
     this._renderSort();
-    this._renderRoute();
+    this._renderEvents();
   }
 }
 
 // _handleModeChange: будем передавать в каждый эвент-презентер.
 // - перебирает список со всеми презентерами и сбрасывает их вид до начального посредством их же метода .resetView
 
-// _handleEventChange: будем передавать в каждый эвент-презентер под наименованием changeData и уже там будет передаваться в необходимый обработчик
+// _handleViewAction: Здесь будем вызывать обновление модели
+// передаётся в каждый нужный презентер под наименованием changeData и уже там будет передаваться в необходимый обработчик
 // При срабатывании обработчика, данные, например флаг isFavorite, изменятся и будут переданы changeData
-// Данные изменятся и обновят конкретный презентер через this._eventPresenter[updatedPoint.id].init(updatedPoint)
-// Т.е. каждая вью будет иметь данный метод и будет его вызывать в ответ на какое-либо действие и реализуется связь от представления к данным.
-// - получает один элемент обновлённых данных;
-// - обновляет список моковых данных;
-// - передаёт в эвент-презентер обновлённый элемент данных для инициализации
+// - actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
+// - updateType - тип изменений, нужно чтобы понять, что после нужно обновить
+// - updateItem - обновленные данные
+
+// _handleModelEvent: обработчик-наблюдатель, который реагирует на изменение модели.
+// В зависимости от типа изменений решаем, что делать:
+// - обновляет часть списка эвентов. Например, когда поменялось описание.
+// - обновляет весь список эвентов. Например, когда удалили/добавили эвент или при переключении фильтра.
 
 // _renderEvent:
 // - создаёт новый эвент-презентер;
@@ -138,8 +175,5 @@ export default class Trip {
 // - очищает поле с эвентами;
 // - отрисовывает поле с эвентами;
 
-// 021 - import {IS_NEW_MODE} from "../utils/constants";
-// 022 - import {getBlankPoint} from "../temp/mocks";
-// 023 - EventEditView,
-// 024 - this._blankComponent = new EventEditView(getBlankPoint(), IS_NEW_MODE);
-// 025 - render(this._routeComponent, this._blankComponent)
+// _getEvents: обертка над методом модели для получения задач
+// - в будущем позволит удобнее получать из модели данные в презенторе

@@ -71,26 +71,6 @@ export const getEllipseString = (arr) => (arr.length > 3)
   ? `${arr[0]} &mdash; ... &mdash; ${arr[arr.length - 1]}`
   : arr.reduce((phrase, word, index) => (index === 0) ? `${phrase}${word}` : `${phrase} &mdash; ${word}`, ``);
 
-/**
- * This function replaces one found element in the array
- * @param {Object[]} items - array to update
- * @param {Object} update - the object to update
- * @return {Object[]} returns an array with the updated object
- */
-export const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
-
-  if (index === -1) {
-    return items;
-  }
-
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1)
-  ];
-};
-
 export const assign = (expandable, ...payload) => Object.assign({}, expandable, ...payload);
 
 export const getPlaces = () => Destinations.map((destination) => destination.place);

@@ -1,4 +1,4 @@
-import Abstract from "../view/abstract";
+import Abstract from '../view/abstract';
 
 export const RenderPosition = {
   BEFOREBEGIN: `beforebegin`,
@@ -66,6 +66,10 @@ export const replace = (newChild, oldChild) => {
 };
 
 export const remove = (component) => {
+  if (component === null) {
+    return;
+  }
+
   if (!(component instanceof Abstract)) {
     throw new Error(`Can remove only components`);
   }
