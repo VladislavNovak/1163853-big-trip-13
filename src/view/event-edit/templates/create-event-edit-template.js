@@ -17,10 +17,23 @@ export const createEventEditTemplate = (point) => {
           ${createHeaderDestinationTemplate(point)}
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormattedDate(timeStart, FormatTypes.LONG_SLASH)}">
+            <input
+              class="event__input
+              event__input--time"
+              id="event-start-time-1"
+              type="text" name="event-start-time"
+              value="${getFormattedDate(timeStart, FormatTypes.LONG_SLASH)}"
+            >
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFormattedDate(timeEnd, FormatTypes.LONG_SLASH)}">
+            <input
+              class="event__input
+              event__input--time"
+              id="event-end-time-1"
+              type="text"
+              name="event-end-time"
+              value="${getFormattedDate(timeEnd, FormatTypes.LONG_SLASH)}"
+            >
           </div>
 
           <div class="event__field-group  event__field-group--price">
@@ -33,7 +46,7 @@ export const createEventEditTemplate = (point) => {
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
           <button class="event__reset-btn" type="reset">${isEditMode ? `Delete` : `Cancel`}</button>
-          <button class="event__rollup-btn" type="button">
+          ${isEditMode ? `<button class="event__rollup-btn" type="button">` : ``}
         </header>
         <section class="event__details">
           ${createSectionOffersTemplate(point)}
