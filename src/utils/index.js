@@ -17,23 +17,6 @@ export const getID = () => {
 };
 
 /**
- * This function shuffles a copy of the original array and truncates it at random
- * @param {string[]} arr - in the case of this project, it is a listing of offers
- * @return {string[]} returns an array of several random values of the original array
- */
-export const getSomeOffers = (arr) => {
-  const clone = arr.slice(0);
-  for (let i = clone.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * (i + 1));
-    [clone[i], clone[j]] = [clone[j], clone[i]];
-  }
-
-  const sliceArr = clone.slice(0, getRandomInteger(0, 5));
-
-  return sliceArr;
-};
-
-/**
  * This function formats the date according to a certain condition
  * @param {Object} time - the date to be converted
  * @param {string} view - one of the variants of the FormatTypes object
