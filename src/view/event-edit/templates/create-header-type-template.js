@@ -7,8 +7,20 @@ export const createHeaderTypeTemplate = ({type}) => {
       const typeInLowerCase = routeType.toLowerCase();
       return (
         `<div class="event__type-item">
-          <input id="event-type-${typeInLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${typeInLowerCase}">
-          <label class="event__type-label  event__type-label--${typeInLowerCase}" for="event-type-${typeInLowerCase}-1">${routeType}</label>
+          <input
+            id="event-type-${typeInLowerCase}-1"
+            class="event__type-input
+            visually-hidden"
+            type="radio"
+            name="event-type"
+            value="${routeType}"
+          >
+          <label
+            class="event__type-label
+            event__type-label--${typeInLowerCase}"
+            for="event-type-${typeInLowerCase}-1">
+            ${routeType}
+          </label>
         </div>`
       );
     }).join(``);

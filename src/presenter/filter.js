@@ -4,7 +4,7 @@ import {remove, render, replace} from '../utils/render';
 import FiltersView from '../view/filters/filters';
 
 export default class Filter {
-  constructor(filterContainer, filterModel, eventsModel) {
+  constructor(filterContainer, eventsModel, filterModel) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
     this._eventsModel = eventsModel;

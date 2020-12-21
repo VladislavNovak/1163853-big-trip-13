@@ -33,7 +33,7 @@ const handleTabClick = (activeTab) => {
 tabsComponent.tabClick(handleTabClick);
 
 const tripPresenter = new TripPresenter(mainElement, eventsModel, filterModel);
-const filterPresenter = new FilterPresenter(controlElement, filterModel, eventsModel);
+const filterPresenter = new FilterPresenter(controlElement, eventsModel, filterModel);
 
 filterPresenter.init();
 tripPresenter.init();
