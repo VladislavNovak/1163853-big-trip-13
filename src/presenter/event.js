@@ -74,6 +74,7 @@ export default class Event {
 
   _setEditMode() {
     replace(this._eventEditComponent, this._eventComponent);
+    this._eventEditComponent.createPickrs();
     document.addEventListener(`keydown`, this._escKeyDownHandler);
     this._changeMode();
     this._mode = Mode.EDITING;
@@ -81,6 +82,7 @@ export default class Event {
 
   _setViewMode() {
     replace(this._eventComponent, this._eventEditComponent);
+    this._eventEditComponent.destroyPickrs();
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
     this._mode = Mode.DEFAULT;
   }

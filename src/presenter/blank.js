@@ -29,7 +29,7 @@ export default class Blank {
 
     this._blankEventEditComponent.formSubmit(this._formSubmitHandler);
     this._blankEventEditComponent.resetButtonClick(this._resetButtonClickHandler);
-
+    this._blankEventEditComponent.createPickrs();
     render(this._routeContainer, this._blankEventEditComponent, RenderPosition.AFTERBEGIN);
 
     document.addEventListener(`keydown`, this._escKeyDownHandler);

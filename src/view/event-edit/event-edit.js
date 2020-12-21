@@ -10,22 +10,11 @@ import '../../../node_modules/flatpickr/dist/flatpickr.min';
 import Smart from '../smart';
 import {createEventEditTemplate} from './templates/create-event-edit-template';
 
-const pickrsDestroy = (...pickrs) => {
-  pickrs.forEach((pickr) => {
-    if (pickr) {
-      pickr.destroy();
-      pickr = null;
-    }
-  });
-};
-
 export default class EventEdit extends Smart {
   constructor(point, offersModel, isEditMode = true) {
     super();
     this._point = EventEdit.supplementData(point, isEditMode);
     this._offersModel = offersModel;
-    this._pickrStart = null;
-    this._pickrEnd = null;
 
     batchBind(
         this,
@@ -35,19 +24,16 @@ export default class EventEdit extends Smart {
         this._offerCheckboxChangeHandler,
         this._priceTextInputHandler,
         this._destinationTextInputHandler,
-        this._typeRadioInputHandler,
-        this._onPickrStartHandler,
-        this._onPickrEndHandler
+        this._typeRadioInputHandler
     );
 
     this._setInnerHandlers();
-    this._setPickrs();
   }
 
   removeElement() {
     super.removeElement();
 
-    pickrsDestroy(this._pickrStart, this._pickrEnd);
+    this.destroyPickrs(this._pickrStart, this._pickrEnd);
   }
 
   reset(point) {
@@ -173,6 +159,30 @@ export default class EventEdit extends Smart {
     return data;
   }
 
+  destroyPickrs() {
+    if (this._pickrStart) {
+      this._pickrStart.destroy();
+      this._pickrStart = null;
+    }
+    if (this._pickrEnd) {
+      this._pickrEnd.destroy();
+      this._pickrEnd = null;
+    }
+  }
+
+  createPickrs() {
+    this._pickrStart = null;
+    this._pickrEnd = null;
+
+    batchBind(
+        this,
+        this._onPickrStartHandler,
+        this._onPickrEndHandler
+    );
+
+    this._setPickrs();
+  }
+
   _onPickrStartHandler([newStartTime]) {
     if (newStartTime === undefined) {
       return;
@@ -195,7 +205,7 @@ export default class EventEdit extends Smart {
   }
 
   _setPickrs() {
-    pickrsDestroy(this._pickrStart, this._pickrEnd);
+    this.destroyPickrs(this._pickrStart, this._pickrEnd);
 
     const pickrDefaultConfig = {
       'dateFormat': `d/m/y H:i`,
