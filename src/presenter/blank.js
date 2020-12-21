@@ -5,9 +5,10 @@ import {remove, render, RenderPosition} from '../utils/render';
 import EventEditView from '../view/event-edit/event-edit';
 
 export default class Blank {
-  constructor(routeContainer, changeData) {
+  constructor(routeContainer, changeData, offersModel) {
     this._routeContainer = routeContainer;
     this._changeData = changeData;
+    this._offersModel = offersModel;
 
     this._blankEventEditComponent = null;
 
@@ -21,7 +22,7 @@ export default class Blank {
       return;
     }
 
-    this._blankEventEditComponent = new EventEditView(getBlankPoint(), SET_BLANK_MODE);
+    this._blankEventEditComponent = new EventEditView(getBlankPoint(), this._offersModel, SET_BLANK_MODE);
 
     this._blankEventEditComponent.formSubmit(this._formSubmitHandler);
     this._blankEventEditComponent.resetButtonClick(this._resetButtonClickHandler);

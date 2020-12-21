@@ -1,5 +1,5 @@
-import {Destinations, OffersList} from '../../temp/mock-constants';
-import {assign, getPlaces, getSomeOffers} from '../../utils';
+import {Destinations} from '../../temp/mock-constants';
+import {assign, getPlaces} from '../../utils';
 
 import flatpickr from 'flatpickr';
 import ConfirmDatePlugin from 'flatpickr/dist/plugins/confirmDate/confirmDate.js';
@@ -20,9 +20,10 @@ const pickrsDestroy = (...pickrs) => {
 };
 
 export default class EventEdit extends Smart {
-  constructor(point, isEditMode = true) {
+  constructor(point, offersModel, isEditMode = true) {
     super();
     this._point = EventEdit.supplementData(point, isEditMode);
+    this._offersModel = offersModel;
     this._pickrStart = null;
     this._pickrEnd = null;
 
@@ -120,8 +121,8 @@ export default class EventEdit extends Smart {
   }
 
   _typeRadioInputHandler({target}) {
-    const type = target.value;
-    const offers = getSomeOffers(OffersList);
+    const {type, offers} = this._offersModel
+        .getOffers().find((offer) => offer.type === target.value);
     this.updateData({type, offers});
   }
 

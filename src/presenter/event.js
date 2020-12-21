@@ -8,10 +8,11 @@ import {
 } from '../view';
 
 export default class Event {
-  constructor(routeContainer, changeData, changeMode) {
+  constructor(routeContainer, changeData, changeMode, offersModel) {
     this._routeContainer = routeContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
+    this._offersModel = offersModel;
 
     this._eventComponent = null;
     this._eventEditComponent = null;
@@ -32,7 +33,7 @@ export default class Event {
     const prevEventEditComponent = this._eventEditComponent;
 
     this._eventComponent = new EventView(point);
-    this._eventEditComponent = new EventEditView(point);
+    this._eventEditComponent = new EventEditView(point, this._offersModel);
 
     this._eventComponent.rollupButtonClick(this._handlEventRollupClick);
     this._eventComponent.favoriteButtonClick(this._handleFavoriteClick);
