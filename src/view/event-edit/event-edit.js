@@ -1,5 +1,5 @@
 import {Destinations} from '../../temp/mock-constants';
-import {assign, getPlaces} from '../../utils';
+import {assign, getPlaces, batchBind} from '../../utils';
 
 import flatpickr from 'flatpickr';
 import ConfirmDatePlugin from 'flatpickr/dist/plugins/confirmDate/confirmDate.js';
@@ -27,16 +27,18 @@ export default class EventEdit extends Smart {
     this._pickrStart = null;
     this._pickrEnd = null;
 
-    this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
-    this._resetButtonClickHandler = this._resetButtonClickHandler.bind(this);
-    this._formSubmitHandler = this._formSubmitHandler.bind(this);
-    this._offerCheckboxChangeHandler = this._offerCheckboxChangeHandler.bind(this);
-    this._priceTextInputHandler = this._priceTextInputHandler.bind(this);
-    this._destinationTextInputHandler = this._destinationTextInputHandler.bind(this);
-    this._typeRadioInputHandler = this._typeRadioInputHandler.bind(this);
-
-    this._onPickrStartHandler = this._onPickrStartHandler.bind(this);
-    this._onPickrEndHandler = this._onPickrEndHandler.bind(this);
+    batchBind(
+        this,
+        this._rollupButtonClickHandler,
+        this._resetButtonClickHandler,
+        this._formSubmitHandler,
+        this._offerCheckboxChangeHandler,
+        this._priceTextInputHandler,
+        this._destinationTextInputHandler,
+        this._typeRadioInputHandler,
+        this._onPickrStartHandler,
+        this._onPickrEndHandler
+    );
 
     this._setInnerHandlers();
     this._setPickrs();

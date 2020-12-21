@@ -1,5 +1,5 @@
 import {getBlankPoint} from '../temp/mocks';
-import {getID} from '../utils';
+import {batchBind, getID} from '../utils';
 import {UpdateType, UserAction, SET_BLANK_MODE} from '../utils/constants';
 import {remove, render, RenderPosition} from '../utils/render';
 import EventEditView from '../view/event-edit/event-edit';
@@ -12,9 +12,12 @@ export default class Blank {
 
     this._blankEventEditComponent = null;
 
-    this._formSubmitHandler = this._formSubmitHandler.bind(this);
-    this._resetButtonClickHandler = this._resetButtonClickHandler.bind(this);
-    this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
+    batchBind(
+        this,
+        this._formSubmitHandler,
+        this._resetButtonClickHandler,
+        this._escKeyDownHandler
+    );
   }
 
   init() {

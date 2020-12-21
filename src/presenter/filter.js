@@ -1,3 +1,4 @@
+import {batchBind} from '../utils';
 import {UpdateType} from '../utils/constants';
 import {remove, render, replace} from '../utils/render';
 
@@ -13,8 +14,11 @@ export default class Filter {
 
     this._filterComponent = null;
 
-    this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
+    batchBind(
+        this,
+        this._handleModelEvent,
+        this._handleFilterTypeChange
+    );
 
     this._eventsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);

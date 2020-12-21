@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import {FilterTypes, SortTypes, UpdateType, UserAction, WarningTypes} from '../utils/constants';
 import {filter} from '../utils/filter';
+import {batchBind} from '../utils';
 import {remove, render, RenderPosition} from '../utils/render';
 
 import EventPresenter from './event';
@@ -27,10 +28,13 @@ export default class Trip {
     this._routeComponent = new RouteView();
     this._warningComponent = new WarningView(WarningTypes.EMPTY_DATA_LIST);
 
-    this._handleViewAction = this._handleViewAction.bind(this);
-    this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._handleModeChange = this._handleModeChange.bind(this);
-    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    batchBind(
+        this,
+        this._handleViewAction,
+        this._handleModelEvent,
+        this._handleModeChange,
+        this._handleSortTypeChange
+    );
 
     this._eventsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);

@@ -1,5 +1,5 @@
 import {Mode, UserAction, UpdateType} from '../utils/constants';
-import {assign} from '../utils';
+import {assign, batchBind} from '../utils';
 import {remove, render, replace} from '../utils/render';
 
 import {
@@ -18,12 +18,15 @@ export default class Event {
     this._eventEditComponent = null;
     this._mode = Mode.DEFAULT;
 
-    this._handlEventRollupClick = this._handlEventRollupClick.bind(this);
-    this._handlEventEditRollupClick = this._handlEventEditRollupClick.bind(this);
-    this._handlEventEditFormSubmit = this._handlEventEditFormSubmit.bind(this);
-    this._handleDeleteClick = this._handleDeleteClick.bind(this);
-    this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
-    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    batchBind(
+        this,
+        this._handlEventRollupClick,
+        this._handlEventEditRollupClick,
+        this._handlEventEditFormSubmit,
+        this._handleDeleteClick,
+        this._escKeyDownHandler,
+        this._handleFavoriteClick
+    );
   }
 
   init(point) {

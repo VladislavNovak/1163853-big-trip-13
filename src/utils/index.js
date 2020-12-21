@@ -57,3 +57,5 @@ export const getEllipseString = (arr) => (arr.length > 3)
 export const assign = (expandable, ...payload) => Object.assign({}, expandable, ...payload);
 
 export const getPlaces = () => Destinations.map((destination) => destination.place);
+
+export const batchBind = (self, ...methods) => methods.forEach((method) => (self[method.name] = method.bind(self)));
