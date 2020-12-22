@@ -15,10 +15,11 @@ import {
 } from '../view';
 
 export default class Trip {
-  constructor(tripContainer, eventsModel, filterModel, offersModel) {
+  constructor(tripContainer, eventsModel, filterModel, offersModel, destinationsModel) {
     this._eventsModel = eventsModel;
     this._filterModel = filterModel;
     this._offersModel = offersModel;
+    this._destinationsModel = destinationsModel;
     this._tripContainer = tripContainer;
     this._eventPresenter = {};
     this._currentSortType = SortTypes.SORT_DAY;
@@ -39,7 +40,7 @@ export default class Trip {
     this._eventsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
 
-    this._blankPresenter = new BlankPresenter(this._routeComponent, this._handleViewAction, this._offersModel);
+    this._blankPresenter = new BlankPresenter(this._routeComponent, this._handleViewAction, this._offersModel, this._destinationsModel);
   }
 
   init() {
@@ -116,7 +117,7 @@ export default class Trip {
   }
 
   _renderEvent(point) {
-    const eventPresenter = new EventPresenter(this._routeComponent, this._handleViewAction, this._handleModeChange, this._offersModel);
+    const eventPresenter = new EventPresenter(this._routeComponent, this._handleViewAction, this._handleModeChange, this._offersModel, this._destinationsModel);
     eventPresenter.init(point);
     this._eventPresenter[point.id] = eventPresenter;
   }

@@ -1,23 +1,22 @@
-import {getOffers, getPoints} from './temp/mocks';
+import {getDestinations, getOffers, getPoints} from './temp/mocks';
 import {RenderPosition, render} from './utils/render';
 
-import EventsModel from './model/events';
-import FilterModel from './model/filter';
-import OffersModel from './model/offers';
 import TripPresenter from './presenter/trip';
 import FilterPresenter from './presenter/filter';
-import {
-  InfoView,
-  TabsView,
-} from './view/';
+
+import {EventsModel, FilterModel, OffersModel, DestinationsModel} from './model';
+import {InfoView, TabsView} from './view/';
 
 const points = getPoints();
 const offers = getOffers();
+const destinations = getDestinations();
 
 const eventsModel = new EventsModel();
 eventsModel.setEvents(points);
 const offersModel = new OffersModel();
 offersModel.setOffers(offers);
+const destinationsModel = new DestinationsModel();
+destinationsModel.setDestinations(destinations);
 const filterModel = new FilterModel();
 
 const bodyElement = document.body;
@@ -35,7 +34,7 @@ const handleTabClick = (activeTab) => {
 
 tabsComponent.tabClick(handleTabClick);
 
-const tripPresenter = new TripPresenter(mainElement, eventsModel, filterModel, offersModel);
+const tripPresenter = new TripPresenter(mainElement, eventsModel, filterModel, offersModel, destinationsModel);
 const filterPresenter = new FilterPresenter(controlElement, eventsModel, filterModel);
 
 filterPresenter.init();

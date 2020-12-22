@@ -1,4 +1,3 @@
-import {Destinations} from '../../temp/mock-constants';
 import {assign, getPlaces, batchBind} from '../../utils';
 
 import flatpickr from 'flatpickr';
@@ -11,10 +10,11 @@ import Smart from '../smart';
 import {createEventEditTemplate} from './templates/create-event-edit-template';
 
 export default class EventEdit extends Smart {
-  constructor(point, offersModel, isEditMode = true) {
+  constructor(point, offersModel, destinationsModel, isEditMode = true) {
     super();
     this._point = EventEdit.supplementData(point, isEditMode);
     this._offersModel = offersModel;
+    this._destinationsModel = destinationsModel;
 
     batchBind(
         this,
@@ -103,7 +103,8 @@ export default class EventEdit extends Smart {
       return;
     }
 
-    const {place, placeDescription, placePhotos} = Destinations[Destinations.findIndex((destination) => destination.place === target.value)];
+    const {place, placeDescription, placePhotos} = this._destinationsModel.getDestinations()[this._destinationsModel
+      .getDestinations().findIndex((destination) => destination.place === target.value)];
 
     this.updateData({place, placeDescription, placePhotos});
   }
@@ -111,6 +112,7 @@ export default class EventEdit extends Smart {
   _typeRadioInputHandler({target}) {
     const {type, offers} = this._offersModel
         .getOffers().find((offer) => offer.type === target.value);
+
     this.updateData({type, offers});
   }
 
@@ -127,6 +129,10 @@ export default class EventEdit extends Smart {
 
   rollupButtonClick(callback) {
     this._callback.onRollupButtonClick = callback;
+    if (!this._point.isEditMode) {
+      return;
+    }
+
     this.getElement().querySelector(`.event__rollup-btn`)
     .addEventListener(`click`, this._rollupButtonClickHandler);
   }

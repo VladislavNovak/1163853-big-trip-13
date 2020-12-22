@@ -58,4 +58,5 @@ const generatePoint = (mode) => {
 
 export const getPoints = () => new Array(CHANCE_EVENTS_COUNT).fill().map(() => generatePoint(GenerateMode.AS_EDIT_MODE));
 export const getOffers = () => OffersList;
+export const getDestinations = () => Destinations;
 export const getBlankPoint = () => generatePoint(GenerateMode.AS_NEW_COMPONENT);
