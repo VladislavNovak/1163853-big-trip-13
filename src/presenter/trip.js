@@ -50,10 +50,10 @@ export default class Trip {
     this._renderTrip();
   }
 
-  createEvent() {
+  createEvent(onDestroyBlank) {
     this._currentSortType = SortTypes.SORT_DAY;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterTypes.EVERYTHING);
-    this._blankPresenter.init();
+    this._blankPresenter.init(onDestroyBlank);
   }
 
   _getEvents() {

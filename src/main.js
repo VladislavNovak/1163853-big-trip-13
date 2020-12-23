@@ -1,3 +1,4 @@
+import {TabTypes} from './utils/constants';
 import {getDestinations, getOffers, getPoints} from './temp/mocks';
 import {RenderPosition, render} from './utils/render';
 
@@ -28,19 +29,27 @@ render(headerElement, new InfoView(points), RenderPosition.AFTERBEGIN);
 const tabsComponent = new TabsView();
 render(controlElement, tabsComponent);
 
+const tripPresenter = new TripPresenter(mainElement, eventsModel, filterModel, offersModel, destinationsModel);
+const filterPresenter = new FilterPresenter(controlElement, eventsModel, filterModel);
+
 const handleTabClick = (activeTab) => {
-  throw new Error(`TODO implement switching by active tab: ${activeTab}`);
+  switch (activeTab) {
+    case TabTypes.TABLE:
+      break;
+    case TabTypes.STATS:
+      break;
+  }
 };
 
 tabsComponent.tabClick(handleTabClick);
 
-const tripPresenter = new TripPresenter(mainElement, eventsModel, filterModel, offersModel, destinationsModel);
-const filterPresenter = new FilterPresenter(controlElement, eventsModel, filterModel);
-
 filterPresenter.init();
 tripPresenter.init();
 
-document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
-  evt.preventDefault();
-  tripPresenter.createEvent();
+const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
+
+newEventButton.addEventListener(`click`, ({target}) => {
+  target.disabled = true;
+  tabsComponent.tabResetView();
+  tripPresenter.createEvent(() => (target.disabled = false));
 });

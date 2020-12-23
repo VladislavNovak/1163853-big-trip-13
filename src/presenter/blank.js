@@ -10,6 +10,7 @@ export default class Blank {
     this._changeData = changeData;
     this._offersModel = offersModel;
     this._destinationsModel = destinationsModel;
+    this._onDestroyBlank = null;
 
     this._blankEventEditComponent = null;
 
@@ -21,7 +22,9 @@ export default class Blank {
     );
   }
 
-  init() {
+  init(onDestroyBlank) {
+    this._onDestroyBlank = onDestroyBlank;
+
     if (this._blankEventEditComponent !== null) {
       return;
     }
@@ -39,6 +42,10 @@ export default class Blank {
   destroy() {
     if (this._blankEventEditComponent === null) {
       return;
+    }
+
+    if (this._onDestroyBlank !== null) {
+      this._onDestroyBlank();
     }
 
     remove(this._blankEventEditComponent);
