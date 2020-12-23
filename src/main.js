@@ -48,7 +48,7 @@ tabsComponent.tabClick(handleTabClick);
 filterPresenter.init();
 // Временно отключаем, чтобы было проще работать с вью статистики:
 // tripPresenter.init();
-render(mainElement, new StatisticsView(eventsModel));
+render(mainElement, new StatisticsView(eventsModel.getEvents()));
 
 const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
 

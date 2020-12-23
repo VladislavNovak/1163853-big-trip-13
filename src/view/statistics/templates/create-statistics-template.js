@@ -1,9 +1,9 @@
-import {StatisticsType} from "../../../utils/constants";
+import {StatisticsTypes} from "../../../utils/constants";
 
 export const createStatisticsTemplate = () => {
 
   const setStatistic = () => {
-    return Object.values(StatisticsType).map((statsName) => {
+    return Object.values(StatisticsTypes).map((statsName) => {
       return (
         `<div class="statistics__item statistics__item--${statsName}">
           <canvas class="statistics__chart  statistics__chart--${statsName}" width="900"></canvas>

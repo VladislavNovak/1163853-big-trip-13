@@ -1,3 +1,4 @@
+export const BAR_HEIGHT = 55;
 export const SET_BLANK_MODE = false;
 
 export const FormatTypes = {
@@ -54,8 +55,22 @@ export const UpdateType = {
   MAJOR: `MAJOR`,
 };
 
-export const StatisticsType = {
+export const StatisticsTypes = {
   MONEY: `money`,
   TRANSPORT: `transport`,
   TIME: `time`,
+};
+
+
+export const EmojiTypes = {
+  'Taxi': `🚕`,
+  'Bus': `🚌`,
+  'Train': `🚆`,
+  'Ship': `🚢`,
+  'Transport': `🚀`,
+  'Drive': `🚗`,
+  'Flight': `✈️`,
+  'Check-in': `🏨`,
+  'Sightseeing': `🏛`,
+  'Restaurant': `🍴`,
 };
