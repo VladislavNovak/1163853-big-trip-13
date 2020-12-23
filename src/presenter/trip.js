@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {FilterTypes, SortTypes, UpdateType, UserAction, WarningTypes} from '../utils/constants';
+import {SortTypes, UpdateType, UserAction, WarningTypes} from '../utils/constants';
 import {filter} from '../utils/filter';
 import {batchBind} from '../utils';
 import {remove, render, RenderPosition} from '../utils/render';
@@ -37,9 +37,6 @@ export default class Trip {
         this._handleSortTypeChange
     );
 
-    this._eventsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
-
     this._blankPresenter = new BlankPresenter(this._routeComponent, this._handleViewAction, this._offersModel, this._destinationsModel);
   }
 
@@ -47,12 +44,23 @@ export default class Trip {
     render(this._tripContainer, this._tripComponent);
     render(this._tripComponent, this._routeComponent);
 
+    this._eventsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+
     this._renderTrip();
   }
 
+  destroy() {
+    this._clearTrip({resetSortType: true});
+
+    remove(this._routeComponent);
+    remove(this._tripComponent);
+
+    this._eventsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
+  }
+
   createEvent(onDestroyBlank) {
-    this._currentSortType = SortTypes.SORT_DAY;
-    this._filterModel.setFilter(UpdateType.MAJOR, FilterTypes.EVERYTHING);
     this._blankPresenter.init(onDestroyBlank);
   }
 

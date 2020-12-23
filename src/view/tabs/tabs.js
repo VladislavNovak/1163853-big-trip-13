@@ -50,3 +50,7 @@ export default class Tabs extends Abstract {
     this._toggleActiveElement(table, TabTypes.TABLE);
   }
 }
+
+// _toggleActiveElement: переключает активные элементы
+// - target - элемент, который нужно активировать
+// - activeTab нужен для сохранения в стейте

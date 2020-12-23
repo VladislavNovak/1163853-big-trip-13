@@ -1,4 +1,4 @@
-import {TabTypes} from './utils/constants';
+import {FilterTypes, TabTypes, UpdateType} from './utils/constants';
 import {getDestinations, getOffers, getPoints} from './temp/mocks';
 import {RenderPosition, render} from './utils/render';
 
@@ -35,8 +35,10 @@ const filterPresenter = new FilterPresenter(controlElement, eventsModel, filterM
 const handleTabClick = (activeTab) => {
   switch (activeTab) {
     case TabTypes.TABLE:
+      tripPresenter.init();
       break;
     case TabTypes.STATS:
+      tripPresenter.destroy();
       break;
   }
 };
@@ -49,6 +51,9 @@ tripPresenter.init();
 const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
 
 newEventButton.addEventListener(`click`, ({target}) => {
+  tripPresenter.destroy();
+  filterModel.setFilter(UpdateType.MAJOR, FilterTypes.EVERYTHING);
+  tripPresenter.init();
   target.disabled = true;
   tabsComponent.tabResetView();
   tripPresenter.createEvent(() => (target.disabled = false));
