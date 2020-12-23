@@ -1,4 +1,4 @@
-import { batchBind } from '../../utils';
+import {batchBind} from '../../utils';
 import Abstract from '../abstract';
 import {createEventTemplate} from './templates/create-event-template';
 

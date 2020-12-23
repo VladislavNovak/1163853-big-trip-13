@@ -6,7 +6,7 @@ import TripPresenter from './presenter/trip';
 import FilterPresenter from './presenter/filter';
 
 import {EventsModel, FilterModel, OffersModel, DestinationsModel} from './model';
-import {InfoView, TabsView} from './view/';
+import {InfoView, TabsView, StatisticsView} from './view/';
 
 const points = getPoints();
 const offers = getOffers();
@@ -46,7 +46,9 @@ const handleTabClick = (activeTab) => {
 tabsComponent.tabClick(handleTabClick);
 
 filterPresenter.init();
-tripPresenter.init();
+// Временно отключаем, чтобы было проще работать с вью статистики:
+// tripPresenter.init();
+render(mainElement, new StatisticsView(eventsModel));
 
 const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
 
