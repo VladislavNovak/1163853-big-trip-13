@@ -8,8 +8,6 @@ export default class Statistics extends SmartView {
     super();
 
     this._data = data;
-    this._charts = Object.values(StatisticsTypes).map(() => null);
-    this._isCharstCreated = false;
     this._setCharts();
   }
 
@@ -25,22 +23,37 @@ export default class Statistics extends SmartView {
     this._setCharts();
   }
 
-  _sumByTypes() {
+  _createPricingStructure() {
     const amount = this._data.reduce((collect, point) => {
       collect[point.type] = (collect[point.type] || 0) + point.price;
       return collect;
     }, {});
 
-    return Object.entries(amount).map(([type, sum]) => ({type, sum, emoji: EmojiTypes[type]}));
+    return Object.entries(amount).map(([type, accumulate]) => ({type, accumulate, emoji: EmojiTypes[type]}));
+  }
+
+  _createTransportStructure() {
+    const transport = this._data.reduce((collect, point) => {
+      collect[point.type] = (collect[point.type] || 0) + 1;
+      return collect;
+    }, {});
+
+    return Object.entries(transport).map(([type, accumulate]) => ({type, accumulate, emoji: EmojiTypes[type]}));
   }
 
   _getDataForChart(statsType) {
     const chartData = () => {
-      const type = statsType;
-      const collector = this._sumByTypes();
-      const format = (val) => `€ ${val}`;
+      const header = statsType;
+      const collector = {
+        [StatisticsTypes.MONEY]: this._createPricingStructure(),
+        [StatisticsTypes.TRANSPORT]: this._createTransportStructure(),
+      }[header];
+      const format = {
+        [StatisticsTypes.MONEY]: (val) => `€ ${val}`,
+        [StatisticsTypes.TRANSPORT]: (val) => `€ ${val}x`,
+      }[header];
       return {
-        type,
+        header,
         collector,
         format,
       };
@@ -50,17 +63,18 @@ export default class Statistics extends SmartView {
   }
 
   _setCharts() {
-    if (this._isCharstCreated) {
-      this._charts = Object.values(StatisticsTypes).map(() => null);
-    }
-
     const ctxs = Object.values(StatisticsTypes).map((type) => this.getElement().querySelector(`.statistics__chart--${type}`));
 
-    const money = this._getDataForChart(StatisticsTypes.MONEY);
+    const preparedData = Object.values(StatisticsTypes).map((type) => this._getDataForChart(type));
 
-    ctxs.forEach((ctx) => (ctx.height = BAR_HEIGHT * money.collector.length));
-    this._charts[0] = renderChart(ctxs[0], money);
+    ctxs.forEach((ctx, index) => (ctx.height = BAR_HEIGHT * preparedData[index].collector.length));
 
-    this._isCharstCreated = true;
+    ctxs.forEach((ctx, index) => renderChart(ctx, preparedData[index]));
   }
 }
+
+// _setCharts:
+// - получаем контекст всех необходимых тегов
+// - подготавливаем данные для каждой таблицы
+// - устанавливаем размер для каждой таблицы
+// - передаём контекст и подготовленные данные в таблицу для отрисовки

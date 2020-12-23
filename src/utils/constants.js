@@ -58,7 +58,7 @@ export const UpdateType = {
 export const StatisticsTypes = {
   MONEY: `money`,
   TRANSPORT: `transport`,
-  TIME: `time`,
+  // TIME: `time`,
 };
 
 

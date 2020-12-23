@@ -8,7 +8,7 @@ export const renderChart = (ctx, preparedData) => {
     data: {
       labels: preparedData.collector.map(({emoji, type}) => `${emoji} ${type}`),
       datasets: [{
-        data: preparedData.collector.map(({sum}) => sum),
+        data: preparedData.collector.map(({accumulate}) => accumulate),
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
         anchor: `start`
@@ -28,7 +28,7 @@ export const renderChart = (ctx, preparedData) => {
       },
       title: {
         display: true,
-        text: preparedData.type,
+        text: preparedData.header,
         fontColor: `#000000`,
         fontSize: 23,
         position: `left`
