@@ -57,10 +57,15 @@ export const UpdateType = {
 
 export const StatisticsTypes = {
   MONEY: `money`,
-  TRANSPORT: `transport`,
-  // TIME: `time`,
+  TRANSPORT: `type`,
+  TIME: `time-spand`,
 };
 
+export const ChartColors = {
+  SILVER: `#C0C0C0`,
+  GAINSBORO: `#DCDCDC`,
+  WHITE: `#ffffff`,
+};
 
 export const EmojiTypes = {
   'Taxi': `🚕`,

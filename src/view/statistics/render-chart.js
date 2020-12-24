@@ -6,10 +6,10 @@ export const renderChart = (ctx, preparedData) => {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: preparedData.collector.map(({emoji, type}) => `${emoji} ${type}`),
+      labels: preparedData.collector.map(({emoji, type}) => `${type} ${emoji}`),
       datasets: [{
         data: preparedData.collector.map(({accumulate}) => accumulate),
-        backgroundColor: `#ffffff`,
+        backgroundColor: preparedData.collector.map(({color}) => color),
         hoverBackgroundColor: `#ffffff`,
         anchor: `start`
       }]
@@ -62,7 +62,7 @@ export const renderChart = (ctx, preparedData) => {
         display: false
       },
       tooltips: {
-        enabled: false,
+        enabled: true,
       }
     }
   });

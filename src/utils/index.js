@@ -54,6 +54,12 @@ export const getEllipseString = (arr) => (arr.length > 3)
   ? `${arr[0]} &mdash; ... &mdash; ${arr[arr.length - 1]}`
   : arr.reduce((phrase, word, index) => (index === 0) ? `${phrase}${word}` : `${phrase} &mdash; ${word}`, ``);
 
+export const getMaxValueIndexFromObject = (obj) => Object.values(obj)
+  .reduce((bestIndexSoFar, currentlyTestedValue, currentlyTestedIndex, arr) => currentlyTestedValue > arr[bestIndexSoFar] ? currentlyTestedIndex : bestIndexSoFar, 0);
+
+export const getMinValueIndexFromObject = (obj) => Object.values(obj)
+  .reduce((bestIndexSoFar, currentlyTestedValue, currentlyTestedIndex, arr) => currentlyTestedValue < arr[bestIndexSoFar] ? currentlyTestedIndex : bestIndexSoFar, 0);
+
 export const assign = (expandable, ...payload) => Object.assign({}, expandable, ...payload);
 
 export const getPlaces = () => Destinations.map((destination) => destination.place);

@@ -1,6 +1,6 @@
 import {FilterTypes, TabTypes, UpdateType} from './utils/constants';
 import {getDestinations, getOffers, getPoints} from './temp/mocks';
-import {RenderPosition, render} from './utils/render';
+import {RenderPosition, render, remove} from './utils/render';
 
 import TripPresenter from './presenter/trip';
 import FilterPresenter from './presenter/filter';
@@ -32,13 +32,21 @@ render(controlElement, tabsComponent);
 const tripPresenter = new TripPresenter(mainElement, eventsModel, filterModel, offersModel, destinationsModel);
 const filterPresenter = new FilterPresenter(controlElement, eventsModel, filterModel);
 
+let statisticsComponent = null;
+
 const handleTabClick = (activeTab) => {
   switch (activeTab) {
     case TabTypes.TABLE:
+      remove(statisticsComponent);
       tripPresenter.init();
+      newEventButton.disabled = false;
       break;
     case TabTypes.STATS:
       tripPresenter.destroy();
+      filterModel.setFilter(UpdateType.MAJOR, FilterTypes.EVERYTHING);
+      newEventButton.disabled = true;
+      statisticsComponent = new StatisticsView(eventsModel.getEvents());
+      render(mainElement, statisticsComponent);
       break;
   }
 };
@@ -46,9 +54,7 @@ const handleTabClick = (activeTab) => {
 tabsComponent.tabClick(handleTabClick);
 
 filterPresenter.init();
-// Временно отключаем, чтобы было проще работать с вью статистики:
-// tripPresenter.init();
-render(mainElement, new StatisticsView(eventsModel.getEvents()));
+tripPresenter.init();
 
 const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
 

@@ -1,13 +1,19 @@
-import {BAR_HEIGHT, StatisticsTypes, EmojiTypes} from "../../utils/constants";
 import SmartView from "../smart";
-import {createStatisticsTemplate} from "./templates/create-statistics-template";
+import dayjs from "dayjs";
+import duration from 'dayjs/plugin/duration';
 import {renderChart} from './render-chart';
+
+import {BAR_HEIGHT, StatisticsTypes, EmojiTypes, ChartColors} from "../../utils/constants";
+import {getMaxValueIndexFromObject, getMinValueIndexFromObject} from "../../utils";
+
+import {createStatisticsTemplate} from "./templates/create-statistics-template";
 
 export default class Statistics extends SmartView {
   constructor(data) {
     super();
 
     this._data = data;
+    this._charts = new Array(Object.keys(StatisticsTypes).length).fill(null);
     this._setCharts();
   }
 
@@ -17,41 +23,53 @@ export default class Statistics extends SmartView {
 
   removeElement() {
     super.removeElement();
+
+    if (this._charts[0] !== null) {
+      this._charts = new Array(Object.keys(StatisticsTypes).length).fill(null);
+    }
   }
 
   restoreHandlers() {
     this._setCharts();
   }
 
-  _createPricingStructure() {
+  _createOptions(statsType) {
     const amount = this._data.reduce((collect, point) => {
-      collect[point.type] = (collect[point.type] || 0) + point.price;
+      const value = ((statsType === StatisticsTypes.MONEY) && point.price)
+        || ((statsType === StatisticsTypes.TRANSPORT) && 1)
+        || ((statsType === StatisticsTypes.TIME) && dayjs.duration(dayjs(point.timeEnd).diff(point.timeStart)).days());
+      collect[point.type] = (collect[point.type] || 0) + value;
       return collect;
     }, {});
 
-    return Object.entries(amount).map(([type, accumulate]) => ({type, accumulate, emoji: EmojiTypes[type]}));
-  }
+    const maxValueIndex = getMaxValueIndexFromObject(amount);
+    const minValueIndex = getMinValueIndexFromObject(amount);
 
-  _createTransportStructure() {
-    const transport = this._data.reduce((collect, point) => {
-      collect[point.type] = (collect[point.type] || 0) + 1;
-      return collect;
-    }, {});
-
-    return Object.entries(transport).map(([type, accumulate]) => ({type, accumulate, emoji: EmojiTypes[type]}));
+    return Object.entries(amount).map(([type, accumulate], index) => (
+      {
+        type,
+        accumulate,
+        emoji: EmojiTypes[type],
+        color: (index === maxValueIndex) && ChartColors.SILVER
+          || (index === minValueIndex) && ChartColors.GAINSBORO
+          || ChartColors.WHITE,
+      }
+    ));
   }
 
   _getDataForChart(statsType) {
     const chartData = () => {
-      const header = statsType;
+      const header = statsType.toUpperCase();
       const collector = {
-        [StatisticsTypes.MONEY]: this._createPricingStructure(),
-        [StatisticsTypes.TRANSPORT]: this._createTransportStructure(),
-      }[header];
+        [StatisticsTypes.MONEY]: this._createOptions(StatisticsTypes.MONEY),
+        [StatisticsTypes.TRANSPORT]: this._createOptions(StatisticsTypes.TRANSPORT),
+        [StatisticsTypes.TIME]: this._createOptions(StatisticsTypes.TIME),
+      }[statsType];
       const format = {
         [StatisticsTypes.MONEY]: (val) => `€ ${val}`,
-        [StatisticsTypes.TRANSPORT]: (val) => `€ ${val}x`,
-      }[header];
+        [StatisticsTypes.TRANSPORT]: (val) => `${val}x`,
+        [StatisticsTypes.TIME]: (val) => `${val}D`,
+      }[statsType];
       return {
         header,
         collector,
@@ -63,13 +81,19 @@ export default class Statistics extends SmartView {
   }
 
   _setCharts() {
+    if (this._charts[0] !== null) {
+      this._charts = new Array(Object.keys(StatisticsTypes).length).fill(null);
+    }
+
+    dayjs.extend(duration);
+
     const ctxs = Object.values(StatisticsTypes).map((type) => this.getElement().querySelector(`.statistics__chart--${type}`));
 
     const preparedData = Object.values(StatisticsTypes).map((type) => this._getDataForChart(type));
 
     ctxs.forEach((ctx, index) => (ctx.height = BAR_HEIGHT * preparedData[index].collector.length));
 
-    ctxs.forEach((ctx, index) => renderChart(ctx, preparedData[index]));
+    this._charts = ctxs.map((ctx, index) => renderChart(ctx, preparedData[index]));
   }
 }
 
