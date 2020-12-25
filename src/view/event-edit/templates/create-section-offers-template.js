@@ -6,7 +6,14 @@ export const createSectionOffersTemplate = ({offers}) => {
       const idFromTitle = title.replace(/\s+/g, `-`);
       return (
         `<div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="${idFromTitle}" type="checkbox" name="event-offer-luggage" ${isChecked ? `checked` : ``}>
+          <input
+            class="event__offer-checkbox
+            visually-hidden"
+            id="${idFromTitle}"
+            type="checkbox"
+            name="event-offer-luggage"
+            ${isChecked ? `checked` : ``}
+          >
           <label class="event__offer-label" for="${idFromTitle}">
             <span class="event__offer-title">${title}</span>
             &plus;&euro;&nbsp;

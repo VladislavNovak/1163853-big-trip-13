@@ -1,13 +1,8 @@
 import {CHANCE_EVENTS_COUNT, emptyDestination, Destinations, GenerateMode, OffersList} from './mock-constants';
-import {getID, getRandomInteger, getSomeOffers} from '../utils';
+import {getID, getRandomInteger} from '../utils';
 import {getRamdomType, generateDate, getPointPrice, getFavoriteStatus} from './mock-service';
 
-const generateOffers = (mode) => {
-  const offers = (mode === GenerateMode.AS_EDIT_MODE) ? getSomeOffers(OffersList) : [];
-  return {
-    offers,
-  };
-};
+const generateOffersSet = (type) => OffersList.find((offer) => offer.type === type);
 
 // offers: array of shape {title: string, expense: number, isChecked: bool}
 
@@ -31,7 +26,7 @@ const generateDestination = (mode) => {
 const generatePoint = (mode) => {
   const id = getID();
   const type = getRamdomType(mode);
-  const {offers} = generateOffers(mode);
+  const {offers} = generateOffersSet(type);
   const {place, placeDescription, placePhotos} = generateDestination(mode);
   const {timeStart, timeEnd} = generateDate(mode);
   const price = getPointPrice(mode);
@@ -62,4 +57,6 @@ const generatePoint = (mode) => {
 // isFavorite: bool
 
 export const getPoints = () => new Array(CHANCE_EVENTS_COUNT).fill().map(() => generatePoint(GenerateMode.AS_EDIT_MODE));
+export const getOffers = () => OffersList;
+export const getDestinations = () => Destinations;
 export const getBlankPoint = () => generatePoint(GenerateMode.AS_NEW_COMPONENT);

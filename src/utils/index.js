@@ -17,23 +17,6 @@ export const getID = () => {
 };
 
 /**
- * This function shuffles a copy of the original array and truncates it at random
- * @param {string[]} arr - in the case of this project, it is a listing of offers
- * @return {string[]} returns an array of several random values of the original array
- */
-export const getSomeOffers = (arr) => {
-  const clone = arr.slice(0);
-  for (let i = clone.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * (i + 1));
-    [clone[i], clone[j]] = [clone[j], clone[i]];
-  }
-
-  const sliceArr = clone.slice(0, getRandomInteger(0, 5));
-
-  return sliceArr;
-};
-
-/**
  * This function formats the date according to a certain condition
  * @param {Object} time - the date to be converted
  * @param {string} view - one of the variants of the FormatTypes object
@@ -71,6 +54,14 @@ export const getEllipseString = (arr) => (arr.length > 3)
   ? `${arr[0]} &mdash; ... &mdash; ${arr[arr.length - 1]}`
   : arr.reduce((phrase, word, index) => (index === 0) ? `${phrase}${word}` : `${phrase} &mdash; ${word}`, ``);
 
+export const getMaxValueIndexFromObject = (obj) => Object.values(obj)
+  .reduce((bestIndexSoFar, currentlyTestedValue, currentlyTestedIndex, arr) => currentlyTestedValue > arr[bestIndexSoFar] ? currentlyTestedIndex : bestIndexSoFar, 0);
+
+export const getMinValueIndexFromObject = (obj) => Object.values(obj)
+  .reduce((bestIndexSoFar, currentlyTestedValue, currentlyTestedIndex, arr) => currentlyTestedValue < arr[bestIndexSoFar] ? currentlyTestedIndex : bestIndexSoFar, 0);
+
 export const assign = (expandable, ...payload) => Object.assign({}, expandable, ...payload);
 
 export const getPlaces = () => Destinations.map((destination) => destination.place);
+
+export const batchBind = (self, ...methods) => methods.forEach((method) => (self[method.name] = method.bind(self)));

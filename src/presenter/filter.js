@@ -1,10 +1,11 @@
+import {batchBind} from '../utils';
 import {UpdateType} from '../utils/constants';
 import {remove, render, replace} from '../utils/render';
 
 import FiltersView from '../view/filters/filters';
 
 export default class Filter {
-  constructor(filterContainer, filterModel, eventsModel) {
+  constructor(filterContainer, eventsModel, filterModel) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
     this._eventsModel = eventsModel;
@@ -13,8 +14,11 @@ export default class Filter {
 
     this._filterComponent = null;
 
-    this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
+    batchBind(
+        this,
+        this._handleModelEvent,
+        this._handleFilterTypeChange
+    );
 
     this._eventsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);

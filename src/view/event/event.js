@@ -1,3 +1,4 @@
+import {batchBind} from '../../utils';
 import Abstract from '../abstract';
 import {createEventTemplate} from './templates/create-event-template';
 
@@ -6,8 +7,11 @@ export default class Event extends Abstract {
     super();
     this._point = point;
 
-    this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
-    this._favoriteButtonClickHandler = this._favoriteButtonClickHandler.bind(this);
+    batchBind(
+        this,
+        this._rollupButtonClickHandler,
+        this._favoriteButtonClickHandler
+    );
   }
 
   getTemplate() {

@@ -1,5 +1,5 @@
 import {Mode, UserAction, UpdateType} from '../utils/constants';
-import {assign} from '../utils';
+import {assign, batchBind} from '../utils';
 import {remove, render, replace} from '../utils/render';
 
 import {
@@ -8,21 +8,26 @@ import {
 } from '../view';
 
 export default class Event {
-  constructor(routeContainer, changeData, changeMode) {
+  constructor(routeContainer, changeData, changeMode, offersModel, destinationsModel) {
     this._routeContainer = routeContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
+    this._offersModel = offersModel;
+    this._destinationsModel = destinationsModel;
 
     this._eventComponent = null;
     this._eventEditComponent = null;
     this._mode = Mode.DEFAULT;
 
-    this._handlEventRollupClick = this._handlEventRollupClick.bind(this);
-    this._handlEventEditRollupClick = this._handlEventEditRollupClick.bind(this);
-    this._handlEventEditFormSubmit = this._handlEventEditFormSubmit.bind(this);
-    this._handleDeleteClick = this._handleDeleteClick.bind(this);
-    this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
-    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    batchBind(
+        this,
+        this._handlEventRollupClick,
+        this._handlEventEditRollupClick,
+        this._handlEventEditFormSubmit,
+        this._handleDeleteClick,
+        this._escKeyDownHandler,
+        this._handleFavoriteClick
+    );
   }
 
   init(point) {
@@ -32,7 +37,7 @@ export default class Event {
     const prevEventEditComponent = this._eventEditComponent;
 
     this._eventComponent = new EventView(point);
-    this._eventEditComponent = new EventEditView(point);
+    this._eventEditComponent = new EventEditView(point, this._offersModel, this._destinationsModel);
 
     this._eventComponent.rollupButtonClick(this._handlEventRollupClick);
     this._eventComponent.favoriteButtonClick(this._handleFavoriteClick);
@@ -70,6 +75,7 @@ export default class Event {
 
   _setEditMode() {
     replace(this._eventEditComponent, this._eventComponent);
+    this._eventEditComponent.createPickrs();
     document.addEventListener(`keydown`, this._escKeyDownHandler);
     this._changeMode();
     this._mode = Mode.EDITING;
@@ -77,6 +83,7 @@ export default class Event {
 
   _setViewMode() {
     replace(this._eventComponent, this._eventEditComponent);
+    this._eventEditComponent.destroyPickrs();
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
     this._mode = Mode.DEFAULT;
   }

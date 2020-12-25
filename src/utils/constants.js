@@ -1,3 +1,4 @@
+export const BAR_HEIGHT = 55;
 export const SET_BLANK_MODE = false;
 
 export const FormatTypes = {
@@ -52,4 +53,29 @@ export const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
   MAJOR: `MAJOR`,
+};
+
+export const Stats = {
+  MONEY: `money`,
+  TRANSPORT: `type`,
+  TIME: `time-spend`,
+};
+
+export const ChartColors = {
+  SILVER: `#C0C0C0`,
+  GAINSBORO: `#DCDCDC`,
+  WHITE: `#ffffff`,
+};
+
+export const EmojiTypes = {
+  'Taxi': `🚕`,
+  'Bus': `🚌`,
+  'Train': `🚆`,
+  'Ship': `🚢`,
+  'Transport': `🚀`,
+  'Drive': `🚗`,
+  'Flight': `✈️`,
+  'Check-in': `🏨`,
+  'Sightseeing': `🏛`,
+  'Restaurant': `🍴`,
 };

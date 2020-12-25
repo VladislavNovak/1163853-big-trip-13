@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
-import {FilterTypes, SortTypes, UpdateType, UserAction, WarningTypes} from '../utils/constants';
+import {SortTypes, UpdateType, UserAction, WarningTypes} from '../utils/constants';
 import {filter} from '../utils/filter';
+import {batchBind} from '../utils';
 import {remove, render, RenderPosition} from '../utils/render';
 
 import EventPresenter from './event';
@@ -14,9 +15,11 @@ import {
 } from '../view';
 
 export default class Trip {
-  constructor(tripContainer, eventsModel, filterModel) {
+  constructor(tripContainer, eventsModel, filterModel, offersModel, destinationsModel) {
     this._eventsModel = eventsModel;
     this._filterModel = filterModel;
+    this._offersModel = offersModel;
+    this._destinationsModel = destinationsModel;
     this._tripContainer = tripContainer;
     this._eventPresenter = {};
     this._currentSortType = SortTypes.SORT_DAY;
@@ -26,28 +29,39 @@ export default class Trip {
     this._routeComponent = new RouteView();
     this._warningComponent = new WarningView(WarningTypes.EMPTY_DATA_LIST);
 
-    this._handleViewAction = this._handleViewAction.bind(this);
-    this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._handleModeChange = this._handleModeChange.bind(this);
-    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    batchBind(
+        this,
+        this._handleViewAction,
+        this._handleModelEvent,
+        this._handleModeChange,
+        this._handleSortTypeChange
+    );
 
-    this._eventsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
-
-    this._blankPresenter = new BlankPresenter(this._routeComponent, this._handleViewAction);
+    this._blankPresenter = new BlankPresenter(this._routeComponent, this._handleViewAction, this._offersModel, this._destinationsModel);
   }
 
   init() {
     render(this._tripContainer, this._tripComponent);
     render(this._tripComponent, this._routeComponent);
 
+    this._eventsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+
     this._renderTrip();
   }
 
-  createEvent() {
-    this._currentSortType = SortTypes.SORT_DAY;
-    this._filterModel.setFilter(UpdateType.MAJOR, FilterTypes.EVERYTHING);
-    this._blankPresenter.init();
+  destroy() {
+    this._clearTrip({resetSortType: true});
+
+    remove(this._routeComponent);
+    remove(this._tripComponent);
+
+    this._eventsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
+  }
+
+  createEvent(onDestroyBlank) {
+    this._blankPresenter.init(onDestroyBlank);
   }
 
   _getEvents() {
@@ -58,7 +72,7 @@ export default class Trip {
     return {
       [SortTypes.SORT_DAY]: () => filteredPoints.sort((a, b) => a.timeStart - b.timeStart),
       [SortTypes.SORT_TIME]: () => filteredPoints.sort((a, b) => dayjs(b.timeEnd).diff(b.timeStart) - dayjs(a.timeEnd).diff(a.timeStart)),
-      [SortTypes.SORT_PRICE]: () => filteredPoints.getEvents().sort((a, b) => b.price - a.price),
+      [SortTypes.SORT_PRICE]: () => filteredPoints.sort((a, b) => b.price - a.price),
     }[this._currentSortType]();
   }
 
@@ -111,7 +125,7 @@ export default class Trip {
   }
 
   _renderEvent(point) {
-    const eventPresenter = new EventPresenter(this._routeComponent, this._handleViewAction, this._handleModeChange);
+    const eventPresenter = new EventPresenter(this._routeComponent, this._handleViewAction, this._handleModeChange, this._offersModel, this._destinationsModel);
     eventPresenter.init(point);
     this._eventPresenter[point.id] = eventPresenter;
   }

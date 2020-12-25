@@ -1,5 +1,4 @@
-import {Destinations, OffersList} from '../../temp/mock-constants';
-import {assign, getPlaces, getSomeOffers} from '../../utils';
+import {assign, getPlaces, batchBind} from '../../utils';
 
 import flatpickr from 'flatpickr';
 import ConfirmDatePlugin from 'flatpickr/dist/plugins/confirmDate/confirmDate.js';
@@ -10,41 +9,31 @@ import '../../../node_modules/flatpickr/dist/flatpickr.min';
 import Smart from '../smart';
 import {createEventEditTemplate} from './templates/create-event-edit-template';
 
-const pickrsDestroy = (...pickrs) => {
-  pickrs.forEach((pickr) => {
-    if (pickr) {
-      pickr.destroy();
-      pickr = null;
-    }
-  });
-};
-
 export default class EventEdit extends Smart {
-  constructor(point, isEditMode = true) {
+  constructor(point, offersModel, destinationsModel, isEditMode = true) {
     super();
     this._point = EventEdit.supplementData(point, isEditMode);
-    this._pickrStart = null;
-    this._pickrEnd = null;
+    this._offersModel = offersModel;
+    this._destinationsModel = destinationsModel;
 
-    this._rollupButtonClickHandler = this._rollupButtonClickHandler.bind(this);
-    this._resetButtonClickHandler = this._resetButtonClickHandler.bind(this);
-    this._formSubmitHandler = this._formSubmitHandler.bind(this);
-    this._offerCheckboxChangeHandler = this._offerCheckboxChangeHandler.bind(this);
-    this._priceTextInputHandler = this._priceTextInputHandler.bind(this);
-    this._destinationTextInputHandler = this._destinationTextInputHandler.bind(this);
-    this._typeRadioInputHandler = this._typeRadioInputHandler.bind(this);
-
-    this._onPickrStartHandler = this._onPickrStartHandler.bind(this);
-    this._onPickrEndHandler = this._onPickrEndHandler.bind(this);
+    batchBind(
+        this,
+        this._rollupButtonClickHandler,
+        this._resetButtonClickHandler,
+        this._formSubmitHandler,
+        this._offerCheckboxChangeHandler,
+        this._priceTextInputHandler,
+        this._destinationTextInputHandler,
+        this._typeRadioInputHandler
+    );
 
     this._setInnerHandlers();
-    this._setPickrs();
   }
 
   removeElement() {
     super.removeElement();
 
-    pickrsDestroy(this._pickrStart, this._pickrEnd);
+    this.destroyPickrs(this._pickrStart, this._pickrEnd);
   }
 
   reset(point) {
@@ -99,14 +88,12 @@ export default class EventEdit extends Smart {
   }
 
   _priceTextInputHandler(evt) {
-    const price = evt.target.value;
-
-    if (isNaN(parseFloat(price))) {
+    if (isNaN(parseFloat(evt.target.value))) {
       evt.preventDefault();
       return;
     }
 
-    this.updateData({price}, true);
+    this.updateData({price: Number(evt.target.value)}, true);
   }
 
   _destinationTextInputHandler({target}) {
@@ -114,14 +101,16 @@ export default class EventEdit extends Smart {
       return;
     }
 
-    const {place, placeDescription, placePhotos} = Destinations[Destinations.findIndex((destination) => destination.place === target.value)];
+    const {place, placeDescription, placePhotos} = this._destinationsModel.getDestinations()[this._destinationsModel
+      .getDestinations().findIndex((destination) => destination.place === target.value)];
 
     this.updateData({place, placeDescription, placePhotos});
   }
 
   _typeRadioInputHandler({target}) {
-    const type = target.value;
-    const offers = getSomeOffers(OffersList);
+    const {type, offers} = this._offersModel
+        .getOffers().find((offer) => offer.type === target.value);
+
     this.updateData({type, offers});
   }
 
@@ -138,6 +127,10 @@ export default class EventEdit extends Smart {
 
   rollupButtonClick(callback) {
     this._callback.onRollupButtonClick = callback;
+    if (!this._point.isEditMode) {
+      return;
+    }
+
     this.getElement().querySelector(`.event__rollup-btn`)
     .addEventListener(`click`, this._rollupButtonClickHandler);
   }
@@ -170,6 +163,30 @@ export default class EventEdit extends Smart {
     return data;
   }
 
+  destroyPickrs() {
+    if (this._pickrStart) {
+      this._pickrStart.destroy();
+      this._pickrStart = null;
+    }
+    if (this._pickrEnd) {
+      this._pickrEnd.destroy();
+      this._pickrEnd = null;
+    }
+  }
+
+  createPickrs() {
+    this._pickrStart = null;
+    this._pickrEnd = null;
+
+    batchBind(
+        this,
+        this._onPickrStartHandler,
+        this._onPickrEndHandler
+    );
+
+    this._setPickrs();
+  }
+
   _onPickrStartHandler([newStartTime]) {
     if (newStartTime === undefined) {
       return;
@@ -192,7 +209,7 @@ export default class EventEdit extends Smart {
   }
 
   _setPickrs() {
-    pickrsDestroy(this._pickrStart, this._pickrEnd);
+    this.destroyPickrs(this._pickrStart, this._pickrEnd);
 
     const pickrDefaultConfig = {
       'dateFormat': `d/m/y H:i`,
