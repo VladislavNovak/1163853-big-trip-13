@@ -88,14 +88,12 @@ export default class EventEdit extends Smart {
   }
 
   _priceTextInputHandler(evt) {
-    const price = evt.target.value;
-
-    if (isNaN(parseFloat(price))) {
+    if (isNaN(parseFloat(evt.target.value))) {
       evt.preventDefault();
       return;
     }
 
-    this.updateData({price}, true);
+    this.updateData({price: Number(evt.target.value)}, true);
   }
 
   _destinationTextInputHandler({target}) {

@@ -55,10 +55,10 @@ export const UpdateType = {
   MAJOR: `MAJOR`,
 };
 
-export const StatisticsTypes = {
+export const Stats = {
   MONEY: `money`,
   TRANSPORT: `type`,
-  TIME: `time-spand`,
+  TIME: `time-spend`,
 };
 
 export const ChartColors = {

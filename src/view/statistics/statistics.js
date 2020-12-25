@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import duration from 'dayjs/plugin/duration';
 import {renderChart} from './render-chart';
 
-import {BAR_HEIGHT, StatisticsTypes, EmojiTypes, ChartColors} from "../../utils/constants";
+import {BAR_HEIGHT, Stats, EmojiTypes, ChartColors} from "../../utils/constants";
 import {getMaxValueIndexFromObject, getMinValueIndexFromObject} from "../../utils";
 
 import {createStatisticsTemplate} from "./templates/create-statistics-template";
@@ -13,7 +13,7 @@ export default class Statistics extends SmartView {
     super();
 
     this._data = data;
-    this._charts = new Array(Object.keys(StatisticsTypes).length).fill(null);
+    this._charts = new Array(Object.keys(Stats).length).fill(null);
     this._setCharts();
   }
 
@@ -25,7 +25,7 @@ export default class Statistics extends SmartView {
     super.removeElement();
 
     if (this._charts[0] !== null) {
-      this._charts = new Array(Object.keys(StatisticsTypes).length).fill(null);
+      this._charts = new Array(Object.keys(Stats).length).fill(null);
     }
   }
 
@@ -35,9 +35,10 @@ export default class Statistics extends SmartView {
 
   _createOptions(statsType) {
     const amount = this._data.reduce((collect, point) => {
-      const value = ((statsType === StatisticsTypes.MONEY) && point.price)
-        || ((statsType === StatisticsTypes.TRANSPORT) && 1)
-        || ((statsType === StatisticsTypes.TIME) && dayjs.duration(dayjs(point.timeEnd).diff(point.timeStart)).days());
+      const value =
+        ((statsType === Stats.MONEY) && point.price) ||
+        ((statsType === Stats.TRANSPORT) && 1) ||
+        ((statsType === Stats.TIME) && Math.ceil(dayjs.duration(dayjs(point.timeEnd).diff(point.timeStart)).hours() / 24));
       collect[point.type] = (collect[point.type] || 0) + value;
       return collect;
     }, {});
@@ -50,9 +51,10 @@ export default class Statistics extends SmartView {
         type,
         accumulate,
         emoji: EmojiTypes[type],
-        color: (index === maxValueIndex) && ChartColors.SILVER
-          || (index === minValueIndex) && ChartColors.GAINSBORO
-          || ChartColors.WHITE,
+        color:
+          (index === maxValueIndex) && ChartColors.SILVER ||
+          (index === minValueIndex) && ChartColors.GAINSBORO ||
+          ChartColors.WHITE,
       }
     ));
   }
@@ -60,16 +62,14 @@ export default class Statistics extends SmartView {
   _getDataForChart(statsType) {
     const chartData = () => {
       const header = statsType.toUpperCase();
-      const collector = {
-        [StatisticsTypes.MONEY]: this._createOptions(StatisticsTypes.MONEY),
-        [StatisticsTypes.TRANSPORT]: this._createOptions(StatisticsTypes.TRANSPORT),
-        [StatisticsTypes.TIME]: this._createOptions(StatisticsTypes.TIME),
-      }[statsType];
-      const format = {
-        [StatisticsTypes.MONEY]: (val) => `€ ${val}`,
-        [StatisticsTypes.TRANSPORT]: (val) => `${val}x`,
-        [StatisticsTypes.TIME]: (val) => `${val}D`,
-      }[statsType];
+      const collector =
+        ((statsType === Stats.MONEY) && this._createOptions(Stats.MONEY)) ||
+        ((statsType === Stats.TRANSPORT) && this._createOptions(Stats.TRANSPORT)) ||
+        ((statsType === Stats.TIME) && this._createOptions(Stats.TIME));
+      const format =
+        ((statsType === Stats.MONEY) && ((val) => `€ ${val}`)) ||
+        ((statsType === Stats.MONEY) && ((val) => `${val}x`)) ||
+        ((statsType === Stats.MONEY) && ((val) => `${val}D`));
       return {
         header,
         collector,
@@ -82,14 +82,14 @@ export default class Statistics extends SmartView {
 
   _setCharts() {
     if (this._charts[0] !== null) {
-      this._charts = new Array(Object.keys(StatisticsTypes).length).fill(null);
+      this._charts = new Array(Object.keys(Stats).length).fill(null);
     }
 
     dayjs.extend(duration);
 
-    const ctxs = Object.values(StatisticsTypes).map((type) => this.getElement().querySelector(`.statistics__chart--${type}`));
+    const ctxs = Object.values(Stats).map((type) => this.getElement().querySelector(`.statistics__chart--${type}`));
 
-    const preparedData = Object.values(StatisticsTypes).map((type) => this._getDataForChart(type));
+    const preparedData = Object.values(Stats).map((type) => this._getDataForChart(type));
 
     ctxs.forEach((ctx, index) => (ctx.height = BAR_HEIGHT * preparedData[index].collector.length));
 

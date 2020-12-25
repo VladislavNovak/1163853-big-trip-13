@@ -40,6 +40,9 @@ const handleTabClick = (activeTab) => {
       remove(statisticsComponent);
       tripPresenter.init();
       newEventButton.disabled = false;
+      if (mainElement.classList.contains(`no-after`)) {
+        mainElement.classList.remove(`no-after`);
+      }
       break;
     case TabTypes.STATS:
       tripPresenter.destroy();
@@ -47,6 +50,9 @@ const handleTabClick = (activeTab) => {
       newEventButton.disabled = true;
       statisticsComponent = new StatisticsView(eventsModel.getEvents());
       render(mainElement, statisticsComponent);
+      if (!mainElement.classList.contains(`no-after`)) {
+        mainElement.classList.add(`no-after`);
+      }
       break;
   }
 };
