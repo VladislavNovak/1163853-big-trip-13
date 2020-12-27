@@ -1,16 +1,24 @@
 import {FilterTypes, TabTypes, UpdateType} from './utils/constants';
+import {AUTH, LINK} from './api/constants';
 import {getDestinations, getOffers, getPoints} from './temp/mocks';
 import {RenderPosition, render, remove} from './utils/render';
 
 import TripPresenter from './presenter/trip';
 import FilterPresenter from './presenter/filter';
 
+import Api from './api/api';
 import {EventsModel, FilterModel, OffersModel, DestinationsModel} from './model';
 import {InfoView, TabsView, StatisticsView} from './view/';
 
 const points = getPoints();
 const offers = getOffers();
 const destinations = getDestinations();
+
+const api = new Api(LINK, AUTH);
+
+api.getPoints().then((ApiPoints) => {
+  console.log(ApiPoints);
+});
 
 const eventsModel = new EventsModel();
 eventsModel.setEvents(points);
