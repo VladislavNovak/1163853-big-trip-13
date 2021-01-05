@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 import Observer from '../utils/observer';
 
 export default class Events extends Observer {
@@ -52,5 +54,45 @@ export default class Events extends Observer {
     ];
 
     this._notify(updateType);
+  }
+
+  static adaptToServer({id, type, placePhotos, place, placeDescription, timeStart, timeEnd, price, offers, isFavorite}) {
+    return {
+      id,
+      type,
+      date_from: timeStart.toISOString(),
+      date_to: timeEnd.toISOString(),
+      destination: {
+        name: place,
+        description: placeDescription,
+        pictures: placePhotos,
+      },
+      base_price: price,
+      is_favorite: isFavorite,
+      offers: offers.map(({title, expense, isChecked}) => ({
+        title,
+        price: expense,
+        is_checked: isChecked
+      })),
+    };
+  }
+
+  static adaptToClient({id, type, date_from, date_to, destination, base_price, is_favorite, offers}) {
+    return {
+      id,
+      type,
+      timeStart: date_from,
+      timeEnd: date_to,
+      place: destination.name,
+      placeDescription: destination.description,
+      placePhotos: destination.pictures,
+      price: base_price,
+      isFavorite: is_favorite,
+      offers: offers.map(({title, price, is_checked}) => ({
+        title,
+        expense: price,
+        isChecked: is_checked && true || false
+      }))
+    };
   }
 }

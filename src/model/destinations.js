@@ -10,4 +10,12 @@ export default class Destinations {
   getDestinations() {
     return this._destinations;
   }
+
+  static adaptToClient({name, description, pictures}) {
+    return {
+      place: name,
+      placeDescription: description,
+      placePhotos: pictures,
+    };
+  }
 }

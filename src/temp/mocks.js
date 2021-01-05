@@ -1,5 +1,5 @@
 import {CHANCE_EVENTS_COUNT, emptyDestination, Destinations, GenerateMode, OffersList} from './mock-constants';
-import {getID, getRandomInteger} from '../utils';
+import {assign, getID, getRandomInteger} from '../utils';
 import {getRamdomType, generateDate, getPointPrice, getFavoriteStatus} from './mock-service';
 
 const generateOffersSet = (type) => OffersList.find((offer) => offer.type === type);
@@ -26,7 +26,8 @@ const generateDestination = (mode) => {
 const generatePoint = (mode) => {
   const id = getID();
   const type = getRamdomType(mode);
-  const {offers} = generateOffersSet(type);
+  const rawOffers = generateOffersSet(type).offers;
+  const offers = Object.values(rawOffers).map((offer) => assign(offer, {isChecked: Math.random() > 0.5}));
   const {place, placeDescription, placePhotos} = generateDestination(mode);
   const {timeStart, timeEnd} = generateDate(mode);
   const price = getPointPrice(mode);

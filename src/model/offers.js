@@ -1,3 +1,5 @@
+import {capitalizeFirstLetter} from "../utils";
+
 export default class Offers {
   constructor() {
     this._offers = null;
@@ -9,5 +11,15 @@ export default class Offers {
 
   getOffers() {
     return this._offers;
+  }
+
+  static adaptToClient(data) {
+    return {
+      type: capitalizeFirstLetter(data.type),
+      offers: data.offers.map(({title, price}) => ({
+        title,
+        expense: price
+      })),
+    };
   }
 }

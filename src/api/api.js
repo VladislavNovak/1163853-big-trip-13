@@ -1,3 +1,4 @@
+import {DestinationsModel, EventsModel, OffersModel} from "../model";
 import {HTTPStatusRange, Method} from "./constants";
 
 export default class Api {
@@ -8,16 +9,31 @@ export default class Api {
 
   getPoints() {
     return this._load({url: `points`})
-      .then(Api.toJSON);
+      .then(Api.toJSON)
+      .then((points) => points.map(EventsModel.adaptToClient));
+  }
+
+  getOffers() {
+    return this._load({url: `offers`})
+      .then(Api.toJSON)
+      .then((offers) => offers.map(OffersModel.adaptToClient));
+  }
+
+  getDestinations() {
+    return this._load({url: `destinations`})
+      .then(Api.toJSON)
+      .then((destinations) => destinations.map(DestinationsModel.adaptToClient));
   }
 
   updatePoints(point) {
     return this._load({
       url: `points/${point.id}`,
       method: Method.PUT,
-      body: JSON.stringify(point),
+      body: JSON.stringify(EventsModel.adaptToServer(point)),
       headers: new Headers({"Content-Type": `application/json`})
-    }).then(Api.toJSON);
+    })
+      .then(Api.toJSON)
+      .then(EventsModel.adaptToClient);
   }
 
   _load({

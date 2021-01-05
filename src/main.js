@@ -16,9 +16,20 @@ const destinations = getDestinations();
 
 const api = new Api(LINK, AUTH);
 
-api.getPoints().then((ApiPoints) => {
-  console.log(ApiPoints);
-});
+api.getPoints()
+  .then((ApiPoints) => {
+    console.log(`ApiPoints: `, ApiPoints);
+  });
+
+api.getOffers()
+  .then((ApiOffers) => {
+    console.log(`ApiOffers: `, ApiOffers);
+  });
+
+api.getDestinations()
+  .then((ApiDestination) => {
+    console.log(`ApiDestination: `, ApiDestination);
+  });
 
 const eventsModel = new EventsModel();
 eventsModel.setEvents(points);

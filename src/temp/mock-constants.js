@@ -101,39 +101,39 @@ export const OffersList = [
   {
     type: `Taxi`,
     offers: [
-      {title: `Add breakfast`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
-      {title: `Book tickets`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
-      {title: `Improve class`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
+      {title: `Add breakfast`, expense: getRandomInteger(10, 50)},
+      {title: `Book tickets`, expense: getRandomInteger(10, 50)},
+      {title: `Improve class`, expense: getRandomInteger(10, 50)},
     ]
   },
   {
     type: `Bus`,
     offers: [
-      {title: `Lunch in city`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5}
+      {title: `Lunch in city`, expense: getRandomInteger(10, 50)}
     ]
   },
   {
     type: `Train`,
     offers: [
-      {title: `Order the guide`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
-      {title: `Musical accompaniment`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
+      {title: `Order the guide`, expense: getRandomInteger(10, 50)},
+      {title: `Musical accompaniment`, expense: getRandomInteger(10, 50)},
     ]
   },
   {
     type: `Ship`,
     offers: [
-      {title: `Improve class`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
-      {title: `Archery excursion`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
-      {title: `Add breakfast`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
-      {title: `Add luggage`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
+      {title: `Improve class`, expense: getRandomInteger(10, 50)},
+      {title: `Archery excursion`, expense: getRandomInteger(10, 50)},
+      {title: `Add breakfast`, expense: getRandomInteger(10, 50)},
+      {title: `Add luggage`, expense: getRandomInteger(10, 50)},
     ]
   },
   {
     type: `Transport`,
     offers: [
-      {title: `Book tickets`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
-      {title: `Choose seats`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
-      {title: `Lunch in city`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
+      {title: `Book tickets`, expense: getRandomInteger(10, 50)},
+      {title: `Choose seats`, expense: getRandomInteger(10, 50)},
+      {title: `Lunch in city`, expense: getRandomInteger(10, 50)},
     ]
   },
   {
@@ -143,35 +143,35 @@ export const OffersList = [
   {
     type: `Flight`,
     offers: [
-      {title: `Add meal`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
-      {title: `Rent a car`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
-      {title: `Order the guide`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
-      {title: `Add luggage`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
-      {title: `Add breakfast`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
+      {title: `Add meal`, expense: getRandomInteger(10, 50)},
+      {title: `Rent a car`, expense: getRandomInteger(10, 50)},
+      {title: `Order the guide`, expense: getRandomInteger(10, 50)},
+      {title: `Add luggage`, expense: getRandomInteger(10, 50)},
+      {title: `Add breakfast`, expense: getRandomInteger(10, 50)},
     ]
   },
   {
     type: `Check-in`,
     offers: [
-      {title: `Rent a car`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
-      {title: `Archery excursion`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
+      {title: `Rent a car`, expense: getRandomInteger(10, 50)},
+      {title: `Archery excursion`, expense: getRandomInteger(10, 50)},
     ]
   },
   {
     type: `Sightseeing`,
     offers: [
-      {title: `Rent a car`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
-      {title: `Improve class`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
+      {title: `Rent a car`, expense: getRandomInteger(10, 50)},
+      {title: `Improve class`, expense: getRandomInteger(10, 50)},
     ]
   },
   {
     type: `Restaurant`,
     offers: [
-      {title: `Order Uber`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
-      {title: `Rent a car`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
-      {title: `Travel by train`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
-      {title: `Improve class`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
-      {title: `Archery excursion`, expense: getRandomInteger(10, 50), isChecked: Math.random() > 0.5},
+      {title: `Order Uber`, expense: getRandomInteger(10, 50)},
+      {title: `Rent a car`, expense: getRandomInteger(10, 50)},
+      {title: `Travel by train`, expense: getRandomInteger(10, 50)},
+      {title: `Improve class`, expense: getRandomInteger(10, 50)},
+      {title: `Archery excursion`, expense: getRandomInteger(10, 50)},
     ]
   },
 ];

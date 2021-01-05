@@ -65,3 +65,5 @@ export const assign = (expandable, ...payload) => Object.assign({}, expandable, 
 export const getPlaces = () => Destinations.map((destination) => destination.place);
 
 export const batchBind = (self, ...methods) => methods.forEach((method) => (self[method.name] = method.bind(self)));
+
+export const capitalizeFirstLetter = (str) => (!str) ? str : str[0].toUpperCase() + str.slice(1);
