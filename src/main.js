@@ -16,21 +16,6 @@ const destinations = getDestinations();
 
 const api = new Api(LINK, AUTH);
 
-api.getPoints()
-  .then((ApiPoints) => {
-    console.log(`ApiPoints: `, ApiPoints);
-  });
-
-api.getOffers()
-  .then((ApiOffers) => {
-    console.log(`ApiOffers: `, ApiOffers);
-  });
-
-api.getDestinations()
-  .then((ApiDestination) => {
-    console.log(`ApiDestination: `, ApiDestination);
-  });
-
 const eventsModel = new EventsModel();
 eventsModel.setEvents(points);
 const offersModel = new OffersModel();
@@ -46,7 +31,6 @@ const mainElement = bodyElement.querySelector(`.page-body__page-main  .page-body
 
 render(headerElement, new InfoView(points), RenderPosition.AFTERBEGIN);
 const tabsComponent = new TabsView();
-render(controlElement, tabsComponent);
 
 const tripPresenter = new TripPresenter(mainElement, eventsModel, filterModel, offersModel, destinationsModel);
 const filterPresenter = new FilterPresenter(controlElement, eventsModel, filterModel);
@@ -78,6 +62,8 @@ const handleTabClick = (activeTab) => {
 
 tabsComponent.tabClick(handleTabClick);
 
+render(controlElement, tabsComponent);
+
 filterPresenter.init();
 tripPresenter.init();
 
@@ -91,3 +77,10 @@ newEventButton.addEventListener(`click`, ({target}) => {
   tabsComponent.tabResetView();
   tripPresenter.createEvent(() => (target.disabled = false));
 });
+
+Promise.all([api.getPoints(), api.getOffers(), api.getDestinations()])
+  .then(([apiPoints, apiOffers, apiDestination]) => {
+    eventsModel.setEvents(apiPoints);
+    offersModel.setOffers(apiOffers);
+    destinationsModel.setDestinations(apiDestination);
+  });
