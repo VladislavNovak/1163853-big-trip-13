@@ -29,7 +29,7 @@ const headerElement = bodyElement.querySelector(`.trip-main`);
 const controlElement = headerElement.querySelector(`.trip-controls`);
 const mainElement = bodyElement.querySelector(`.page-body__page-main  .page-body__container`);
 
-render(headerElement, new InfoView(points), RenderPosition.AFTERBEGIN);
+render(headerElement, new InfoView(eventsModel), RenderPosition.AFTERBEGIN);
 const tabsComponent = new TabsView();
 
 const tripPresenter = new TripPresenter(mainElement, eventsModel, filterModel, offersModel, destinationsModel);
