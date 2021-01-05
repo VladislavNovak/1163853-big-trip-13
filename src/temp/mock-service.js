@@ -3,7 +3,16 @@ import dayjsRandom from 'dayjs-random';
 import {CHANCE_DAYS_GAP, CHANCE_PHOTOS_COUNT, GenerateMode, RouteTypes} from './mock-constants';
 import {getRandomInteger} from '../utils';
 
-export const getPhoto = () => new Array(getRandomInteger(0, CHANCE_PHOTOS_COUNT)).fill().map(() => `http://picsum.photos/248/152?r=${Math.random()}`);
+export const getPhoto = () => {
+  const rawPhotos = new Array(getRandomInteger(0, CHANCE_PHOTOS_COUNT)).fill().map(() => `http://picsum.photos/248/152?r=${Math.random()}`);
+
+  return rawPhotos.map((photos) => {
+    return {
+      src: photos,
+      description: ``,
+    };
+  });
+};
 
 export const getPointPrice = (mode) => (mode === GenerateMode.AS_EDIT_MODE) ? getRandomInteger(100, 1000) : 0;
 
