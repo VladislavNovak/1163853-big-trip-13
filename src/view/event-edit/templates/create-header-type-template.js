@@ -1,9 +1,11 @@
-import {RouteTypes} from '../../../temp/mock-constants';
+import {getTypes} from '../../../utils';
 
-export const createHeaderTypeTemplate = ({type}) => {
+export const createHeaderTypeTemplate = (point, offers) => {
+  const {type} = point;
+  const routeTypes = getTypes(offers);
 
   const getTypeItem = () => {
-    return Object.values(RouteTypes).map((routeType) => {
+    return Object.values(routeTypes).map((routeType) => {
       const typeInLowerCase = routeType.toLowerCase();
       return (
         `<div class="event__type-item">

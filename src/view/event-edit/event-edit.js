@@ -13,7 +13,7 @@ export default class EventEdit extends Smart {
   constructor(point, offersModel, destinationsModel, isEditMode = true) {
     super();
     this._point = EventEdit.supplementData(point, isEditMode);
-    this._offersModel = offersModel;
+    this._offers = offersModel.getOffers();
     this._destinations = destinationsModel.getDestinations();
 
     batchBind(
@@ -41,7 +41,7 @@ export default class EventEdit extends Smart {
   }
 
   getTemplate() {
-    return createEventEditTemplate(this._point, this._destinations);
+    return createEventEditTemplate(this._point, this._offers, this._destinations);
   }
 
   restoreHandlers() {
@@ -111,8 +111,7 @@ export default class EventEdit extends Smart {
   }
 
   _typeRadioInputHandler({target}) {
-    const {type, offers} = this._offersModel
-        .getOffers().find((offer) => offer.type === target.value);
+    const {type, offers} = this._offers.find((offer) => offer.type === target.value);
 
     this.updateData({type, offers});
   }

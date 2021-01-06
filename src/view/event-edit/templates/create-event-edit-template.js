@@ -6,14 +6,14 @@ import {createHeaderDestinationTemplate} from './create-header-destination-templ
 import {createSectionOffersTemplate} from './create-section-offers-template';
 import {createDescriptionTemplate} from './create-description-template';
 
-export const createEventEditTemplate = (point, destinations) => {
+export const createEventEditTemplate = (point, offers, destinations) => {
   const {timeStart, timeEnd, isEditMode, price} = point;
 
   return (
     `<li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
         <header class="event__header">
-          ${createHeaderTypeTemplate(point)}
+          ${createHeaderTypeTemplate(point, offers)}
           ${createHeaderDestinationTemplate(point, destinations)}
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
