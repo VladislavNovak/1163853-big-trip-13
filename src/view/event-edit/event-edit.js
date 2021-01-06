@@ -1,4 +1,5 @@
-import {assign, getPlaces, batchBind} from '../../utils';
+import {Structure} from '../../utils/constants';
+import {assign, getListByType, batchBind} from '../../utils';
 
 import flatpickr from 'flatpickr';
 import ConfirmDatePlugin from 'flatpickr/dist/plugins/confirmDate/confirmDate.js';
@@ -15,6 +16,7 @@ export default class EventEdit extends Smart {
     this._point = EventEdit.supplementData(point, isEditMode);
     this._offers = offersModel.getOffers();
     this._destinations = destinationsModel.getDestinations();
+    this._places = getListByType(this._destinations, Structure.PLACE);
 
     batchBind(
         this,
@@ -41,7 +43,7 @@ export default class EventEdit extends Smart {
   }
 
   getTemplate() {
-    return createEventEditTemplate(this._point, this._offers, this._destinations);
+    return createEventEditTemplate(this._point, this._offers, this._places);
   }
 
   restoreHandlers() {
@@ -97,7 +99,7 @@ export default class EventEdit extends Smart {
   }
 
   _destinationTextInputHandler({target}) {
-    if (!getPlaces().includes(target.value)) {
+    if (!this._places.includes(target.value)) {
       return;
     }
 
@@ -105,7 +107,7 @@ export default class EventEdit extends Smart {
       place,
       placeDescription,
       placePhotos
-    } = this._destinations[this._destinations.findIndex((destination) => destination.place === target.value)];
+    } = this._destinations[this._places.findIndex((_place) => _place === target.value)];
 
     this.updateData({place, placeDescription, placePhotos});
   }

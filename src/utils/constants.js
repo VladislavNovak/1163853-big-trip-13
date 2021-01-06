@@ -82,5 +82,5 @@ export const EmojiTypes = {
 
 export const Structure = {
   TYPE: `type`,
-  PLACES: `places`,
+  PLACE: `place`,
 };
