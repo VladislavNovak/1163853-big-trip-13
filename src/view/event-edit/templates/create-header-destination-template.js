@@ -1,9 +1,10 @@
-import {getPlaces} from '../../../utils';
+import {Structure} from '../../../utils/constants';
+import {getListByType} from '../../../utils';
 import he from 'he';
 
 export const createHeaderDestinationTemplate = (point, destinations) => {
   const {type, place: selectedPlace} = point;
-  const places = getPlaces(destinations);
+  const places = getListByType(destinations, Structure.PLACES);
 
   const getOption = () => {
     return places.map((place) => {

@@ -1,8 +1,9 @@
-import {getTypes} from '../../../utils';
+import {Structure} from '../../../utils/constants';
+import {getListByType} from '../../../utils';
 
 export const createHeaderTypeTemplate = (point, offers) => {
   const {type} = point;
-  const routeTypes = getTypes(offers);
+  const routeTypes = getListByType(offers, Structure.TYPE);
 
   const getTypeItem = () => {
     return Object.values(routeTypes).map((routeType) => {

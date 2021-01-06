@@ -61,9 +61,13 @@ export const getMinValueIndexFromObject = (obj) => Object.values(obj)
 
 export const assign = (expandable, ...payload) => Object.assign({}, expandable, ...payload);
 
-export const getPlaces = (destinations) => destinations.map((destination) => destination.place);
-
-export const getTypes = (offers) => offers.map((offer) => offer.type);
+/**
+ * This function retrieves a specific list from an object
+ * @param {Object} structure - the object from which to get the list
+ * @param {string} type - an enumeration by the type of which the list is formed
+ * @return {string[]} returns an array of strings
+ */
+export const getListByType = (structure, type) => structure.map((item) => item[type]);
 
 export const batchBind = (self, ...methods) => methods.forEach((method) => (self[method.name] = method.bind(self)));
 

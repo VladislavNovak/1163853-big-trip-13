@@ -79,3 +79,8 @@ export const EmojiTypes = {
   'Sightseeing': `🏛`,
   'Restaurant': `🍴`,
 };
+
+export const Structure = {
+  TYPE: `type`,
+  PLACES: `places`,
+};
