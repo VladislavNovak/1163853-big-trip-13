@@ -14,7 +14,7 @@ export default class EventEdit extends Smart {
     super();
     this._point = EventEdit.supplementData(point, isEditMode);
     this._offersModel = offersModel;
-    this._destinationsModel = destinationsModel;
+    this._destinations = destinationsModel.getDestinations();
 
     batchBind(
         this,
@@ -41,7 +41,7 @@ export default class EventEdit extends Smart {
   }
 
   getTemplate() {
-    return createEventEditTemplate(this._point);
+    return createEventEditTemplate(this._point, this._destinations);
   }
 
   restoreHandlers() {
@@ -101,8 +101,11 @@ export default class EventEdit extends Smart {
       return;
     }
 
-    const {place, placeDescription, placePhotos} = this._destinationsModel.getDestinations()[this._destinationsModel
-      .getDestinations().findIndex((destination) => destination.place === target.value)];
+    const {
+      place,
+      placeDescription,
+      placePhotos
+    } = this._destinations[this._destinations.findIndex((destination) => destination.place === target.value)];
 
     this.updateData({place, placeDescription, placePhotos});
   }

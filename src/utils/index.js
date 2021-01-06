@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import {Destinations} from '../temp/mock-constants';
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -62,7 +61,7 @@ export const getMinValueIndexFromObject = (obj) => Object.values(obj)
 
 export const assign = (expandable, ...payload) => Object.assign({}, expandable, ...payload);
 
-export const getPlaces = () => Destinations.map((destination) => destination.place);
+export const getPlaces = (destinations) => destinations.map((destination) => destination.place);
 
 export const batchBind = (self, ...methods) => methods.forEach((method) => (self[method.name] = method.bind(self)));
 

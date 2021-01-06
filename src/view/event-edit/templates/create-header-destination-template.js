@@ -1,10 +1,11 @@
 import {getPlaces} from '../../../utils';
 import he from 'he';
 
-export const createHeaderDestinationTemplate = ({type, place: selectedPlace}) => {
+export const createHeaderDestinationTemplate = (point, destinations) => {
+  const {type, place: selectedPlace} = point;
+  const places = getPlaces(destinations);
 
   const getOption = () => {
-    const places = getPlaces();
     return places.map((place) => {
       return (
         `<option value="${place}">${place}</option>`
