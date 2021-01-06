@@ -23,11 +23,12 @@ export default class Trip {
     this._tripContainer = tripContainer;
     this._eventPresenter = {};
     this._currentSortType = SortTypes.SORT_DAY;
+    this._isLoading = false;
 
     this._tripComponent = new TripView();
     this._sortComponent = null;
     this._routeComponent = new RouteView();
-    this._warningComponent = new WarningView(WarningTypes.EMPTY_DATA_LIST);
+    this._warningComponent = new WarningView();
 
     batchBind(
         this,
@@ -134,7 +135,13 @@ export default class Trip {
     this._getEvents().forEach((point) => this._renderEvent(point));
   }
 
+  _renderLoading() {
+    this._warningComponent.init(WarningTypes.WAITING_FOR_DOWNLOADING);
+    render(this._tripComponent, this._warningComponent);
+  }
+
   _renderNoEvents() {
+    this._warningComponent.init(WarningTypes.EMPTY_DATA_LIST);
     render(this._tripComponent, this._warningComponent);
   }
 
@@ -143,7 +150,9 @@ export default class Trip {
     this._eventPresenter = {};
 
     remove(this._sortComponent);
-    remove(this._warningComponent);
+    if (this._warningComponent) {
+      remove(this._warningComponent);
+    }
 
     if (resetSortType) {
       this._currentSortType = SortTypes.SORT_DAY;
@@ -151,7 +160,13 @@ export default class Trip {
   }
 
   _renderTrip() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
     if (this._getEvents().length === 0) {
+      console.log(this._getEvents().length);
       this._renderNoEvents();
       return;
     }
