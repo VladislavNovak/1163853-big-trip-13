@@ -8,8 +8,10 @@ export default class Events extends Observer {
     this._points = [];
   }
 
-  setEvents(points) {
+  setEvents(updateType, points) {
     this._points = points.slice();
+
+    this._notify(updateType);
   }
 
   getEvents() {

@@ -9,3 +9,5 @@
 GET https://13.ecmascript.pages.academy/big-trip/destinations HTTP/1.1
 Authorization: Basic NS43cqsibarQ5EJ
 Content-Type: application/json
+
+# Существует отличная альтернатива - расширение для браузера rested

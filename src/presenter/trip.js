@@ -23,7 +23,7 @@ export default class Trip {
     this._tripContainer = tripContainer;
     this._eventPresenter = {};
     this._currentSortType = SortTypes.SORT_DAY;
-    this._isLoading = false;
+    this._isLoading = true;
 
     this._tripComponent = new TripView();
     this._sortComponent = null;
@@ -99,6 +99,11 @@ export default class Trip {
       },
       [UpdateType.MAJOR]: () => {
         this._clearTrip({resetSortType: true});
+        this._renderTrip();
+      },
+      [UpdateType.INIT]: () => {
+        this._isLoading = false;
+        remove(this._warningComponent);
         this._renderTrip();
       },
     }[updateType]();

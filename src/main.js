@@ -1,6 +1,5 @@
 import {FilterTypes, TabTypes, UpdateType} from './utils/constants';
 import {AUTH, LINK} from './api/constants';
-import {getDestinations, getOffers, getPoints} from './temp/mocks';
 import {RenderPosition, render, remove} from './utils/render';
 
 import TripPresenter from './presenter/trip';
@@ -10,18 +9,11 @@ import Api from './api/api';
 import {EventsModel, FilterModel, OffersModel, DestinationsModel} from './model';
 import {InfoView, TabsView, StatisticsView} from './view/';
 
-const points = getPoints();
-const offers = getOffers();
-const destinations = getDestinations();
-
 const api = new Api(LINK, AUTH);
 
 const eventsModel = new EventsModel();
-eventsModel.setEvents(points);
 const offersModel = new OffersModel();
-offersModel.setOffers(offers);
 const destinationsModel = new DestinationsModel();
-destinationsModel.setDestinations(destinations);
 const filterModel = new FilterModel();
 
 const bodyElement = document.body;
@@ -82,5 +74,8 @@ Promise.all([api.getPoints(), api.getOffers(), api.getDestinations()])
   .then(([apiPoints, apiOffers, apiDestination]) => {
     offersModel.setOffers(apiOffers);
     destinationsModel.setDestinations(apiDestination);
-    eventsModel.setEvents(apiPoints);
+    eventsModel.setEvents(UpdateType.INIT, apiPoints);
+  })
+  .catch(() => {
+    eventsModel.setEvents(UpdateType.INIT, []);
   });
