@@ -15,11 +15,12 @@ import {
 } from '../view';
 
 export default class Trip {
-  constructor(tripContainer, eventsModel, filterModel, offersModel, destinationsModel) {
+  constructor(tripContainer, eventsModel, filterModel, offersModel, destinationsModel, api) {
     this._eventsModel = eventsModel;
     this._filterModel = filterModel;
     this._offersModel = offersModel;
     this._destinationsModel = destinationsModel;
+    this._api = api;
     this._tripContainer = tripContainer;
     this._eventPresenter = {};
     this._currentSortType = SortTypes.SORT_DAY;
@@ -84,7 +85,11 @@ export default class Trip {
 
   _handleViewAction(actionType, updateType, update) {
     return {
-      [UserAction.UPDATE_EVENT]: () => (this._eventsModel.updateEvent(updateType, update)),
+      [UserAction.UPDATE_EVENT]: () => {
+        this._api.updatePoints(update).then((response) => {
+          this._eventsModel.updateEvent(updateType, response);
+        });
+      },
       [UserAction.ADD_EVENT]: () => (this._eventsModel.addEvent(updateType, update)),
       [UserAction.DELETE_EVENT]: () => (this._eventsModel.deleteEvent(updateType, update)),
     }[actionType]();

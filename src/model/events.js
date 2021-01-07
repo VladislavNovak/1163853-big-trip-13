@@ -62,8 +62,8 @@ export default class Events extends Observer {
     return {
       id,
       type,
-      date_from: timeStart.toISOString(),
-      date_to: timeEnd.toISOString(),
+      date_from: timeStart,
+      date_to: timeEnd,
       destination: {
         name: place,
         description: placeDescription,

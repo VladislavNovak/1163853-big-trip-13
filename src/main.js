@@ -25,7 +25,7 @@ const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
 render(headerElement, new InfoView(eventsModel), RenderPosition.AFTERBEGIN);
 const tabsComponent = new TabsView();
 
-const tripPresenter = new TripPresenter(mainElement, eventsModel, filterModel, offersModel, destinationsModel);
+const tripPresenter = new TripPresenter(mainElement, eventsModel, filterModel, offersModel, destinationsModel, api);
 const filterPresenter = new FilterPresenter(controlElement, eventsModel, filterModel);
 
 let statisticsComponent = null;
