@@ -166,7 +166,6 @@ export default class Trip {
     }
 
     if (this._getEvents().length === 0) {
-      console.log(this._getEvents().length);
       this._renderNoEvents();
       return;
     }

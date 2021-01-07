@@ -80,7 +80,7 @@ newEventButton.addEventListener(`click`, ({target}) => {
 
 Promise.all([api.getPoints(), api.getOffers(), api.getDestinations()])
   .then(([apiPoints, apiOffers, apiDestination]) => {
-    eventsModel.setEvents(apiPoints);
     offersModel.setOffers(apiOffers);
     destinationsModel.setDestinations(apiDestination);
+    eventsModel.setEvents(apiPoints);
   });
