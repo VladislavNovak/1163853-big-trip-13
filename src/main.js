@@ -20,6 +20,7 @@ const bodyElement = document.body;
 const headerElement = bodyElement.querySelector(`.trip-main`);
 const controlElement = headerElement.querySelector(`.trip-controls`);
 const mainElement = bodyElement.querySelector(`.page-body__page-main  .page-body__container`);
+const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
 
 render(headerElement, new InfoView(eventsModel), RenderPosition.AFTERBEGIN);
 const tabsComponent = new TabsView();
@@ -52,30 +53,34 @@ const handleTabClick = (activeTab) => {
   }
 };
 
-tabsComponent.tabClick(handleTabClick);
-
-render(controlElement, tabsComponent);
-
-filterPresenter.init();
-tripPresenter.init();
-
-const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
-
-newEventButton.addEventListener(`click`, ({target}) => {
+const handleNewEventButtonClick = ({target}) => {
   tripPresenter.destroy();
   filterModel.setFilter(UpdateType.MAJOR, FilterTypes.EVERYTHING);
   tripPresenter.init();
   target.disabled = true;
   tabsComponent.tabResetView();
   tripPresenter.createEvent(() => (target.disabled = false));
-});
+};
+
+filterPresenter.init();
+tripPresenter.init();
+
+
+const enableControls = () => {
+  newEventButton.disabled = false;
+  newEventButton.addEventListener(`click`, handleNewEventButtonClick);
+  tabsComponent.tabClick(handleTabClick);
+  render(controlElement, tabsComponent);
+};
 
 Promise.all([api.getPoints(), api.getOffers(), api.getDestinations()])
   .then(([apiPoints, apiOffers, apiDestination]) => {
     offersModel.setOffers(apiOffers);
     destinationsModel.setDestinations(apiDestination);
     eventsModel.setEvents(UpdateType.INIT, apiPoints);
+    enableControls();
   })
   .catch(() => {
     eventsModel.setEvents(UpdateType.INIT, []);
+    enableControls();
   });
