@@ -4,6 +4,8 @@ export const LINK = `https://13.ecmascript.pages.academy/big-trip`;
 export const Method = {
   GET: `GET`,
   PUT: `PUT`,
+  POST: `POST`,
+  DELETE: `DELETE`
 };
 
 export const HTTPStatusRange = {

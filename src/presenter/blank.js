@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {batchBind, getID} from '../utils';
+import {batchBind} from '../utils';
 import {UpdateType, UserAction, SET_BLANK_MODE} from '../utils/constants';
 import {remove, render, RenderPosition} from '../utils/render';
 import EventEditView from '../view/event-edit/event-edit';
@@ -14,7 +14,7 @@ const getBlankPoint = (offersModel) => {
     place: ``,
     placeDescription: ``,
     placePhotos: null,
-    price: null,
+    price: 0,
     isFavorite: false,
     offers,
   };
@@ -71,7 +71,7 @@ export default class Blank {
   }
 
   _formSubmitHandler(point) {
-    this._changeData(UserAction.ADD_EVENT, UpdateType.MINOR, Object.assign({id: getID()}, point));
+    this._changeData(UserAction.ADD_EVENT, UpdateType.MINOR, point);
     this.destroy();
   }
 

@@ -90,8 +90,16 @@ export default class Trip {
           this._eventsModel.updateEvent(updateType, response);
         });
       },
-      [UserAction.ADD_EVENT]: () => (this._eventsModel.addEvent(updateType, update)),
-      [UserAction.DELETE_EVENT]: () => (this._eventsModel.deleteEvent(updateType, update)),
+      [UserAction.ADD_EVENT]: () => {
+        this._api.addPoint(update).then((response) => {
+          this._eventsModel.addEvent(updateType, response);
+        });
+      },
+      [UserAction.DELETE_EVENT]: () => {
+        this._api.deletePoint(update).then(() => {
+          this._eventsModel.deleteEvent(updateType, update);
+        });
+      },
     }[actionType]();
   }
 

@@ -36,6 +36,24 @@ export default class Api {
       .then(EventsModel.adaptToClient);
   }
 
+  addPoint(point) {
+    return this._load({
+      url: `points`,
+      method: Method.POST,
+      body: JSON.stringify(EventsModel.adaptToServer(point)),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then(Api.toJSON)
+      .then(EventsModel.adaptToClient);
+  }
+
+  deletePoint(point) {
+    return this._load({
+      url: `points/${point.id}`,
+      method: Method.DELETE
+    });
+  }
+
   _load({
     url,
     method = Method.GET,
