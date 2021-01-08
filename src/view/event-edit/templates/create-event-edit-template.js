@@ -7,7 +7,7 @@ import {createSectionOffersTemplate} from './create-section-offers-template';
 import {createDescriptionTemplate} from './create-description-template';
 
 export const createEventEditTemplate = (point, offers, places) => {
-  const {timeStart, timeEnd, isEditMode, price} = point;
+  const {timeStart, timeEnd, isEditMode, place: isPlaceSelected} = point;
 
   return (
     `<li class="trip-events__item">
@@ -41,11 +41,17 @@ export const createEventEditTemplate = (point, offers, places) => {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}">
+            <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="0">
           </div>
 
-          <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-          <button class="event__reset-btn" type="reset">${isEditMode ? `Delete` : `Cancel`}</button>
+          <button
+            class="event__save-btn  btn  btn--blue"
+            type="submit"
+            ${!isPlaceSelected && `disabled`}
+            ${!isPlaceSelected && `title="CHOOSE A PLACE"`}>Save</button>
+          <button
+            class="event__reset-btn"
+            type="reset">${isEditMode ? `Delete` : `Cancel`}</button>
           ${isEditMode ? `<button class="event__rollup-btn" type="button">` : ``}
         </header>
         <section class="event__details">
