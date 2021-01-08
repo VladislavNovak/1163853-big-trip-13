@@ -11,7 +11,9 @@ export const renderChart = (ctx, preparedData) => {
         data: preparedData.collector.map(({accumulate}) => accumulate),
         backgroundColor: preparedData.collector.map(({color}) => color),
         hoverBackgroundColor: `#ffffff`,
-        anchor: `start`
+        anchor: `start`,
+        barThickness: 44,
+        minBarLength: 50
       }]
     },
     options: {
@@ -44,7 +46,6 @@ export const renderChart = (ctx, preparedData) => {
             display: false,
             drawBorder: false
           },
-          barThickness: 44,
         }],
         xAxes: [{
           ticks: {
@@ -55,7 +56,6 @@ export const renderChart = (ctx, preparedData) => {
             display: false,
             drawBorder: false
           },
-          minBarLength: 50
         }],
       },
       legend: {

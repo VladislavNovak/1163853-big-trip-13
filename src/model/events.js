@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 
+import {capitalizeFirstLetter} from '../utils';
 import Observer from '../utils/observer';
 
 export default class Events extends Observer {
@@ -61,7 +62,7 @@ export default class Events extends Observer {
   static adaptToServer({id, type, placePhotos, place, placeDescription, timeStart, timeEnd, price, offers, isFavorite}) {
     return {
       id,
-      type,
+      type: type.toLowerCase(),
       date_from: timeStart,
       date_to: timeEnd,
       destination: {
@@ -82,7 +83,7 @@ export default class Events extends Observer {
   static adaptToClient({id, type, date_from, date_to, destination, base_price, is_favorite, offers}) {
     return {
       id,
-      type,
+      type: capitalizeFirstLetter(type),
       timeStart: date_from,
       timeEnd: date_to,
       place: destination.name,
