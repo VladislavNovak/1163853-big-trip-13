@@ -1,13 +1,11 @@
 import {FilterTypes, TabTypes, UpdateType} from './utils/constants';
 import {AUTH, LINK} from './api/constants';
-import {RenderPosition, render, remove} from './utils/render';
-
-import TripPresenter from './presenter/trip';
-import FilterPresenter from './presenter/filter';
-
+import {render, remove} from './utils/render';
 import Api from './api/api';
-import {EventsModel, FilterModel, OffersModel, DestinationsModel} from './model';
-import {InfoView, TabsView, StatisticsView} from './view/';
+
+import {FilterPresenter, InfoPresenter, TripPresenter} from './presenter/';
+import {EventsModel, FilterModel, OffersModel, DestinationsModel} from './model/';
+import {TabsView, StatisticsView} from './view/';
 
 const api = new Api(LINK, AUTH);
 
@@ -22,7 +20,8 @@ const controlElement = headerElement.querySelector(`.trip-controls`);
 const mainElement = bodyElement.querySelector(`.page-body__page-main  .page-body__container`);
 const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
 
-render(headerElement, new InfoView(eventsModel), RenderPosition.AFTERBEGIN);
+const infoPresenter = new InfoPresenter(headerElement, eventsModel);
+infoPresenter.init();
 const tabsComponent = new TabsView();
 
 const tripPresenter = new TripPresenter(mainElement, eventsModel, filterModel, offersModel, destinationsModel, api);
