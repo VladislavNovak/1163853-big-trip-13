@@ -1,21 +1,17 @@
-import {FormatTypes} from '../../utils/constants';
-import {getEllipseString, getFormattedDate} from '../../utils';
-
 import Abstract from '../abstract';
 import {createInfoTemplate} from './templates/create-info-template';
 
 export default class Info extends Abstract {
-  constructor(eventsModel) {
+  constructor(isDataExist, total, ellipse, firstFormattedDate, lastFormattedDate) {
     super();
-    this._events = eventsModel.getEvents();
-    this._isExist = this._events.length;
-    this._total = this._isExist ? this._events.map(({price}) => price).reduce((start, value) => start + value, 0) : 0;
-    this._ellipse = this._isExist ? getEllipseString(this._events.map(({place}) => place)) : ``;
-    this._firstFormattedDate = this._isExist ? getFormattedDate(this._events[0].timeStart, FormatTypes.MONTHS) : ``;
-    this._lastFormattedDate = this._isExist ? getFormattedDate(this._events[this._events.length - 1].timeEnd, FormatTypes.MONTHS) : ``;
+    this._isDataExist = isDataExist;
+    this._total = total;
+    this._ellipse = ellipse;
+    this._firstFormattedDate = firstFormattedDate;
+    this._lastFormattedDate = lastFormattedDate;
   }
 
   getTemplate() {
-    return createInfoTemplate(this._isExist, this._total, this._ellipse, this._firstFormattedDate, this._lastFormattedDate);
+    return createInfoTemplate(this._isDataExist, this._total, this._ellipse, this._firstFormattedDate, this._lastFormattedDate);
   }
 }

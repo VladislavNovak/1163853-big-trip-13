@@ -1,6 +1,6 @@
-export const createInfoTemplate = (isExist, total, ellipse, firstFormattedDate, lastFormattedDate) => {
+export const createInfoTemplate = (isDataExist, total, ellipse, firstFormattedDate, lastFormattedDate) => {
   return (
-    isExist && (`<section class="trip-main__trip-info  trip-info">
+    isDataExist && (`<section class="trip-main__trip-info  trip-info">
       <div class="trip-info__main">
         <h1 class="trip-info__title">${ellipse}</h1>
 

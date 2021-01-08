@@ -1,5 +1,7 @@
-import {batchBind} from "../utils";
+import {FormatTypes} from "../utils/constants";
+import {batchBind, getEllipseString, getFormattedDate} from "../utils";
 import {remove, render, RenderPosition} from "../utils/render";
+
 import {InfoView} from "../view";
 
 export default class Info {
@@ -17,7 +19,14 @@ export default class Info {
   }
 
   _renderInfoComponent() {
-    this._infoComponent = new InfoView(this._eventsModel);
+    const events = this._eventsModel.getEvents();
+    const isDataExist = events.length;
+    const total = isDataExist ? events.map(({price}) => price).reduce((start, value) => start + value, 0) : 0;
+    const ellipse = isDataExist ? getEllipseString(events.map(({place}) => place)) : ``;
+    const firstFormattedDate = isDataExist ? getFormattedDate(events[0].timeStart, FormatTypes.MONTHS) : ``;
+    const lastFormattedDate = isDataExist ? getFormattedDate(events[events.length - 1].timeEnd, FormatTypes.MONTHS) : ``;
+
+    this._infoComponent = new InfoView(isDataExist, total, ellipse, firstFormattedDate, lastFormattedDate);
     render(this._headerContainer, this._infoComponent, RenderPosition.AFTERBEGIN);
   }
 
@@ -31,8 +40,6 @@ export default class Info {
   }
 
   _handleModelEvent() {
-    console.log(`FIRE`);
-
     this._destroyInfoComponent();
     this._renderInfoComponent();
   }
