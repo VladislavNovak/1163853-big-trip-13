@@ -1,7 +1,7 @@
 import he from 'he';
 
 export const createHeaderDestinationTemplate = (point, places) => {
-  const {type, place: selectedPlace} = point;
+  const {type, place: selectedPlace, isDisabled} = point;
 
   const getOption = () => {
     return places.map((place) => {
@@ -22,6 +22,7 @@ export const createHeaderDestinationTemplate = (point, places) => {
         id="event-destination-1"
         type="text"
         name="event-destination"
+        ${isDisabled ? `disabled` : ``}
         value="${he.encode(selectedPlace)}"
       list="destination-list-1">
       <datalist id="destination-list-1">

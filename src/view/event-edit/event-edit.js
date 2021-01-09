@@ -156,14 +156,22 @@ export default class EventEdit extends Smart {
       .addEventListener(`click`, this._resetButtonClickHandler);
   }
 
-  static supplementData(data, payload) {
-    return assign(data, {isEditMode: payload});
+  static supplementData(data, isEditMode) {
+    return assign(data, {
+      isEditMode,
+      isDisabled: false,
+      isSaving: false,
+      isDeleting: false,
+    });
   }
 
   static improverishData(data) {
     data = assign(data);
 
     delete data.isEditMode;
+    delete data.isDisabled;
+    delete data.isSaving;
+    delete data.isDeleting;
     return data;
   }
 
