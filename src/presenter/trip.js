@@ -72,7 +72,7 @@ export default class Trip {
     const filteredPoints = filter[filterType](points);
 
     return {
-      [SortTypes.SORT_DAY]: () => filteredPoints.sort((a, b) => a.timeStart - b.timeStart),
+      [SortTypes.SORT_DAY]: () => filteredPoints.sort((a, b) => dayjs(a.timeStart) - dayjs(b.timeStart)),
       [SortTypes.SORT_TIME]: () => filteredPoints.sort((a, b) => dayjs(b.timeEnd).diff(b.timeStart) - dayjs(a.timeEnd).diff(a.timeStart)),
       [SortTypes.SORT_PRICE]: () => filteredPoints.sort((a, b) => b.price - a.price),
     }[this._currentSortType]();

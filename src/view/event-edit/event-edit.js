@@ -73,14 +73,14 @@ export default class EventEdit extends Smart {
   }
 
   _offerCheckboxChangeHandler({target}) {
-    const {id, checked: isChecked} = target;
-
     if (!target.matches(`INPUT`)) {
       return;
     }
 
+    const {id, checked: isChecked} = target;
+
     const offers = this._point.offers.map((offer) => {
-      if (offer.title === id.replace(/-/g, ` `)) {
+      if (offer.title === id) {
         return assign(offer, {isChecked});
       }
 
