@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {SortTypes, UpdateType, UserAction, WarningTypes} from '../utils/constants';
+import {SortTypes, State, UpdateType, UserAction, WarningTypes} from '../utils/constants';
 import {filter} from '../utils/filter';
 import {batchBind} from '../utils';
 import {remove, render, RenderPosition} from '../utils/render';
@@ -86,16 +86,19 @@ export default class Trip {
   _handleViewAction(actionType, updateType, update) {
     return {
       [UserAction.UPDATE_EVENT]: () => {
+        this._eventPresenter[update.id].setViewState(State.SAVING);
         this._api.updatePoints(update).then((response) => {
           this._eventsModel.updateEvent(updateType, response);
         });
       },
       [UserAction.ADD_EVENT]: () => {
+        this._blankPresenter.setSaving();
         this._api.addPoint(update).then((response) => {
           this._eventsModel.addEvent(updateType, response);
         });
       },
       [UserAction.DELETE_EVENT]: () => {
+        this._eventPresenter[update.id].setViewState(State.DELETING);
         this._api.deletePoint(update).then(() => {
           this._eventsModel.deleteEvent(updateType, update);
         });
@@ -164,6 +167,7 @@ export default class Trip {
   }
 
   _clearTrip(resetSortType = false) {
+    this._blankPresenter.destroy();
     Object.values(this._eventPresenter).forEach((presenter) => presenter.destroy());
     this._eventPresenter = {};
 
