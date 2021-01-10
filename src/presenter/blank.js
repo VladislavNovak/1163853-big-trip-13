@@ -70,9 +70,15 @@ export default class Blank {
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
   }
 
+  setSaving() {
+    this._blankEventEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true
+    });
+  }
+
   _formSubmitHandler(point) {
     this._changeData(UserAction.ADD_EVENT, UpdateType.MINOR, point);
-    this.destroy();
   }
 
   _resetButtonClickHandler() {

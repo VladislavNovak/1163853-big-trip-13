@@ -1,4 +1,4 @@
-import {Mode, UserAction, UpdateType} from '../utils/constants';
+import {Mode, UserAction, UpdateType, State} from '../utils/constants';
 import {assign, batchBind} from '../utils';
 import {remove, render, replace} from '../utils/render';
 
@@ -55,7 +55,8 @@ export default class Event {
     }
 
     if (this._mode === Mode.EDITING) {
-      replace(this._eventEditComponent, prevEventEditComponent);
+      replace(this._eventComponent, prevEventEditComponent);
+      this._mode = Mode.DEFAULT;
     }
 
     remove(prevEventComponent);
@@ -71,6 +72,23 @@ export default class Event {
   destroy() {
     remove(this._eventComponent);
     remove(this._eventEditComponent);
+  }
+
+  setViewState(state) {
+    switch (state) {
+      case State.SAVING:
+        this._eventEditComponent.updateData({
+          isDisabled: true,
+          isSaving: true
+        });
+        break;
+      case State.DELETING:
+        this._eventEditComponent.updateData({
+          isDeleting: true,
+          isSaving: true
+        });
+        break;
+    }
   }
 
   _setEditMode() {
