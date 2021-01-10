@@ -6,8 +6,8 @@ import {createHeaderDestinationTemplate} from './create-header-destination-templ
 import {createSectionOffersTemplate} from './create-section-offers-template';
 import {createDescriptionTemplate} from './create-description-template';
 
-export const createEventEditTemplate = (point, offers, places) => {
-  const {timeStart, timeEnd, isEditMode, place: isPlaceSelected, isDisabled, isSaving, isDeleting} = point;
+export const createEventEditTemplate = (point, offers, places, isEditMode) => {
+  const {timeStart, timeEnd, place: isPlaceSelected, isDisabled, isSaving, isDeleting} = point;
 
   return (
     `<li class="trip-events__item">

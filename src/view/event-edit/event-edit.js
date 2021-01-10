@@ -13,9 +13,10 @@ import {createEventEditTemplate} from './templates/create-event-edit-template';
 export default class EventEdit extends Smart {
   constructor(point, offersModel, destinationsModel, isEditMode = true) {
     super();
-    this._point = EventEdit.supplementData(point, isEditMode);
+    this._point = EventEdit.supplementData(point);
     this._offers = offersModel.getOffers();
     this._destinations = destinationsModel.getDestinations();
+    this._isEditMode = isEditMode;
     this._places = getListByType(this._destinations, Structure.PLACE);
 
     batchBind(
@@ -39,11 +40,11 @@ export default class EventEdit extends Smart {
   }
 
   reset(point) {
-    this.updateData(EventEdit.improverishData(point));
+    this.updateData(EventEdit.supplementData(point));
   }
 
   getTemplate() {
-    return createEventEditTemplate(this._point, this._offers, this._places);
+    return createEventEditTemplate(this._point, this._offers, this._places, this._isEditMode);
   }
 
   restoreHandlers() {
@@ -131,7 +132,7 @@ export default class EventEdit extends Smart {
 
   rollupButtonClick(callback) {
     this._callback.onRollupButtonClick = callback;
-    if (!this._point.isEditMode) {
+    if (!this._isEditMode) {
       return;
     }
 
@@ -156,9 +157,8 @@ export default class EventEdit extends Smart {
       .addEventListener(`click`, this._resetButtonClickHandler);
   }
 
-  static supplementData(data, isEditMode) {
+  static supplementData(data) {
     return assign(data, {
-      isEditMode,
       isDisabled: false,
       isSaving: false,
       isDeleting: false,
