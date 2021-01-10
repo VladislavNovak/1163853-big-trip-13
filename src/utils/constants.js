@@ -1,3 +1,4 @@
+export const SHAKE_ANIMATION_TIMEOUT = 600;
 export const BAR_HEIGHT = 55;
 export const SET_BLANK_MODE = false;
 
@@ -46,6 +47,7 @@ export const Mode = {
 export const State = {
   SAVING: `SAVING`,
   DELETING: `DELETING`,
+  ABORTING: `ABORTING`
 };
 
 export const UserAction = {

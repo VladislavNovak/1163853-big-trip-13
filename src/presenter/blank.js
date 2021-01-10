@@ -77,6 +77,18 @@ export default class Blank {
     });
   }
 
+  setAborting() {
+    const resetFormState = () => {
+      this._blankEventEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    this._blankEventEditComponent.shake(resetFormState);
+  }
+
   _formSubmitHandler(point) {
     this._changeData(UserAction.ADD_EVENT, UpdateType.MINOR, point);
   }

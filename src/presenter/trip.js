@@ -87,21 +87,33 @@ export default class Trip {
     return {
       [UserAction.UPDATE_EVENT]: () => {
         this._eventPresenter[update.id].setViewState(State.SAVING);
-        this._api.updatePoints(update).then((response) => {
-          this._eventsModel.updateEvent(updateType, response);
-        });
+        this._api.updatePoints(update)
+          .then((response) => {
+            this._eventsModel.updateEvent(updateType, response);
+          })
+          .catch(() => {
+            this._eventPresenter[update.id].setViewState(State.ABORTING);
+          });
       },
       [UserAction.ADD_EVENT]: () => {
         this._blankPresenter.setSaving();
-        this._api.addPoint(update).then((response) => {
-          this._eventsModel.addEvent(updateType, response);
-        });
+        this._api.addPoint(update)
+          .then((response) => {
+            this._eventsModel.addEvent(updateType, response);
+          })
+          .catch(() => {
+            this._blankPresenter.setAborting();
+          });
       },
       [UserAction.DELETE_EVENT]: () => {
         this._eventPresenter[update.id].setViewState(State.DELETING);
-        this._api.deletePoint(update).then(() => {
-          this._eventsModel.deleteEvent(updateType, update);
-        });
+        this._api.deletePoint(update)
+          .then(() => {
+            this._eventsModel.deleteEvent(updateType, update);
+          })
+          .catch(() => {
+            this._eventPresenter[update.id].setViewState(State.ABORTING);
+          });
       },
     }[actionType]();
   }
