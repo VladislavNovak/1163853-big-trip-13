@@ -3,18 +3,17 @@ export const createSectionOffersTemplate = ({offers}) => {
   const getListOffers = () => {
 
     return offers.map(({expense, isChecked, title}) => {
-      const idFromTitle = title.replace(/\s+/g, `-`);
       return (
         `<div class="event__offer-selector">
           <input
             class="event__offer-checkbox
             visually-hidden"
-            id="${idFromTitle}"
+            id="${title}"
             type="checkbox"
-            name="event-offer-luggage"
+            name="${title}"
             ${isChecked ? `checked` : ``}
           >
-          <label class="event__offer-label" for="${idFromTitle}">
+          <label class="event__offer-label" for="${title}">
             <span class="event__offer-title">${title}</span>
             &plus;&euro;&nbsp;
             <span class="event__offer-price">${expense}</span>

@@ -1,4 +1,5 @@
-import {assign, getPlaces, batchBind} from '../../utils';
+import {Structure} from '../../utils/constants';
+import {assign, getListByType, batchBind} from '../../utils';
 
 import flatpickr from 'flatpickr';
 import ConfirmDatePlugin from 'flatpickr/dist/plugins/confirmDate/confirmDate.js';
@@ -12,9 +13,11 @@ import {createEventEditTemplate} from './templates/create-event-edit-template';
 export default class EventEdit extends Smart {
   constructor(point, offersModel, destinationsModel, isEditMode = true) {
     super();
-    this._point = EventEdit.supplementData(point, isEditMode);
-    this._offersModel = offersModel;
-    this._destinationsModel = destinationsModel;
+    this._point = EventEdit.supplementData(point);
+    this._offers = offersModel.getOffers();
+    this._destinations = destinationsModel.getDestinations();
+    this._isEditMode = isEditMode;
+    this._places = getListByType(this._destinations, Structure.PLACE);
 
     batchBind(
         this,
@@ -37,11 +40,11 @@ export default class EventEdit extends Smart {
   }
 
   reset(point) {
-    this.updateData(EventEdit.improverishData(point));
+    this.updateData(EventEdit.supplementData(point));
   }
 
   getTemplate() {
-    return createEventEditTemplate(this._point);
+    return createEventEditTemplate(this._point, this._offers, this._places, this._isEditMode);
   }
 
   restoreHandlers() {
@@ -70,14 +73,14 @@ export default class EventEdit extends Smart {
   }
 
   _offerCheckboxChangeHandler({target}) {
-    const {id, checked: isChecked} = target;
-
     if (!target.matches(`INPUT`)) {
       return;
     }
 
+    const {id, checked: isChecked} = target;
+
     const offers = this._point.offers.map((offer) => {
-      if (offer.title === id.replace(/-/g, ` `)) {
+      if (offer.title === id) {
         return assign(offer, {isChecked});
       }
 
@@ -97,19 +100,21 @@ export default class EventEdit extends Smart {
   }
 
   _destinationTextInputHandler({target}) {
-    if (!getPlaces().includes(target.value)) {
+    if (!this._places.includes(target.value)) {
       return;
     }
 
-    const {place, placeDescription, placePhotos} = this._destinationsModel.getDestinations()[this._destinationsModel
-      .getDestinations().findIndex((destination) => destination.place === target.value)];
+    const {
+      place,
+      placeDescription,
+      placePhotos
+    } = this._destinations[this._places.findIndex((_place) => _place === target.value)];
 
     this.updateData({place, placeDescription, placePhotos});
   }
 
   _typeRadioInputHandler({target}) {
-    const {type, offers} = this._offersModel
-        .getOffers().find((offer) => offer.type === target.value);
+    const {type, offers} = this._offers.find((offer) => offer.type === target.value);
 
     this.updateData({type, offers});
   }
@@ -122,12 +127,12 @@ export default class EventEdit extends Smart {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.onFormSubmit(EventEdit.improverishData(this._point), evt);
+    this._callback.onFormSubmit(EventEdit.improverishData(this._point));
   }
 
   rollupButtonClick(callback) {
     this._callback.onRollupButtonClick = callback;
-    if (!this._point.isEditMode) {
+    if (!this._isEditMode) {
       return;
     }
 
@@ -152,14 +157,21 @@ export default class EventEdit extends Smart {
       .addEventListener(`click`, this._resetButtonClickHandler);
   }
 
-  static supplementData(data, payload) {
-    return assign(data, {isEditMode: payload});
+  static supplementData(data) {
+    return assign(data, {
+      isDisabled: false,
+      isSaving: false,
+      isDeleting: false,
+    });
   }
 
   static improverishData(data) {
     data = assign(data);
 
     delete data.isEditMode;
+    delete data.isDisabled;
+    delete data.isSaving;
+    delete data.isDeleting;
     return data;
   }
 

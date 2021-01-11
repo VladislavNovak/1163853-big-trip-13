@@ -1,3 +1,4 @@
+export const SHAKE_ANIMATION_TIMEOUT = 600;
 export const BAR_HEIGHT = 55;
 export const SET_BLANK_MODE = false;
 
@@ -43,6 +44,12 @@ export const Mode = {
   EDITING: `EDITING`,
 };
 
+export const State = {
+  SAVING: `SAVING`,
+  DELETING: `DELETING`,
+  ABORTING: `ABORTING`
+};
+
 export const UserAction = {
   UPDATE_EVENT: `UPDATE_EVENT`,
   ADD_EVENT: `ADD_EVENT`,
@@ -53,6 +60,7 @@ export const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
   MAJOR: `MAJOR`,
+  INIT: `INIT`,
 };
 
 export const Stats = {
@@ -78,4 +86,9 @@ export const EmojiTypes = {
   'Check-in': `🏨`,
   'Sightseeing': `🏛`,
   'Restaurant': `🍴`,
+};
+
+export const Structure = {
+  TYPE: `type`,
+  PLACE: `place`,
 };

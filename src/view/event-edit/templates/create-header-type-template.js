@@ -1,9 +1,12 @@
-import {RouteTypes} from '../../../temp/mock-constants';
+import {Structure} from '../../../utils/constants';
+import {getListByType} from '../../../utils';
 
-export const createHeaderTypeTemplate = ({type}) => {
+export const createHeaderTypeTemplate = (point, offers) => {
+  const {type, isDisabled} = point;
+  const routeTypes = getListByType(offers, Structure.TYPE);
 
   const getTypeItem = () => {
-    return Object.values(RouteTypes).map((routeType) => {
+    return Object.values(routeTypes).map((routeType) => {
       const typeInLowerCase = routeType.toLowerCase();
       return (
         `<div class="event__type-item">
@@ -13,14 +16,13 @@ export const createHeaderTypeTemplate = ({type}) => {
             visually-hidden"
             type="radio"
             name="event-type"
-            value="${routeType}"
-          >
+            value="${routeType}">
           <label
             class="event__type-label
             event__type-label--${typeInLowerCase}"
             for="event-type-${typeInLowerCase}-1">
             ${routeType}
-          </label>
+            </label>
         </div>`
       );
     }).join(``);
@@ -30,9 +32,14 @@ export const createHeaderTypeTemplate = ({type}) => {
     `<div class="event__type-wrapper">
       <label class="event__type  event__type-btn" for="event-type-toggle-1">
         <span class="visually-hidden">Choose event type</span>
-        <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
+        <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png"  alt="Event type icon">
       </label>
-      <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+      <input
+        class="event__type-toggle
+        visually-hidden"
+        id="event-type-toggle-1"
+        ${isDisabled ? `disabled` : ``}
+        type="checkbox">
 
       <div class="event__type-list">
         <fieldset class="event__type-group">

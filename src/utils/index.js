@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import {Destinations} from '../temp/mock-constants';
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -62,6 +61,14 @@ export const getMinValueIndexFromObject = (obj) => Object.values(obj)
 
 export const assign = (expandable, ...payload) => Object.assign({}, expandable, ...payload);
 
-export const getPlaces = () => Destinations.map((destination) => destination.place);
+/**
+ * This function retrieves a specific list from an object
+ * @param {Object} structure - the object from which to get the list
+ * @param {string} type - an enumeration by the type of which the list is formed
+ * @return {string[]} returns an array of strings
+ */
+export const getListByType = (structure, type) => structure.map((item) => item[type]);
 
 export const batchBind = (self, ...methods) => methods.forEach((method) => (self[method.name] = method.bind(self)));
+
+export const capitalizeFirstLetter = (str) => (!str) ? str : str[0].toUpperCase() + str.slice(1);

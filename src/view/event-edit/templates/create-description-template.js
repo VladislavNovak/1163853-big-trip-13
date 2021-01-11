@@ -3,7 +3,7 @@ export const createDescriptionTemplate = ({placeDescription, placePhotos}) => {
   const getPhotoList = () => {
     return placePhotos.map((photo) => {
       return (
-        `<img class="event__photo" src="${photo}" alt="Event photo">`
+        `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`
       );
     }).join(``);
   };

@@ -1,4 +1,4 @@
-import {Mode, UserAction, UpdateType} from '../utils/constants';
+import {Mode, UserAction, UpdateType, State} from '../utils/constants';
 import {assign, batchBind} from '../utils';
 import {remove, render, replace} from '../utils/render';
 
@@ -55,7 +55,8 @@ export default class Event {
     }
 
     if (this._mode === Mode.EDITING) {
-      replace(this._eventEditComponent, prevEventEditComponent);
+      replace(this._eventComponent, prevEventEditComponent);
+      this._mode = Mode.DEFAULT;
     }
 
     remove(prevEventComponent);
@@ -73,19 +74,48 @@ export default class Event {
     remove(this._eventEditComponent);
   }
 
+  setViewState(state) {
+    const resetFormState = () => {
+      this._eventEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    switch (state) {
+      case State.SAVING:
+        this._eventEditComponent.updateData({
+          isDisabled: true,
+          isSaving: true
+        });
+        break;
+      case State.DELETING:
+        this._eventEditComponent.updateData({
+          isDeleting: true,
+          isSaving: true
+        });
+        break;
+      case State.ABORTING:
+        this._eventComponent.shake(resetFormState);
+        this._eventEditComponent.shake(resetFormState);
+        break;
+    }
+  }
+
   _setEditMode() {
     replace(this._eventEditComponent, this._eventComponent);
-    this._eventEditComponent.createPickrs();
     document.addEventListener(`keydown`, this._escKeyDownHandler);
     this._changeMode();
     this._mode = Mode.EDITING;
+    this._eventEditComponent.createPickrs();
   }
 
   _setViewMode() {
     replace(this._eventComponent, this._eventEditComponent);
-    this._eventEditComponent.destroyPickrs();
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
     this._mode = Mode.DEFAULT;
+    this._eventEditComponent.destroyPickrs();
   }
 
   _handlEventRollupClick() {
@@ -110,7 +140,6 @@ export default class Event {
 
   _handlEventEditFormSubmit(point) {
     this._changeData(UserAction.UPDATE_EVENT, UpdateType.MINOR, point);
-    this._setViewMode();
   }
 
   _handleDeleteClick(point) {

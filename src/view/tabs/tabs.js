@@ -15,16 +15,8 @@ export default class Tabs extends Abstract {
     return createTabsTemplate(this._activeTab);
   }
 
-  _toggleActiveElement(target, activeTab) {
-    this._activeTab = activeTab;
-
-    if (this._activeTab === this._prevActiveTab) {
-      return;
-    }
-
-    this._prevActiveTab = this._activeTab;
+  _toggleActiveElement(target) {
     this.getElement().querySelector(`.${AddClass.ACTIVE_TAB}`).classList.remove(AddClass.ACTIVE_TAB);
-
     target.classList.add(AddClass.ACTIVE_TAB);
   }
 
@@ -33,7 +25,15 @@ export default class Tabs extends Abstract {
       return;
     }
 
-    this._toggleActiveElement(target, target.dataset.tabType);
+    this._activeTab = target.dataset.tabType;
+
+    if (this._activeTab === this._prevActiveTab) {
+      return;
+    }
+
+    this._prevActiveTab = this._activeTab;
+
+    this._toggleActiveElement(target);
 
     this._callback.onTabClick(this._activeTab);
   }

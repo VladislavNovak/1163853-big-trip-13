@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {SortTypes, UpdateType, UserAction, WarningTypes} from '../utils/constants';
+import {SortTypes, State, UpdateType, UserAction, WarningTypes} from '../utils/constants';
 import {filter} from '../utils/filter';
 import {batchBind} from '../utils';
 import {remove, render, RenderPosition} from '../utils/render';
@@ -15,19 +15,21 @@ import {
 } from '../view';
 
 export default class Trip {
-  constructor(tripContainer, eventsModel, filterModel, offersModel, destinationsModel) {
+  constructor(tripContainer, eventsModel, filterModel, offersModel, destinationsModel, api) {
     this._eventsModel = eventsModel;
     this._filterModel = filterModel;
     this._offersModel = offersModel;
     this._destinationsModel = destinationsModel;
+    this._api = api;
     this._tripContainer = tripContainer;
     this._eventPresenter = {};
     this._currentSortType = SortTypes.SORT_DAY;
+    this._isLoading = true;
 
     this._tripComponent = new TripView();
     this._sortComponent = null;
     this._routeComponent = new RouteView();
-    this._warningComponent = new WarningView(WarningTypes.EMPTY_DATA_LIST);
+    this._warningComponent = new WarningView();
 
     batchBind(
         this,
@@ -70,7 +72,7 @@ export default class Trip {
     const filteredPoints = filter[filterType](points);
 
     return {
-      [SortTypes.SORT_DAY]: () => filteredPoints.sort((a, b) => a.timeStart - b.timeStart),
+      [SortTypes.SORT_DAY]: () => filteredPoints.sort((a, b) => dayjs(a.timeStart) - dayjs(b.timeStart)),
       [SortTypes.SORT_TIME]: () => filteredPoints.sort((a, b) => dayjs(b.timeEnd).diff(b.timeStart) - dayjs(a.timeEnd).diff(a.timeStart)),
       [SortTypes.SORT_PRICE]: () => filteredPoints.sort((a, b) => b.price - a.price),
     }[this._currentSortType]();
@@ -83,9 +85,36 @@ export default class Trip {
 
   _handleViewAction(actionType, updateType, update) {
     return {
-      [UserAction.UPDATE_EVENT]: () => (this._eventsModel.updateEvent(updateType, update)),
-      [UserAction.ADD_EVENT]: () => (this._eventsModel.addEvent(updateType, update)),
-      [UserAction.DELETE_EVENT]: () => (this._eventsModel.deleteEvent(updateType, update)),
+      [UserAction.UPDATE_EVENT]: () => {
+        this._eventPresenter[update.id].setViewState(State.SAVING);
+        this._api.updatePoints(update)
+          .then((response) => {
+            this._eventsModel.updateEvent(updateType, response);
+          })
+          .catch(() => {
+            this._eventPresenter[update.id].setViewState(State.ABORTING);
+          });
+      },
+      [UserAction.ADD_EVENT]: () => {
+        this._blankPresenter.setSaving();
+        this._api.addPoint(update)
+          .then((response) => {
+            this._eventsModel.addEvent(updateType, response);
+          })
+          .catch(() => {
+            this._blankPresenter.setAborting();
+          });
+      },
+      [UserAction.DELETE_EVENT]: () => {
+        this._eventPresenter[update.id].setViewState(State.DELETING);
+        this._api.deletePoint(update)
+          .then(() => {
+            this._eventsModel.deleteEvent(updateType, update);
+          })
+          .catch(() => {
+            this._eventPresenter[update.id].setViewState(State.ABORTING);
+          });
+      },
     }[actionType]();
   }
 
@@ -98,6 +127,11 @@ export default class Trip {
       },
       [UpdateType.MAJOR]: () => {
         this._clearTrip({resetSortType: true});
+        this._renderTrip();
+      },
+      [UpdateType.INIT]: () => {
+        this._isLoading = false;
+        remove(this._warningComponent);
         this._renderTrip();
       },
     }[updateType]();
@@ -134,16 +168,25 @@ export default class Trip {
     this._getEvents().forEach((point) => this._renderEvent(point));
   }
 
+  _renderLoading() {
+    this._warningComponent.init(WarningTypes.WAITING_FOR_DOWNLOADING);
+    render(this._tripComponent, this._warningComponent);
+  }
+
   _renderNoEvents() {
+    this._warningComponent.init(WarningTypes.EMPTY_DATA_LIST);
     render(this._tripComponent, this._warningComponent);
   }
 
   _clearTrip(resetSortType = false) {
+    this._blankPresenter.destroy();
     Object.values(this._eventPresenter).forEach((presenter) => presenter.destroy());
     this._eventPresenter = {};
 
     remove(this._sortComponent);
-    remove(this._warningComponent);
+    if (this._warningComponent) {
+      remove(this._warningComponent);
+    }
 
     if (resetSortType) {
       this._currentSortType = SortTypes.SORT_DAY;
@@ -151,6 +194,11 @@ export default class Trip {
   }
 
   _renderTrip() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
     if (this._getEvents().length === 0) {
       this._renderNoEvents();
       return;

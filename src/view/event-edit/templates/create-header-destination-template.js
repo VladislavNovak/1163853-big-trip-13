@@ -1,10 +1,9 @@
-import {getPlaces} from '../../../utils';
 import he from 'he';
 
-export const createHeaderDestinationTemplate = ({type, place: selectedPlace}) => {
+export const createHeaderDestinationTemplate = (point, places) => {
+  const {type, place: selectedPlace, isDisabled} = point;
 
   const getOption = () => {
-    const places = getPlaces();
     return places.map((place) => {
       return (
         `<option value="${place}">${place}</option>`
@@ -23,6 +22,7 @@ export const createHeaderDestinationTemplate = ({type, place: selectedPlace}) =>
         id="event-destination-1"
         type="text"
         name="event-destination"
+        ${isDisabled ? `disabled` : ``}
         value="${he.encode(selectedPlace)}"
       list="destination-list-1">
       <datalist id="destination-list-1">

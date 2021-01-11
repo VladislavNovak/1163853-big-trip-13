@@ -1,8 +1,24 @@
-import {getBlankPoint} from '../temp/mocks';
-import {batchBind, getID} from '../utils';
+import dayjs from 'dayjs';
+import {batchBind} from '../utils';
 import {UpdateType, UserAction, SET_BLANK_MODE} from '../utils/constants';
 import {remove, render, RenderPosition} from '../utils/render';
 import EventEditView from '../view/event-edit/event-edit';
+
+const getBlankPoint = (offersModel) => {
+  const _type = offersModel.getOffers().map(({type}) => type)[0];
+  const {offers} = offersModel.getOffers().find((offer) => offer.type === _type);
+  return {
+    type: _type,
+    timeStart: dayjs().toISOString(),
+    timeEnd: dayjs().toISOString(),
+    place: ``,
+    placeDescription: ``,
+    placePhotos: null,
+    price: 0,
+    isFavorite: false,
+    offers,
+  };
+};
 
 export default class Blank {
   constructor(routeContainer, changeData, offersModel, destinationsModel) {
@@ -29,7 +45,7 @@ export default class Blank {
       return;
     }
 
-    this._blankEventEditComponent = new EventEditView(getBlankPoint(), this._offersModel, this._destinationsModel, SET_BLANK_MODE);
+    this._blankEventEditComponent = new EventEditView(getBlankPoint(this._offersModel), this._offersModel, this._destinationsModel, SET_BLANK_MODE);
 
     this._blankEventEditComponent.formSubmit(this._formSubmitHandler);
     this._blankEventEditComponent.resetButtonClick(this._resetButtonClickHandler);
@@ -54,9 +70,27 @@ export default class Blank {
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
   }
 
+  setSaving() {
+    this._blankEventEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._blankEventEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    this._blankEventEditComponent.shake(resetFormState);
+  }
+
   _formSubmitHandler(point) {
-    this._changeData(UserAction.ADD_EVENT, UpdateType.MINOR, Object.assign({id: getID()}, point));
-    this.destroy();
+    this._changeData(UserAction.ADD_EVENT, UpdateType.MINOR, point);
   }
 
   _resetButtonClickHandler() {
