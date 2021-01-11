@@ -105,17 +105,17 @@ export default class Event {
 
   _setEditMode() {
     replace(this._eventEditComponent, this._eventComponent);
-    this._eventEditComponent.createPickrs();
     document.addEventListener(`keydown`, this._escKeyDownHandler);
     this._changeMode();
     this._mode = Mode.EDITING;
+    this._eventEditComponent.createPickrs();
   }
 
   _setViewMode() {
     replace(this._eventComponent, this._eventEditComponent);
-    this._eventEditComponent.destroyPickrs();
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
     this._mode = Mode.DEFAULT;
+    this._eventEditComponent.destroyPickrs();
   }
 
   _handlEventRollupClick() {
@@ -140,7 +140,6 @@ export default class Event {
 
   _handlEventEditFormSubmit(point) {
     this._changeData(UserAction.UPDATE_EVENT, UpdateType.MINOR, point);
-    this._setViewMode();
   }
 
   _handleDeleteClick(point) {

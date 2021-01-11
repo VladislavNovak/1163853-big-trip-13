@@ -127,7 +127,7 @@ export default class EventEdit extends Smart {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.onFormSubmit(EventEdit.improverishData(this._point), evt);
+    this._callback.onFormSubmit(EventEdit.improverishData(this._point));
   }
 
   rollupButtonClick(callback) {
