@@ -1,3 +1,5 @@
+# Вариации запровов к серверу:
+
 # GET https://13.ecmascript.pages.academy/big-trip/points HTTP/1.1
 # Authorization: Basic NS43cqsibarQ5EJ
 # Content-Type: application/json
