@@ -83,3 +83,7 @@ Promise.all([api.getPoints(), api.getOffers(), api.getDestinations()])
     eventsModel.setEvents(UpdateType.INIT, []);
     enableControls();
   });
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`);
+});
