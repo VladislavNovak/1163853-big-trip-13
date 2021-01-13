@@ -1,5 +1,5 @@
-import {DestinationsModel, EventsModel, OffersModel} from "../model";
-import {HTTPStatusRange, Method} from "./constants";
+import {DestinationsModel, EventsModel, OffersModel} from '../model';
+import {HTTPStatusRange, Method} from './constants';
 
 export default class Api {
   constructor(endPoint, authorization) {
