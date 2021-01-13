@@ -1,4 +1,5 @@
 export const SHAKE_ANIMATION_TIMEOUT = 600;
+export const SHOW_TIME = 5000;
 export const BAR_HEIGHT = 55;
 export const SET_BLANK_MODE = false;
 
@@ -34,9 +35,10 @@ export const AddClass = {
   DISACTIVE: ``,
 };
 
-export const WarningTypes = {
+export const WarningMsg = {
   EMPTY_DATA_LIST: `Click New Event to create your first point`,
   WAITING_FOR_DOWNLOADING: `Loading...`,
+  OFFLINE_STATUS: `You can't create new event offline`,
 };
 
 export const Mode = {

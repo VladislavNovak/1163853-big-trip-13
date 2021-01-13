@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {SortTypes, State, UpdateType, UserAction, WarningTypes} from '../utils/constants';
+import {SortTypes, State, UpdateType, UserAction, WarningMsg} from '../utils/constants';
 import {filter} from '../utils/filter';
 import {batchBind} from '../utils';
 import {remove, render, RenderPosition} from '../utils/render';
@@ -169,12 +169,12 @@ export default class Trip {
   }
 
   _renderLoading() {
-    this._warningComponent.init(WarningTypes.WAITING_FOR_DOWNLOADING);
+    this._warningComponent.init(WarningMsg.WAITING_FOR_DOWNLOADING);
     render(this._tripComponent, this._warningComponent);
   }
 
   _renderNoEvents() {
-    this._warningComponent.init(WarningTypes.EMPTY_DATA_LIST);
+    this._warningComponent.init(WarningMsg.EMPTY_DATA_LIST);
     render(this._tripComponent, this._warningComponent);
   }
 
