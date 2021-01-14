@@ -99,7 +99,7 @@ Promise.all([
   });
 
 window.addEventListener(`load`, () => {
-  navigator.serviceWorker.register(`/servise-worker.js`);
+  navigator.serviceWorker.register(`/sw.js`);
 });
 
 window.addEventListener(`online`, () => {

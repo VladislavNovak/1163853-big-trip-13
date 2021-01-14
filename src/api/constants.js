@@ -16,3 +16,9 @@ export const HTTPStatusRange = {
   MIN: 200,
   MAX: 299
 };
+
+export const StoredType = {
+  POINT: `POINT`,
+  OFFER: `OFFER`,
+  DESTINATION: `DESTINATION`,
+};

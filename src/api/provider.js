@@ -1,3 +1,4 @@
+import {StoredType} from './constants';
 import {isOnline} from '../utils/';
 import {DestinationsModel, EventsModel, OffersModel} from '../model/';
 import {createStoreStructure, getSyncedPoints} from './utils';
@@ -13,12 +14,12 @@ export default class Provider {
       return this._api.getPoints()
         .then((points) => {
           const items = createStoreStructure(points.map(EventsModel.adaptToServer));
-          this._store.setItems(items);
+          this._store.setItems(StoredType.POINT, items);
           return points;
         });
     }
 
-    const storePoints = Object.values(this._store.getItems());
+    const storePoints = Object.values(this._store.getItems(StoredType.POINT));
 
     return Promise.resolve(storePoints.map(EventsModel.adaptToClient));
   }
@@ -27,12 +28,12 @@ export default class Provider {
     if (isOnline()) {
       return this._api.getOffers()
         .then((offers) => {
-          this._store.setItems(offers);
+          this._store.setItems(StoredType.OFFER, offers);
           return offers;
         });
     }
 
-    const storeOffers = Object.values(this._store.getItems());
+    const storeOffers = Object.values(this._store.getItems(StoredType.OFFER));
 
     return Promise.resolve(storeOffers.map(OffersModel.adaptToClient));
   }
@@ -41,12 +42,12 @@ export default class Provider {
     if (isOnline()) {
       return this._api.getDestinations()
         .then((destinations) => {
-          this._store.setItems(destinations);
+          this._store.setItems(StoredType.DESTINATION, destinations);
           return destinations;
         });
     }
 
-    const storePoints = Object.values(this._store.getItems());
+    const storePoints = Object.values(this._store.getItems(StoredType.DESTINATION));
 
     return Promise.resolve(storePoints.map(DestinationsModel.adaptToClient));
   }
@@ -55,12 +56,12 @@ export default class Provider {
     if (isOnline()) {
       return this._api.updatePoints(point)
         .then((updatedPoint) => {
-          this._store.setItem(updatedPoint.id, EventsModel.adaptToServer(updatedPoint));
+          this._store.setItem(StoredType.POINT, updatedPoint.id, EventsModel.adaptToServer(updatedPoint));
           return updatedPoint;
         });
     }
 
-    this._store.setItem(point.id, EventsModel.adaptToServer(Object.assign({}, point)));
+    this._store.setItem(StoredType.POINT, point.id, EventsModel.adaptToServer(Object.assign({}, point)));
 
     return Promise.resolve(point);
   }
@@ -69,7 +70,7 @@ export default class Provider {
     if (isOnline()) {
       return this._api.addPoint(point)
         .then((newPoint) => {
-          this._store.setItem(newPoint.id, EventsModel.adaptToServer(newPoint));
+          this._store.setItem(StoredType.POINT, newPoint.id, EventsModel.adaptToServer(newPoint));
           return newPoint;
         });
     }
@@ -80,7 +81,7 @@ export default class Provider {
   deletePoint(point) {
     if (isOnline()) {
       return this._api.deletePoint(point)
-        .then(() => this._store.removeItem(point.id));
+        .then(() => this._store.removeItem(StoredType.POINT, point.id));
     }
 
     return Promise.reject(new Error(`Delete point failed`));
