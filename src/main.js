@@ -60,7 +60,7 @@ const handleTabClick = (activeTab) => {
 
 const handleNewEventButtonClick = ({target}) => {
   if (!isOnline()) {
-    toast(WarningMsg.OFFLINE_STATUS);
+    toast(WarningMsg.OFFLINE_CANT_CREATE_NEW_EVENT);
     return;
   }
   tripPresenter.destroy();

@@ -120,11 +120,6 @@ export default class Event {
   }
 
   _handlEventRollupClick() {
-    if (!isOnline()) {
-      toast(WarningMsg.OFFLINE_STATUS);
-      return;
-    }
-
     this._setEditMode();
   }
 
@@ -146,7 +141,7 @@ export default class Event {
 
   _handlEventEditFormSubmit(point) {
     if (!isOnline()) {
-      toast(WarningMsg.OFFLINE_STATUS);
+      toast(WarningMsg.OFFLINE_CANT_SAVE_EVENT);
       return;
     }
 
@@ -155,7 +150,7 @@ export default class Event {
 
   _handleDeleteClick(point) {
     if (!isOnline()) {
-      toast(WarningMsg.OFFLINE_STATUS);
+      toast(WarningMsg.OFFLINE_CANT_DELETE_EVENT);
       return;
     }
 

@@ -38,7 +38,9 @@ export const AddClass = {
 export const WarningMsg = {
   EMPTY_DATA_LIST: `Click New Event to create your first point`,
   WAITING_FOR_DOWNLOADING: `Loading...`,
-  OFFLINE_STATUS: `You can't create new event offline`,
+  OFFLINE_CANT_CREATE_NEW_EVENT: `You can't create new event offline`,
+  OFFLINE_CANT_SAVE_EVENT: `You can't save event offline`,
+  OFFLINE_CANT_DELETE_EVENT: `You can't delete event offline`,
 };
 
 export const Mode = {
