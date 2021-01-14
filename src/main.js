@@ -59,14 +59,14 @@ const handleTabClick = (activeTab) => {
 };
 
 const handleNewEventButtonClick = ({target}) => {
+  if (!isOnline()) {
+    toast(WarningMsg.OFFLINE_STATUS);
+    return;
+  }
   tripPresenter.destroy();
   filterModel.setFilter(UpdateType.MAJOR, FilterTypes.EVERYTHING);
   tripPresenter.init();
   target.disabled = true;
-  if (!isOnline) {
-    toast(WarningMsg.OFFLINE_STATUS);
-    return;
-  }
   tabsComponent.tabResetView();
   tripPresenter.createEvent(() => (target.disabled = false));
 };

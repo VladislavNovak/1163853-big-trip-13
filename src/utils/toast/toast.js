@@ -1,5 +1,5 @@
 import {SHOW_TIME} from '../constants';
-import './toast';
+import './toast.css';
 
 const toastContainer = document.createElement(`div`);
 toastContainer.classList.add(`toast-container`);
