@@ -120,6 +120,11 @@ export default class Event {
   }
 
   _handlEventRollupClick() {
+    if (!isOnline()) {
+      toast(WarningMsg.OFFLINE_CANT_EDIT_EVENT);
+      return;
+    }
+
     this._setEditMode();
   }
 
@@ -140,20 +145,11 @@ export default class Event {
   }
 
   _handlEventEditFormSubmit(point) {
-    if (!isOnline()) {
-      toast(WarningMsg.OFFLINE_CANT_SAVE_EVENT);
-      return;
-    }
 
     this._changeData(UserAction.UPDATE_EVENT, UpdateType.MINOR, point);
   }
 
   _handleDeleteClick(point) {
-    if (!isOnline()) {
-      toast(WarningMsg.OFFLINE_CANT_DELETE_EVENT);
-      return;
-    }
-
     this._changeData(UserAction.DELETE_EVENT, UpdateType.MINOR, point);
   }
 }

@@ -41,6 +41,7 @@ export const WarningMsg = {
   OFFLINE_CANT_CREATE_NEW_EVENT: `You can't create new event offline`,
   OFFLINE_CANT_SAVE_EVENT: `You can't save event offline`,
   OFFLINE_CANT_DELETE_EVENT: `You can't delete event offline`,
+  OFFLINE_CANT_EDIT_EVENT: `You can't edit event offline`,
 };
 
 export const Mode = {

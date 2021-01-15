@@ -22,11 +22,21 @@ export default class Info {
     const events = this._eventsModel.getEvents();
     const isDataExist = events.length;
     const total = isDataExist ? events.map(({price}) => price).reduce((start, value) => start + value, 0) : 0;
+
+    const additionalSpanding = isDataExist ? events.reduce((sum, point) => {
+      point.offers.forEach((offer) => {
+        if (offer.isChecked) {
+          sum += offer.expense;
+        }
+      });
+      return sum;
+    }, 0) : 0;
+
     const ellipse = isDataExist ? getEllipseString(events.map(({place}) => place)) : ``;
     const firstFormattedDate = isDataExist ? getFormattedDate(events[0].timeStart, FormatTypes.MONTHS) : ``;
     const lastFormattedDate = isDataExist ? getFormattedDate(events[events.length - 1].timeEnd, FormatTypes.MONTHS) : ``;
 
-    this._infoComponent = new InfoView(isDataExist, total, ellipse, firstFormattedDate, lastFormattedDate);
+    this._infoComponent = new InfoView(isDataExist, total, additionalSpanding, ellipse, firstFormattedDate, lastFormattedDate);
     render(this._headerContainer, this._infoComponent, RenderPosition.AFTERBEGIN);
   }
 
