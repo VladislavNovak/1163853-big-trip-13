@@ -89,7 +89,7 @@ export default class Provider {
 
   sync() {
     if (isOnline()) {
-      const storePoints = Object.values(this._store.getItems());
+      const storePoints = Object.values(this._store.getItems(StoredType.POINT));
 
       return this._api.sync(storePoints)
         .then((response) => {
