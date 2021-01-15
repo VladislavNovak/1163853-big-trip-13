@@ -1,13 +1,19 @@
-import {FilterTypes, TabTypes, UpdateType} from './utils/constants';
-import {AUTH, LINK} from './api/constants';
+import {AUTH, LINK, STORE_NAME} from './api/constants';
+import {FilterTypes, TabTypes, UpdateType, WarningMsg} from './utils/constants';
+import {isOnline} from './utils';
 import {render, remove} from './utils/render';
 import Api from './api/api';
+import Store from './api/store';
+import Provider from './api/provider';
 
 import {FilterPresenter, InfoPresenter, TripPresenter} from './presenter/';
 import {EventsModel, FilterModel, OffersModel, DestinationsModel} from './model/';
 import {TabsView, StatisticsView} from './view/';
+import {toast} from './utils/toast/toast';
 
 const api = new Api(LINK, AUTH);
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
 
 const eventsModel = new EventsModel();
 const offersModel = new OffersModel();
@@ -24,7 +30,7 @@ const infoPresenter = new InfoPresenter(headerElement, eventsModel);
 infoPresenter.init();
 const tabsComponent = new TabsView();
 
-const tripPresenter = new TripPresenter(mainElement, eventsModel, filterModel, offersModel, destinationsModel, api);
+const tripPresenter = new TripPresenter(mainElement, eventsModel, filterModel, offersModel, destinationsModel, apiWithProvider);
 const filterPresenter = new FilterPresenter(controlElement, eventsModel, filterModel);
 
 let statisticsComponent = null;
@@ -53,6 +59,10 @@ const handleTabClick = (activeTab) => {
 };
 
 const handleNewEventButtonClick = ({target}) => {
+  if (!isOnline()) {
+    toast(WarningMsg.OFFLINE_CANT_CREATE_NEW_EVENT);
+    return;
+  }
   tripPresenter.destroy();
   filterModel.setFilter(UpdateType.MAJOR, FilterTypes.EVERYTHING);
   tripPresenter.init();
@@ -72,7 +82,11 @@ const enableControls = () => {
   render(controlElement, tabsComponent);
 };
 
-Promise.all([api.getPoints(), api.getOffers(), api.getDestinations()])
+Promise.all([
+  apiWithProvider.getPoints(),
+  apiWithProvider.getOffers(),
+  apiWithProvider.getDestinations()
+])
   .then(([apiPoints, apiOffers, apiDestination]) => {
     offersModel.setOffers(apiOffers);
     destinationsModel.setDestinations(apiDestination);
@@ -83,3 +97,16 @@ Promise.all([api.getPoints(), api.getOffers(), api.getDestinations()])
     eventsModel.setEvents(UpdateType.INIT, []);
     enableControls();
   });
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`);
+});
+
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` [offline]`, ``);
+  apiWithProvider.sync();
+});
+
+window.addEventListener(`offline`, () => {
+  document.title += ` [offline]`;
+});

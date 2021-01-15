@@ -23,7 +23,7 @@ export default class Events extends Observer {
     const index = this._points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
-      throw new Error(`an't update unexisting task`);
+      throw new Error(`an't update unexisting event`);
     }
 
     this._points = [
@@ -48,7 +48,7 @@ export default class Events extends Observer {
     const index = this._points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
-      throw new Error(`an't update unexisting task`);
+      throw new Error(`an't update unexisting event`);
     }
 
     this._points = [

@@ -1,11 +1,12 @@
-import {Mode, UserAction, UpdateType, State} from '../utils/constants';
-import {assign, batchBind} from '../utils';
+import {Mode, UserAction, UpdateType, State, WarningMsg} from '../utils/constants';
+import {assign, batchBind, isOnline} from '../utils';
 import {remove, render, replace} from '../utils/render';
 
 import {
   EventEditView,
   EventView,
 } from '../view';
+import {toast} from '../utils/toast/toast';
 
 export default class Event {
   constructor(routeContainer, changeData, changeMode, offersModel, destinationsModel) {
@@ -119,6 +120,11 @@ export default class Event {
   }
 
   _handlEventRollupClick() {
+    if (!isOnline()) {
+      toast(WarningMsg.OFFLINE_CANT_EDIT_EVENT);
+      return;
+    }
+
     this._setEditMode();
   }
 
@@ -139,6 +145,7 @@ export default class Event {
   }
 
   _handlEventEditFormSubmit(point) {
+
     this._changeData(UserAction.UPDATE_EVENT, UpdateType.MINOR, point);
   }
 

@@ -72,3 +72,5 @@ export const getListByType = (structure, type) => structure.map((item) => item[t
 export const batchBind = (self, ...methods) => methods.forEach((method) => (self[method.name] = method.bind(self)));
 
 export const capitalizeFirstLetter = (str) => (!str) ? str : str[0].toUpperCase() + str.slice(1);
+
+export const isOnline = () => window.navigator.onLine;
