@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 import {capitalizeFirstLetter} from '../utils';
 import Observer from '../utils/observer';
 
@@ -63,38 +61,38 @@ export default class Events extends Observer {
     return {
       id,
       type: type.toLowerCase(),
-      date_from: timeStart,
-      date_to: timeEnd,
+      [`date_from`]: timeStart,
+      [`date_to`]: timeEnd,
       destination: {
         name: place,
         description: placeDescription,
         pictures: placePhotos,
       },
-      base_price: price,
-      is_favorite: isFavorite,
+      [`base_price`]: price,
+      [`is_favorite`]: isFavorite,
       offers: offers.map(({title, expense, isChecked}) => ({
         title,
         price: expense,
-        is_checked: isChecked
+        [`is_checked`]: isChecked
       })),
     };
   }
 
-  static adaptToClient({id, type, date_from, date_to, destination, base_price, is_favorite, offers}) {
+  static adaptToClient(data) {
     return {
-      id,
-      type: capitalizeFirstLetter(type),
-      timeStart: date_from,
-      timeEnd: date_to,
-      place: destination.name,
-      placeDescription: destination.description,
-      placePhotos: destination.pictures,
-      price: base_price,
-      isFavorite: is_favorite,
-      offers: offers.map(({title, price, is_checked}) => ({
-        title,
-        expense: price,
-        isChecked: is_checked && true || false
+      id: data.id,
+      type: capitalizeFirstLetter(data.type),
+      timeStart: data[`date_from`],
+      timeEnd: data[`date_to`],
+      place: data.destination.name,
+      placeDescription: data.destination.description,
+      placePhotos: data.destination.pictures,
+      price: data[`base_price`],
+      isFavorite: data[`is_favorite`],
+      offers: data.offers.map((offer) => ({
+        title: offer.title,
+        expense: offer.price,
+        isChecked: offer[`is_checked`] && true || false
       }))
     };
   }
