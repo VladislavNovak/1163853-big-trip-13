@@ -1,5 +1,6 @@
 import {batchBind} from '../utils';
-import {UpdateType} from '../utils/constants';
+import {FilterTypes, UpdateType} from '../utils/constants';
+import {filter} from '../utils/filter';
 import {remove, render, replace} from '../utils/render';
 
 import FiltersView from '../view/filters/filters';
@@ -9,6 +10,8 @@ export default class Filter {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
     this._eventsModel = eventsModel;
+
+    this._eventsExistenceIdentifier = {};
 
     this._currentFilter = null;
 
@@ -27,8 +30,13 @@ export default class Filter {
   init() {
     this._currentFilter = this._filterModel.getFilter();
     const prevFilterComponent = this._filterComponent;
+    const points = this._eventsModel.getEvents();
 
-    this._filterComponent = new FiltersView(this._currentFilter);
+    this._eventsExistenceIdentifier[FilterTypes.EVERYTHING] = Boolean(points.length);
+    this._eventsExistenceIdentifier[FilterTypes.PAST] = Boolean(filter[FilterTypes.PAST](points).length);
+    this._eventsExistenceIdentifier[FilterTypes.FUTURE] = Boolean(filter[FilterTypes.FUTURE](points).length);
+
+    this._filterComponent = new FiltersView(this._currentFilter, this._eventsExistenceIdentifier);
     this._filterComponent.filterChange(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
@@ -54,3 +62,4 @@ export default class Filter {
 }
 
 // _handleModelEvent: единственной задачей будет перерисовка всего фильтра
+// this._eventsExistenceIdentifier понадобится в view/Filter для disabled/подключения конкретного фильтра

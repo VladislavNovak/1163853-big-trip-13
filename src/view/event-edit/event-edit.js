@@ -204,12 +204,14 @@ export default class EventEdit extends Smart {
       return;
     }
 
-    if (newStartTime > this._point.timeEnd) {
-      this._pickrEnd.set(`defaultDate`, newStartTime);
-      this.updateData({timeEnd: newStartTime});
+    const timeStart = newStartTime.toISOString();
+
+    if (timeStart > this._point.timeEnd) {
+      this._pickrEnd.set(`defaultDate`, timeStart);
+      this.updateData({timeEnd: timeStart});
     }
 
-    this.updateData({timeStart: newStartTime});
+    this.updateData({timeStart});
   }
 
   _onPickrEndHandler([newEndTime]) {
@@ -217,7 +219,13 @@ export default class EventEdit extends Smart {
       return;
     }
 
-    this.updateData({timeEnd: newEndTime});
+    const timeEnd = newEndTime.toISOString();
+    if (timeEnd < this._point.timeStart) {
+      this._pickrStart.set(`defaultDate`, timeEnd);
+      this.updateData({timeStart: timeEnd});
+    }
+
+    this.updateData({timeEnd});
   }
 
   _setPickrs() {

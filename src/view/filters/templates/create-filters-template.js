@@ -1,9 +1,10 @@
 import {FilterTypes} from '../../../utils/constants';
 
-export const createFiltersTemplate = (activeFilter) => {
+export const createFiltersTemplate = (activeFilter, eventsExistenceIdentifier) => {
 
   const getFilters = () => {
     return Object.values(FilterTypes).map((filter) => {
+      const isExistEvents = eventsExistenceIdentifier[filter];
       const filterInLowerCase = filter.toLowerCase();
       return (
         `<div class="trip-filters__filter">
@@ -14,6 +15,7 @@ export const createFiltersTemplate = (activeFilter) => {
             type="radio"
             name="trip-filter"
             value="${filter}"
+            ${!isExistEvents ? `disabled` : ``}
             ${filter === activeFilter ? `checked` : ``}
           >
           <label
@@ -32,3 +34,7 @@ export const createFiltersTemplate = (activeFilter) => {
     </form>`
   );
 };
+
+
+// isExistEvents: объект eventsExistenceIdentifier, который формируется в presenter/Filter
+// путём проверки существования эвентов/пойнтов для прошлого, будущего и вообще.
