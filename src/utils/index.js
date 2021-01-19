@@ -46,18 +46,18 @@ export const getFormattedDuration = (start, end) => {
 
 /**
  * This function depending on the number of arguments returns different kinds of string
- * @param {string[]} arr - in the case of this project, it is a listing of destinations
+ * @param {string[]} items - in the case of this project, it is a listing of destinations
  * @return {string} returns the collected string
  */
-export const getEllipseString = (arr) => (arr.length > 3)
-  ? `${arr[0]} &mdash; ... &mdash; ${arr[arr.length - 1]}`
-  : arr.reduce((phrase, word, index) => (index === 0) ? `${phrase}${word}` : `${phrase} &mdash; ${word}`, ``);
+export const getEllipseString = (items) => (items.length > 3)
+  ? `${items[0]} &mdash; ... &mdash; ${items[items.length - 1]}`
+  : items.reduce((phrase, word, index) => (index === 0) ? `${phrase}${word}` : `${phrase} &mdash; ${word}`, ``);
 
-export const getMaxValueIndexFromObject = (obj) => Object.values(obj)
-  .reduce((bestIndexSoFar, currentlyTestedValue, currentlyTestedIndex, arr) => currentlyTestedValue > arr[bestIndexSoFar] ? currentlyTestedIndex : bestIndexSoFar, 0);
+export const getMaxValueIndexFromObject = (structure) => Object.values(structure)
+  .reduce((bestIndexSoFar, currentlyTestedValue, currentlyTestedIndex, items) => currentlyTestedValue > items[bestIndexSoFar] ? currentlyTestedIndex : bestIndexSoFar, 0);
 
-export const getMinValueIndexFromObject = (obj) => Object.values(obj)
-  .reduce((bestIndexSoFar, currentlyTestedValue, currentlyTestedIndex, arr) => currentlyTestedValue < arr[bestIndexSoFar] ? currentlyTestedIndex : bestIndexSoFar, 0);
+export const getMinValueIndexFromObject = (structure) => Object.values(structure)
+  .reduce((bestIndexSoFar, currentlyTestedValue, currentlyTestedIndex, items) => currentlyTestedValue < items[bestIndexSoFar] ? currentlyTestedIndex : bestIndexSoFar, 0);
 
 export const assign = (expandable, ...payload) => Object.assign({}, expandable, ...payload);
 
@@ -71,6 +71,6 @@ export const getListByType = (structure, type) => structure.map((item) => item[t
 
 export const batchBind = (self, ...methods) => methods.forEach((method) => (self[method.name] = method.bind(self)));
 
-export const capitalizeFirstLetter = (str) => (!str) ? str : str[0].toUpperCase() + str.slice(1);
+export const capitalizeFirstLetter = (item) => (!item) ? item : item[0].toUpperCase() + item.slice(1);
 
 export const isOnline = () => window.navigator.onLine;
